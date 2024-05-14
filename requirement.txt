@@ -1,1 +1,2 @@
 scholarly
+slack-bolt
