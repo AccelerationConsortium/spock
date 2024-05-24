@@ -6,13 +6,12 @@ import os
 BOT_TOKEN = "xoxb_YOUR_BOT_TOKEN"
 app = App(token=BOT_TOKEN)
 
-
 from scholarly import scholarly
 from datetime import datetime
 
-def get_latest_article(author_name):
+def get_latest_article(author_name:str):
     current_year = datetime.now().year  # Get the current year
-
+    
     # Search for the author
     search_query = scholarly.search_author(author_name)
 
@@ -60,7 +59,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import os
 
-slack_token = "xoxb-YOUR_SLACK_TOKEN"
+slack_token = "xapp-1-A073PSURRTP-7142456074721-6e99245588c36bb69b5152236088813ccf54af0d1a6dc9aceda12083856a9e6c"
 client = WebClient(token=slack_token)
 import concurrent.futures
 import time
