@@ -59,7 +59,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import os
 
-slack_token = "xapp-1-A073PSURRTP-7142456074721-6e99245588c36bb69b5152236088813ccf54af0d1a6dc9aceda12083856a9e6c"
+slack_token = "SLACK_BOT_TOKEN"
 client = WebClient(token=slack_token)
 import concurrent.futures
 import time

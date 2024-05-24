@@ -974,4 +974,476 @@ Topics for Emily Moore
  'alcohols, dicarboxylic acids, diols, and methyl ketones. We propose several '
  'metabolic engineering strategies to accomplish these conversions in chain '
  'elongating bacteria and utilize constraint-based metabolic modelling to '
- 
+ 'predict pathway stoichiometries, assess thermodynamic feasibility, and '
+ 'estimate ATP and product yields. We also evaluate how producing alternative '
+ 'products impacts the growth rate of chain elongating bacteria via resource '
+ 'allocation modelling, revealing a trade-off between product carbon length '
+ 'and class versus cell growth rate. Together, these results highlight the '
+ 'potential for using chain elongating bacteria as a platform for diverse '
+ 'oleochemical biomanufacturing and offer a starting point for guiding future '
+ 'metabolic engineering efforts aimed at expanding their product range.')
+Topics for Christopher Lawson
+ have been updated
+('Efficient parallel split learning over resource-constrained wireless edge '
+ 'networks')
+('The increasingly deeper neural networks hinder the democratization of '
+ 'privacy-enhancing distributed learning, such as federated learning (FL), to '
+ 'resource-constrained devices. To overcome this challenge, in this paper, we '
+ 'advocate the integration of edge computing paradigm and parallel split '
+ 'learning (PSL), allowing multiple edge devices to offload substantial '
+ 'training workloads to an edge server via layer-wise model split. By '
+ 'observing that existing PSL schemes incur excessive training latency and a '
+ 'large volume of data transmissions, we propose an innovative PSL framework, '
+ 'namely, efficient parallel split learning (EPSL), to accelerate model '
+ 'training. To be specific, EPSL parallelizes client-side model training and  '
+ "reduces the dimension of activations' gradients  for backpropagation (BP) "
+ 'via  last-layer gradient aggregation , leading to a significant reduction in '
+ 'server-side training and communication latency …')
+Topics for Kai Huang
+ have been updated
+('Universal, label-free, single-molecule visualization of DNA origami '
+ 'nanodevices across biological samples using origamiFISH')
+('Structural DNA nanotechnology enables the fabrication of user-defined DNA '
+ 'origami nanostructures (DNs) for biological applications. However, the role '
+ 'of DN design during cellular interactions and subsequent biodistribution '
+ 'remain poorly understood. Current methods for tracking DN fates in situ, '
+ 'including fluorescent-dye labelling, suffer from low sensitivity and '
+ 'dye-induced artifacts. Here we present origamiFISH, a label-free and '
+ 'universal method for the single-molecule fluorescence detection of DNA '
+ 'origami nanostructures in cells and tissues. origamiFISH targets pan-DN '
+ 'scaffold sequences with hybridization chain reaction probes to achieve '
+ '1,000-fold signal amplification. We identify cell-type- and DN '
+ 'shape-specific spatiotemporal distribution patterns within a minute of '
+ 'uptake and at picomolar DN concentrations, 10,000× lower than field '
+ 'standards. We additionally optimize compatibility with …')
+Topics for Leo Chou
+ have been updated
+'Ru-doped functional porous materials for electrocatalytic water splitting'
+('Electrolytic water splitting (EWS) is an attractive and promising technique '
+ 'for the production of hydrogen energy. Nevertheless, the sluggish kinetic '
+ 'rate of hydrogen/oxygen evolution reactions leads to a high overpotential '
+ 'and low energy efficiency. Up to date, Pt/Ir-based nanocatalysts have become '
+ 'the state-of-the-art EWS catalysts, but disadvantages such as high cost and '
+ 'low earth abundance greatly limit their applications in EWS devices. As an '
+ 'attractive candidate for the Pt/Ir catalysts, series of Ru-based '
+ 'nanomaterials have aroused much attention for their low price, Pt-like '
+ 'hydrogen bond strength, and high EWS activity. In particular, Ru-doped '
+ 'functional porous materials have been becoming one of the most '
+ 'representative EWS catalysts, which can not only achieve the dispersion and '
+ 'adjustment for active Ru sites, but also simultaneously solve the problems '
+ 'of mass transfer and catalytic conversion in EWS. In …')
+Topics for Bo Wang
+ have been updated
+('Carbonation and CO2 reabsorption of cement-based materials: Influence of '
+ 'limestone filler and ground-granulated blast-furnace slag')
+('This study investigates and compares the carbonation depth, carbonation rate '
+ 'and degree of carbonation of mortar specimens made with different binder '
+ 'systems. The interplay and influence of limestone filler (LF) particle size, '
+ 'LF content and ground-granulated blast-furnace slag (GGBFS) on the '
+ 'compressive strength, carbonation depth, carbonation rate and degree of '
+ 'carbonation are evaluated. Specimens were exposed to an accelerated '
+ 'carbonation environment of 3 ± 0.5% CO2 concentration, 50 ± 5% relative '
+ 'humidity and a temperature of 23 ± 2 ֯C for up to 12 weeks. It was found '
+ 'that: (i) ∼9.8% LF in Portland limestone cement does not significantly '
+ 'impact the carbonation depth and compressive strength; (ii) the use of 25% '
+ 'GGBFS as a cement replacement in addition to LF increases the carbonated '
+ 'area of specimens; (iii) the use of coarse size LF as cement replacement '
+ 'increases the k-factor of the …')
+Topics for Daman Panesar
+ have been updated
+'Functional protein dynamics in a crystal'
+('Proteins are molecular machines and to understand how they work, we need to '
+ 'understand how they move. New pump-probe time-resolved X-ray diffraction '
+ 'methods open up ways to initiate and observe protein motions with atomistic '
+ 'detail in crystals on biologically relevant timescales. However, the '
+ 'practical limitations of these experiments demand parallel development of '
+ 'effective molecular dynamics approaches to accelerate progress and extract '
+ 'meaning. Here, we establish robust and accurate methods for simulating '
+ 'dynamics in protein crystals, a nontrivial process requiring careful '
+ 'attention to equilibration, environmental composition, and choice of force '
+ 'fields. With more than seven milliseconds of sampling of a single chain, we '
+ 'identify critical factors controlling agreement between simulation and '
+ 'experiments and show that simulated motions recapitulate ligand-induced '
+ 'conformational changes. This work …')
+Topics for Sarah Rauscher
+ have been updated
+'Delocalized, asynchronous, closed-loop discovery of organic laser emitters'
+('Contemporary materials discovery requires intricate sequences of synthesis, '
+ 'formulation, and characterization that often span multiple locations with '
+ 'specialized expertise or instrumentation. To accelerate these workflows, we '
+ 'present a cloud-based strategy that enabled delocalized and asynchronous '
+ 'design-make-test-analyze cycles. We showcased this approach through the '
+ 'exploration of molecular gain materials for organic solid-state lasers as a '
+ 'frontier application in molecular optoelectronics. Distributed robotic '
+ 'synthesis and in-line property characterization, orchestrated by a '
+ 'cloud-based artificial intelligence experiment planner, resulted in the '
+ 'discovery of 21 new state-of-the-art materials. Gram-scale synthesis '
+ 'ultimately allowed for the verification of best-in-class stimulated emission '
+ 'in a thin-film device. Demonstrating the asynchronous integration of five '
+ 'laboratories across the globe, this workflow provides a …')
+Topics for Martin Seifrid
+ have been updated
+'Generative adversarial networks and diffusion models in material discovery'
+('The idea of materials discovery has excited and perplexed research '
+ 'scientists for centuries. Several different methods have been employed to '
+ 'find new types of materials, ranging from the arbitrary replacement of atoms '
+ 'in a crystal structure to advanced machine learning methods for predicting '
+ 'entirely new crystal structures. In this work, we pursue three primary '
+ 'objectives. (I) Introduce CrysTens, a crystal encoding that can be used in a '
+ 'wide variety of deep learning generative models. (II) Investigate and '
+ 'analyze the relative performance of Generative Adversarial Networks (GANs) '
+ 'and Diffusion Models to find an innovative and effective way of generating '
+ 'theoretical crystal structures that are synthesizable and stable. (III) Show '
+ 'that the models that have a better “understanding” of the structure of '
+ 'CrysTens produce more symmetrical and realistic crystals and exhibit a '
+ 'better apprehension of the dataset as a whole. We …')
+Topics for Taylor D. Sparks
+ have been updated
+('A large-scale machine learning analysis of inorganic nanoparticles in '
+ 'preclinical cancer research')
+('Owing to their distinct physical and chemical properties, inorganic '
+ 'nanoparticles (NPs) have shown promising results in preclinical cancer '
+ 'therapy, but designing and engineering them for effective therapeutic '
+ 'purposes remains a challenge. Although a comprehensive database of inorganic '
+ 'NP research is not currently available, it is crucial for developing '
+ 'effective cancer therapies. In this context, machine learning (ML) has '
+ 'emerged as a transformative tool, but its adaptation to nanomedicine is '
+ 'hindered by inexistent or small datasets. Here we assembled a large database '
+ 'of inorganic NPs, comprising experimental datasets from 745 preclinical '
+ 'studies in cancer nanomedicine. Using descriptive statistics and explainable '
+ 'ML models we mined this database to gain knowledge of inorganic NP design '
+ 'patterns and inform future NP research for cancer treatment. Our analyses '
+ 'suggest that NP shape and therapy type are …')
+Topics for Tiago Rodrigues, Lisbon
+ have been updated
+('Review of low-cost self-driving laboratories in chemistry and materials '
+ 'science: the “frugal twin” concept')
+('This review proposes the concept of a “frugal twin,” similar to a digital '
+ 'twin, but for physical experiments. Frugal twins range from simple toy '
+ 'examples to low-cost surrogates of high-cost research systems. For example, '
+ 'a color-mixing self-driving laboratory (SDL) can serve as a low-cost version '
+ 'of a costly multi-step chemical discovery SDL. Frugal twins already provide '
+ 'hands-on experience for SDLs with low costs and low risks. They can also '
+ 'offer as test beds for software prototyping (e.g., optimization, data '
+ 'infrastructure), and a low barrier to entry for democratizing SDLs. However, '
+ 'there is room for improvement. The true value of frugal twins can be '
+ 'realized in three core areas. Firstly, hardware and software modularity; '
+ 'secondly, purpose-built design (human-inspired vs. hardware-centric vs. '
+ 'human-in-the-loop); and thirdly state-of-the-art (SOTA) software (e.g., '
+ 'multi-fidelity optimization). We also describe the ethical …')
+Topics for Benji Maruyama
+ have been updated
+'History-agnostic battery degradation inference'
+('Lithium-ion batteries (LIBs) have attracted widespread attention as an '
+ 'efficient energy storage device on electric vehicles (EV) to achieve '
+ 'emission-free mobility. However, the performance of LIBs deteriorates with '
+ 'time and usage, and the state of health of used batteries are difficult to '
+ 'quantify. Having accurate estimations of a battery’s remaining life across '
+ 'different life stages would benefit maintenance, safety, and serve as a '
+ 'means of qualifying used batteries for second-life applications. Since the '
+ 'full history of a battery may not always be available in downstream '
+ 'applications, in this study, we demonstrate a deep learning framework that '
+ 'enables dynamic degradation rate prediction, including both short-term and '
+ 'long-term forecasting, while requiring only the most recent battery usage '
+ 'information. Specifically, our model takes a rolling window of current and '
+ 'voltage time-series inputs, and predicts the near-term and …')
+Topics for Shijing Sun
+ have been updated
+('14th century Yersinia pestis genomes support emergence of pestis secunda '
+ 'within Europe')
+('Pestis secunda (1356–1366 CE) is the first of a series of plague outbreaks '
+ 'in Europe that followed the Black Death (1346–1353 CE). Collectively this '
+ 'period is called the Second Pandemic. From a genomic perspective, the '
+ 'majority of post-Black Death strains of Yersinia pestis thus far identified '
+ 'in Europe display diversity accumulated over a period of centuries that form '
+ 'a terminal sub-branch of the Y. pestis phylogeny. It has been debated if '
+ 'these strains arose from local evolution of Y. pestis or if the disease was '
+ 'repeatedly reintroduced from an external source. Plague lineages descended '
+ 'from the pestis secunda, however, are thought to have persisted in non-human '
+ 'reservoirs outside Europe, where they eventually gave rise to the Third '
+ 'Pandemic (19th and 20th centuries). Resolution of competing hypotheses on '
+ 'the origins of the many post-Black Death outbreaks has been hindered in part '
+ 'by the low representation of Y. pestis genomes in archaeological specimens, '
+ 'especially for the pestis secunda. Here we report on five individuals from '
+ 'Germany that were infected with lineages of plague associated with the '
+ 'pestis secunda. For the two genomes of high coverage, one groups within the '
+ 'known diversity of genotypes associated with the pestis secunda, while the '
+ 'second carries an ancestral genotype that places it earlier. Through '
+ 'consideration of historical sources that explore first documentation of the '
+ 'pandemic in today’s Central Germany, we argue that these data provide robust '
+ 'evidence to support a post-Black Death evolution of the pathogen within '
+ 'Europe rather than a re-introduction from outside. Additionally, we '
+ 'demonstrate retrievability of Y …')
+Topics for Kristin Bos
+ have been updated
+'Self-Driving Laboratories for Chemistry and Materials Science'
+('Self-driving laboratories (SDLs) promise an accelerated application of the '
+ 'scientific method. Through the automation of high-throughput '
+ 'experimentation, and autonomization of experiment planning and execution, '
+ 'SDLs hold the potential to greatly accelerate research in chemistry and '
+ 'materials discovery. This review article provides an in-depth analysis of '
+ 'the state-of-the-art in SDL technology, its applications across various '
+ 'scientific disciplines, and the potential implications for research, and '
+ 'industry. This review additionally provides an overview of the enabling '
+ 'technologies for SDLs, including their hardware, software, and integration '
+ 'with laboratory infrastructure. Most importantly, this review explores the '
+ 'diverse range of scientific domains where SDLs have made significant '
+ 'contributions, from drug discovery and materials science to genomics and '
+ 'chemistry. We provide a comprehensive review of existing real …')
+Topics for Yang Cao, Toronto
+ have been updated
+Couldn't find the google scholar profile for Ekaterina Trushina
+: 
+('Factors controlling drug release in cross-linked poly (valerolactone) based '
+ 'matrices')
+('2023-11-07 Assigned to THE GOVERNING COUNCIL OF THE UNIVERSITY OF TORONTO '
+ 'reassignment THE GOVERNING COUNCIL OF THE UNIVERSITY OF TORONTO ASSIGNMENT '
+ 'OF ASSIGNORS INTEREST (SEE DOCUMENT FOR DETAILS). Assignors: ALLEN, '
+ 'CHRISTINE, Boucher, Hilary, LE DÉVÉDEC, Frantz2023-11-07 Assigned to PENDANT '
+ 'BIOSCIENCES, INC. reassignment PENDANT BIOSCIENCES, INC. ASSIGNMENT OF '
+ 'ASSIGNORS INTEREST (SEE DOCUMENT FOR DETAILS). Assignors: RUCKH, Timothy '
+ 'Tordella, STEVENS, David Michael, ELMQUIST, Carl Eric')
+Topics for Frantz le Dévédec
+ have been updated
+('A Microfluidic Platform for Evaluating the Internalization of Liposome Drug '
+ 'Carriers in Tumor Spheroids')
+('The development of in vitro models recapitulating nanoparticle transport '
+ 'under physiological flow conditions is of great importance for predicting '
+ 'the efficacy of nanoparticle drug carriers. Liposomes are extensively used '
+ 'for drug delivery owing to their biocompatibility and biodegradability and '
+ 'the ability to carry both hydrophilic and hydrophobic compounds. Here, we '
+ 'used a library of liposomes with various dimensions and a microfluidic '
+ 'platform comprising a large array of uniformly sized breast cancer spheroids '
+ 'to explore size-dependent liposome internalization and retention in the '
+ 'spheroids under close-to-physiological interstitial conditions. Such a '
+ 'platform showed promising applications in the preclinical screening of small '
+ 'molecule drugs; however, the capability to deliver nanoparticles in the '
+ 'spheroid interior under close-to-physiological flow conditions was not '
+ 'explored. For the liposomes with diameters in the …')
+Topics for Ilya Yakavets
+ have been updated
+('Chapter Two: P and N type copper phthalocyanines as effective semiconductors '
+ 'in organic thin-film transistor-based DNA biosensors at elevated '
+ 'temperatures')
+('This section discusses the context, contributions, and significance of the '
+ 'research presented in this chapter. The work presented here was published in '
+ 'in RSC Advances (RSC Adv. 9, 2133–2142 (2019)) by NT Boileau, OA Melville, '
+ 'B. Mirka, R. Cranston, and BH Lessard.2.1. 1 Context In 2017, OTFTs were '
+ 'starting to show promise as biosensors and our group was becoming interested '
+ 'in using phthalocyanines as semiconductors in OTFTs. At that point, no one '
+ 'in the lab group had ever built a biosensor. While some DNA biosensors had '
+ 'been reported in the literature, all of them had two factors in common: '
+ 'using p-type semiconductors, and operating at room temperature. We wanted to '
+ 'expand on the work that had already been done on DNA OTFT biosensors by '
+ 'using an N-type semiconductor and by operating the devices at elevated '
+ 'temperature. Firstly, by using and comparing N-type devices to P-type '
+ 'devices we hoped to further elucidate the mechanism of sensing between an '
+ 'OTFT and double stranded complementary DNA. Secondly, we knew that specific '
+ 'DNA pairings optimally bind at specific temperatures depending on their '
+ 'sequence, and we found that no one in the literature had reported this '
+ 'consideration, leading us to believe that we may achieve superior results '
+ 'compared to the literature by operating the devices at elevated '
+ 'temperatures. At this stage, we needed to develop a workflow to enable the '
+ 'fabrication and characterization of liquid stable OTFTs, building the '
+ 'capability and establishing the tools to be able to work with DNA in the '
+ 'lab, and designing a methodology to successfully test, expose, and '
+ 'characterize an OTFT-DNA …')
+Topics for Owen Melville 
+ have been updated
+('Sizing up feature descriptors for macromolecular machine learning with '
+ 'polymeric biomaterials')
+('It has proved challenging to represent the behavior of polymeric '
+ 'macromolecules as machine learning features for biomaterial interaction '
+ 'prediction. There are several approaches to this representation, yet no '
+ 'consensus for a universal representational framework, in part due to the '
+ 'sensitivity of biomacromolecular interactions to polymer properties. To help '
+ 'navigate the process of feature engineering, we provide an overview of '
+ 'popular classes of data representations for polymeric biomaterial machine '
+ 'learning while discussing their merits and limitations. Generally, '
+ 'increasing the accessibility of polymeric biomaterial feature engineering '
+ 'knowledge will contribute to the goal of accelerating clinical translation '
+ 'from biomaterials discovery.')
+Topics for Jeff Watchorn
+ have been updated
+('Towards a greener electrosynthesis: pairing machine learning and 3D printing '
+ 'for rapid optimisation of anodic trifluoromethylation')
+('Applying electro-organic synthesis in flow configuration can potentially '
+ "reduce the pharmaceutical industry's carbon footprint and simplify the "
+ 'reaction scale-up. However, the optimisation of such reactions has remained '
+ 'challenging due to the convoluted interplay between various input '
+ 'experimental parameters. Herein, we demonstrate the advantage of integrating '
+ 'a machine learning (ML) algorithm within an automated flow microreactor '
+ 'setup to assist in the optimisation of anodic trifluoromethylation without '
+ 'transition metal catalysts. The ML algorithm is able to optimise six '
+ 'reaction parameters concurrently and increase the reaction yield of anodic '
+ 'trifluoromethylation by >270% within two iterations. Furthermore, we '
+ 'discovered that suppression of electrode fouling and even higher reaction '
+ 'yields could be achieved by integrating 3D-printed metal electrodes into the '
+ 'microreactor. By coupling multiple analytical tools …')
+Topics for Nipun Kumar Gupta 
+ have been updated
+('Chemical tools for the Gid4 subunit of the human E3 ligase C-terminal to '
+ 'LisH (CTLH) degradation complex')
+('We have developed a novel chemical handle (PFI-E3H1) and a chemical probe '
+ '(PFI-7) as ligands for the Gid4 subunit of the human E3 ligase CTLH '
+ 'degradation complex. Through an efficient initial hit-ID campaign, '
+ 'structure-based drug design (SBDD) and leveraging the sizeable Pfizer '
+ 'compound library, we identified a 500 nM ligand for this E3 ligase through '
+ 'file screening alone. Further exploration identified a vector that is '
+ 'tolerant to addition of a linker for future chimeric molecule design. The '
+ 'chemotype was subsequently optimized to sub-100 nM Gid4 binding affinity for '
+ 'a chemical probe. These novel tools, alongside the suitable negative control '
+ 'also identified, should enable the interrogation of this complex human E3 '
+ 'ligase macromolecular assembly.')
+Topics for Santha Santhakumar, utoronto
+ have been updated
+('Automated fabrication of a scalable heart-on-a-chip device by 3D printing of '
+ 'thermoplastic elastomer nanocomposite and hot embossing')
+('The successful translation of organ-on-a-chip devices requires the '
+ 'development of an automated workflow for device fabrication, which is '
+ 'challenged by the need for precise deposition of multiple classes of '
+ 'materials in micro-meter scaled configurations. Many current heart-on-a-chip '
+ 'devices are produced manually, requiring the expertise and dexterity of '
+ 'skilled operators. Here, we devised an automated and scalable fabrication '
+ 'method to engineer a Biowire II multiwell platform to generate human '
+ 'iPSC-derived cardiac tissues. This high-throughput heart-on-a-chip platform '
+ 'incorporated fluorescent nanocomposite microwires as force sensors, produced '
+ 'from quantum dots and thermoplastic elastomer, and 3D printed on top of a '
+ 'polystyrene tissue culture base patterned by hot embossing. An array of '
+ 'built-in carbon electrodes was embedded in a single step into the base, '
+ 'flanking the microwells on both sides. The …')
+Topics for Yimu Zhao
+ have been updated
+('iCub3 avatar system: Enabling remote fully immersive embodiment of humanoid '
+ 'robots')
+('We present an avatar system designed to facilitate the embodiment of '
+ 'humanoid robots by human operators, validated through iCub3, a humanoid '
+ 'developed at the Istituto Italiano di Tecnologia. More precisely, the paper '
+ 'makes two contributions: First, we present the humanoid iCub3 as a robotic '
+ 'avatar that integrates the latest significant improvements after about 15 '
+ 'years of development of the iCub series. Second, we present a versatile '
+ 'avatar system enabling humans to embody humanoid robots encompassing aspects '
+ 'such as locomotion, manipulation, voice, and facial expressions with '
+ 'comprehensive sensory feedback including visual, auditory, haptic, weight, '
+ 'and touch modalities. We validated the system by implementing several avatar '
+ 'architecture instances, each tailored to specific requirements. First, we '
+ 'evaluated the optimized architecture for verbal, nonverbal, and physical '
+ 'interactions with a remote …')
+Topics for Kourosh Darvish
+ have been updated
+'JARVIS-Leaderboard: a large scale benchmark of materials design methods'
+('Lack of rigorous reproducibility and validation are significant hurdles for '
+ 'scientific development across many fields. Materials science, in particular, '
+ 'encompasses a variety of experimental and theoretical approaches that '
+ 'require careful benchmarking. Leaderboard efforts have been developed '
+ 'previously to mitigate these issues. However, a comprehensive comparison and '
+ 'benchmarking on an integrated platform with multiple data modalities with '
+ 'perfect and defect materials data is still lacking. This work introduces '
+ 'JARVIS-Leaderboard, an open-source and community-driven platform that '
+ 'facilitates benchmarking and enhances reproducibility. The platform allows '
+ 'users to set up benchmarks with custom tasks and enables contributions in '
+ 'the form of dataset, code, and meta-data submissions. We cover the following '
+ 'materials design categories: Artificial Intelligence (AI), Electronic '
+ 'Structure (ES), Force-fields (FF …')
+Topics for Kangming Li 
+ have been updated
+('Worldwide trends in underweight and obesity from 1990 to 2022: a pooled '
+ 'analysis of 3663 population-representative studies with 222 million '
+ 'children, adolescents, and adults')
+('Underweight and obesity are associated with adverse health outcomes '
+ 'throughout the life course. We estimated the individual and combined '
+ 'prevalence of underweight or thinness and obesity, and their changes, from '
+ '1990 to 2022 for adults and school-aged children and adolescents in 200 '
+ 'countries and territories.We used data from 3663 population-based studies '
+ 'with 222 million participants that measured height and weight in '
+ 'representative samples of the general population. We used a Bayesian '
+ 'hierarchical model to estimate trends in the prevalence of different BMI '
+ 'categories, separately for adults (age ≥20 years) and school-aged children '
+ 'and adolescents (age 5–19 years), from 1990 to 2022 for 200 countries and '
+ 'territories. For adults, we report the individual and combined prevalence of '
+ 'underweight (BMI <18·5 kg/m2) and obesity (BMI ≥30 kg/m2). For school-aged '
+ 'children and …')
+Topics for Ali Shayesteh
+ have been updated
+'Delocalized, asynchronous, closed-loop discovery of organic laser emitters'
+('Contemporary materials discovery requires intricate sequences of synthesis, '
+ 'formulation, and characterization that often span multiple locations with '
+ 'specialized expertise or instrumentation. To accelerate these workflows, we '
+ 'present a cloud-based strategy that enabled delocalized and asynchronous '
+ 'design-make-test-analyze cycles. We showcased this approach through the '
+ 'exploration of molecular gain materials for organic solid-state lasers as a '
+ 'frontier application in molecular optoelectronics. Distributed robotic '
+ 'synthesis and in-line property characterization, orchestrated by a '
+ 'cloud-based artificial intelligence experiment planner, resulted in the '
+ 'discovery of 21 new state-of-the-art materials. Gram-scale synthesis '
+ 'ultimately allowed for the verification of best-in-class stimulated emission '
+ 'in a thin-film device. Demonstrating the asynchronous integration of five '
+ 'laboratories across the globe, this workflow provides a …')
+Topics for Han Hao, Toronto
+ have been updated
+('Hierarchical FeS2 cathode with suppressed shuttle effect for high '
+ 'performance magnesium-ion batteries')
+('2D transition metal sulfides (such as FeS2) are promising cathode materials '
+ 'for magnesium-ion batteries due to their high capacity, low cost, and '
+ 'abundance. However, unexpected side effects of the electrochemical process '
+ 'result in poor cycling performance, which hamper their widespread use. '
+ 'Herein, we demonstrate the shuttle effects of metal sulfide cathodes in '
+ 'magnesium-ion batteries for the first time and propose a strategy of phase '
+ 'engineering to retard such side effects, improving the magnesium storage '
+ 'performance of the FeS2 cathode. We also show the correlation between '
+ 'structure evolution of FeS2 and electrochemical performance using cryogenic '
+ 'transmission electron microscopy, time-of-flight secondary ion mass '
+ 'spectrometry and X-ray diffraction. The stress caused by the '
+ 'magnesiation-induced expansion of FeS2 is shown to be alleviated in porous '
+ 'hierarchical spheres, which has been verified by …')
+Topics for Yang Bai, Toronto
+ have been updated
+'COVID-19 vaccine acceptance and hesitancy among ethnic minorities in Hong Kong'
+('Ethnic minorities account for 8% of the Hong Kong population, most are '
+ 'Filipino and Indonesian domestic helpers taking care of children and the '
+ 'elderly. To understand the COVID-19 vaccination rates and factors associated '
+ 'with vaccine acceptance of ethnic minorities, we performed a cross-sectional '
+ 'questionnaire study recruiting Hong Kong ethnic minorities aged ≥18\u2009'
+ 'years between 1 July and 18 July 2021 in public areas. Demographics, '
+ 'knowledge about COVID-19, vaccination status, intention and reasons to '
+ 'receive the vaccine, and planning to be re-vaccinated were analyzed. '
+ 'Continuous and categorical variables were compared using unpaired t-test and '
+ 'Chi-square test, respectively. Potential confounders were adjusted using '
+ 'multiple logistic regression. 2,012 ethnic minorities participated, with a '
+ 'mean age of 39\u2009years, of which 97.6% were female, 79.5% were Filipino, '
+ 'and 17.5% were Indonesian. 80.6 …')
+Topics for Joseph Brown
+ have been updated
+('Material efficiency in local timber construction: unlocking the potential of '
+ 'English timber')
+('The rising demand for low-embodied carbon materials and supply chain '
+ 'disruptions, such as climate change impacts and global crises, necessitate a '
+ 'sustainable wood supply for building products. Supporting local capacity to '
+ 'grow, manufacture, and supply timber-building products can surmount '
+ 'international trade barriers. In the UK, the market is import-oriented, with '
+ 'forests in England primarily utilised for short-term purposes. This study '
+ 'explores material-efficient, optimisation-driven structural timber systems '
+ 'using local underutilised English timber for low to mid-rise buildings and '
+ 'retrofitting. Adding value to this timber offers long-term carbon '
+ 'sequestration, addresses the demand for low-embodied carbon materials, and '
+ 'provides socio-economic benefits through local education and employment. We '
+ 'present designs and simulations of structural prototypes using underutilised '
+ 'English timber and analyse timber …')
+Topics for Harry Mills
+ have been updated
+'Generative adversarial networks and diffusion models in material discovery'
+('The idea of materials discovery has excited and perplexed research '
+ 'scientists for centuries. Several different methods have been employed to '
+ 'find new types of materials, ranging from the arbitrary replacement of atoms '
+ 'in a crystal structure to advanced machine learning methods for predicting '
+ 'entirely new crystal structures. In this work, we pursue three primary '
+ 'objectives. (I) Introduce CrysTens, a crystal encoding that can be used in a '
+ 'wide variety of deep learning generative models. (II) Investigate and '
+ 'analyze the relative performance of Generative Adversarial Networks (GANs) '
+ 'and Diffusion Models to find an innovative and effective way of generating '
+ 'theoretical crystal structures that are synthesizable and stable. (III) Show '
+ 'that the models that have a better “understanding” of the structure of '
+ 'CrysTens produce more symmetrical and realistic crystals and exhibit a '
+ 'better apprehension of the dataset as a whole. We …')
+Topics for Sterling G. Baird
+ have been updated
