@@ -1,6 +1,5 @@
 from article_topics import *
 
-
 with open("authors.txt","r") as file:
     authors = file.readlines()
     for author in authors:
@@ -9,4 +8,4 @@ with open("authors.txt","r") as file:
             get_topics(author_filled)
             print(f"Topics for {author} have been updated")
         except Exception as e:
-            print(f"Couldn't find the google scholar profile for {author}")
+            print(f"Couldn't find the google scholar profile for {author}: {e}")

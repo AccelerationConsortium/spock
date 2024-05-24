@@ -23,15 +23,13 @@ def get_topics(author_filled):
     with open('response.json', 'r') as file:
         data = json.load(file)
     for category, item in data.items():
-        added = False
-        for word in get_publication_titles(author_filled).split():
-            if word.lower() in item['keywords'] and not added:
+        for keyword in item['keywords']:
+            if keyword in get_publication_abstract(author_filled).lower():
                 data[category]['articles'].append(get_publication_titles(author_filled)) 
-                added = True
-        for word in get_publication_abstract(author_filled).split():
-            if word.lower() in item['keywords'] and not added:
+            if keyword in get_publication_titles(author_filled).lower():
                 data[category]['articles'].append(get_publication_titles(author_filled))
-                added = True
+                
+    
 
     # Writing 
     with open('response.json', 'w') as file:
