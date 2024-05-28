@@ -9,3 +9,8 @@ class Writer:
     def setup_author(author:Author):
         pass
     
+    def write():
+        pass	
+    def read():
+        pass
+    
