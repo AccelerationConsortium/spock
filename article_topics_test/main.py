@@ -5,7 +5,9 @@ with open("authors.txt","r") as file:
     for author in authors:
         try:
             author_filled = get_last_publication(author)
-            get_topics(author_filled)
+            write_abstract(author_filled, author[:-1])
+            get_topics(author_filled,author[:-1])
+            #write_abstract(author_filled)
             print(f"Topics for {author} have been updated")
         except Exception as e:
             print(f"Couldn't find the google scholar profile for {author}: {e}")
