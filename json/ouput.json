@@ -1,0 +1,58 @@
+{
+  "Mehrad Ansari": {
+    "title": "History-agnostic battery degradation inference",
+    "abstract": "Lithium-ion batteries (LIBs) have attracted widespread attention as an efficient energy storage device on electric vehicles (EV) to achieve emission-free mobility. However, the performance of LIBs deteriorates with time and usage, and the state of health of used batteries are difficult to quantify. Having accurate estimations of a battery\u2019s remaining life across different life stages would benefit maintenance, safety, and serve as a means of qualifying used batteries for second-life applications. Since the full history of a battery may not always be available in downstream applications, in this study, we demonstrate a deep learning framework that enables dynamic degradation rate prediction, including both short-term and long-term forecasting, while requiring only the most recent battery usage information. Specifically, our model takes a rolling window of current and voltage time-series inputs, and predicts the near-term and \u2026",
+    "topic": ["Batteries"],
+    "author": "Mehrad Ansari and Steven B Torrisi and Amalie Trewartha and Shijing Sun",
+    "year": 2024
+  },
+  "Jay Werber": {
+    "title": "Clinical sequencing of the retinitis pigmentosa gene RPGR in over 1,000 cases of vision loss",
+    "abstract": "RPGR pathogenic variants are the major cause of X-linked retinitis pigmentosa. Here, we report the results from 1,033 clinical DNA tests that included sequencing of RPGR. A total of 184 RPGR variants were identified: 78 pathogenic or likely pathogenic, 14 uncertain, and 92 likely benign or benign. Among the pathogenic and likely pathogenic variants, 23 were novel, and most were frameshift or nonsense mutations (87%) and enriched (67%) in RPGR exon 15 (ORF15). Identical pathogenic variants found in different families were largely on different haplotype backgrounds, indicating relatively frequent, recurrent RPGR mutations. None of the 16 mother/affected son pairs showed de novo mutations; all 16 mothers were heterozygous for the pathogenic variant. These last two observations support the occurrence of most RPGR mutations in the male germline.",
+    "topic": [],
+    "author": "Madhulatha Pantrangi and Julie Rath and Nicole Kaetterhenry and Kari Branham and Dana Talsness and James L Weber",
+    "year": 2024
+  },
+  "Jason Hattrick-Simpers": {
+    "title": "A data-driven framework to improve the wear resistance of a low-alloy steel fabricated by laser powder bed fusion",
+    "abstract": "The laser powder bed fusion (LPBF) technique provides an opportunity to precisely control process parameters and produce materials with desired microstructure, which play an important role in developing wear-resistance components. An accurate and efficient determination of the optimal process window for new materials, however, remains a highly sought yet challenging task due to a high experimental cost by trial and error. In this study, we demonstrate a physics-informed data-driven framework to create a 3D process map and optimize printing parameters (i.e., laser power (P), scan speed (v), and hatch distance (h)) for a newly designed low-alloy steel. First, we establish a highly precise P-v process map by thoroughly exploring kernel selection and parameter hyper-tuning in Gaussian process regression (GPR) models. Subsequently, we employ the Bayesian optimization (BO) algorithm with different \u2026",
+    "topic": ["Physics"],
+    "author": "Jiahui Zhang and Sagar Patel and Zhiying Liu and Tianyi Lyu and Yuhao Wang and Yujie Hua and Wandong Wang and Jason Hattrick-Simpers and Mihaela Vlasea and Yu Zou",
+    "year": 2024
+  },
+  "Cheryl Arrowsmith": {
+    "title": "A public-private partnership that supports the discovery of new medicines through open access research.",
+    "abstract": "EPB41L3 is, with moesin (MSN), a member of the FERM family, which is highly expressed in brain as well as in other tissues (kidney, intestine, and testis). Similar to MSN, it binds to the C-terminus of CD44 and transmits signals to the cytoskeleton. EPB41L3 is inversely correlated with markers of Alzheimer\u2019s Disease (AD). We have chosen to pursue the EPB41L3-CD44 interaction as a potential key driver in AD, and as a selectivity target for FERM proteins. This TEP includes expression constructs and methods for purification of the FERM domain from recombinant E. coli; Fluorescence-based assays for binding its ligand; a peptide from the cytoplasmic tail of CD44; crystal structures and a soakable crystallization system; and small molecules identified from a crystal-based fragment screen. We have also expressed several related FERM domains which can be used as a selectivity panel when developing new ligands. In follow-up work, we plan to expand the fragment hits to generate chemical tools for both EPB41L3 and moesin.",
+    "topic": [],
+    "author": "SGC UNC",
+    "year": 2037
+  },
+  "Robert Batey": {
+    "title": "Flipping the script: understanding riboswitches from an alternative perspective",
+    "abstract": "Riboswitches are broadly distributed regulatory elements most frequently found in the 5\u2032-leader sequence of bacterial mRNAs that regulate gene expression in response to the binding of a small molecule effector. The occupancy status of the ligand binding aptamer domain manipulates downstream information in the message that instructs the expression machinery. Currently, there are over 55 validated riboswitch classes, where each class is defined based on the identity of the ligand it binds and/or sequence and structure conservation patterns within the aptamer domain. This classification reflects an \u201captamer-centric\u201d perspective that dominates our understanding of riboswitches. In this review, we propose a conceptual framework that groups riboswitches based on the mechanism by which RNA manipulates information directly instructing the expression machinery. This scheme does not replace the established \u2026",
+    "topic": [],
+    "author": "Lukasz T Olenginski and Savannah F Spradlin and Robert T Batey",
+    "year": 2024
+  },
+  "Christine Allen, Toronto": {
+    "title": "Correction to: Up-regulation of autophagy is a mechanism of resistance to chemotherapy and can be inhibited by pantoprazole to increase drug sensitivity",
+    "abstract": "PubPeer found an error in Fig. 2B of this paper in that there was image duplication for the \u2018Control\u2019and \u2018DOX\u2019panels in this 32-panel figure. The senior author takes responsibility for this error, and has submitted a corrected version of Fig. 2B.The first author of the paper (Dr Tan) provides assurance that the revised figure is correct, and all authors of the paper (except for M Wang, for whom we no longer have contact information) agree with submission of this correction.",
+    "topic": [],
+    "author": "Qian Tan and AM Joshua and M Wang and RG Bristow and BG Wouters and CJ Allen and Ian F Tannock",
+    "year": 2024
+  },
+  "Mohamad Moosavi, Toronto": {
+    "title": "Accelerated chemical science with AI",
+    "abstract": "In light of the pressing need for practical materials and molecular solutions to renewable energy and health problems, to name just two examples, one wonders how to accelerate research and development in the chemical sciences, so as to address the time it takes to bring materials from initial discovery to commercialization. Artificial intelligence (AI)-based techniques, in particular, are having a transformative and accelerating impact on many if not most, technological domains. To shed light on these questions, the authors and participants gathered in person for the ASLLA Symposium on the theme of \u2018Accelerated Chemical Science with AI\u2019 at Gangneung, Republic of Korea. We present the findings, ideas, comments, and often contentious opinions expressed during four panel discussions related to the respective general topics: \u2018Data\u2019, \u2018New applications\u2019, \u2018Machine learning algorithms\u2019, and \u2018Education\u2019. All \u2026",
+    "topic": [],
+    "author": "Seoin Back and Al\u00e1n Aspuru-Guzik and Michele Ceriotti and Ganna Gryn'ova and Bartosz Grzybowski and Geun Ho Gu and Jason Hein and Kedar Hippalgaonkar and Rodrigo Horm\u00e1zabal and Yousung Jung and Seonah Kim and Woo Youn Kim and Seyed Mohamad Moosavi and Juhwan Noh and Changyoung Park and Joshua Schrier and Philippe Schwaller and Koji Tsuda and Tejs Vegge and O Anatole von Lilienfeld and Aron Walsh",
+    "year": 2024
+  },
+  "Tejs Vegge": {
+    "title": "Accelerated chemical science with AI",
+    "abstract": "In light of the pressing need for practical materials and molecular solutions to renewable energy and health problems, to name just two examples, one wonders how to accelerate research and development in the chemical sciences, so as to address the time it takes to bring materials from initial discovery to commercialization. Artificial intelligence (AI)-based techniques, in particular, are having a transformative and accelerating impact on many if not most, technological domains. To shed light on these questions, the authors and participants gathered in person for the ASLLA Symposium on the theme of \u2018Accelerated Chemical Science with AI\u2019 at Gangneung, Republic of Korea. We present the findings, ideas, comments, and often contentious opinions expressed during four panel discussions related to the respective general topics: \u2018Data\u2019, \u2018New applications\u2019, \u2018Machine learning algorithms\u2019, and \u2018Education\u2019. All \u2026",
+    "topic": [],
+    "author": "Seoin Back and Al\u00e1n Aspuru-Guzik and Michele Ceriotti and Ganna Gryn'ova and Bartosz Grzybowski and Geun Ho Gu and Jason Hein and Kedar Hippalgaonkar and Rodrigo Horm\u00e1zabal and Yousung Jung and Seonah Kim and Woo Youn Kim and Seyed Mohamad Moosavi and Juhwan Noh and Changyoung Park and Joshua Schrier and Philippe Schwaller and Koji Tsuda and Tejs Vegge and O Anatole von Lilienfeld and Aron Walsh",
+    "year": 2024
+  }
+}

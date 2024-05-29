@@ -1,6 +1,4 @@
-from scholarly import scholarly
 import json
-from pprint import pp
 
 class Publication:
     def __init__(self,publication_filled,author_name) -> None:
@@ -11,15 +9,16 @@ class Publication:
         self.abstract = self.get_publication_abstract()
         self.author = self.get_author_name()
         self.year = self.get_year()
-        self.topic = self.get_topic() # Maybe to edit ??
+        self.topic = self.get_topic() 
         
-    def get_topic(self):
+    def get_topic(self,output_file="json/ouput.json",
+                  input_file="json/response.json"):
         try:
-            with open('output.json','r') as file:
+            with open(output_file,'r') as file:
                 data = json.load(file)
             return data[self.author]['topic']
         except Exception as e:
-            return self.__get_topic('response.json')
+            return self.__get_topic(input_file)
     
     def get_publication_title(self):
         return self.publication_filled['bib']['title'] 
@@ -41,14 +40,13 @@ class Publication:
         
         for category, item in data.items():
             for keyword in item['keywords']:
-                for word in self.abstract.split():
-                    if word.lower() in keyword:
-                        topics.append(category)
-                for word in self.title.split():
-                    if word.lower() in keyword:
-                        topics.append(category)
+                if keyword in self.abstract:
+                    topics.append(category)
+                if keyword in self.title:
+                    topics.append(category)
+    
                     
-        return topics
+        return list(set(topics))
     
     
             
