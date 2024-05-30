@@ -42,16 +42,20 @@ socket_mode_client = SocketModeClient(app_token="xapp-1-A074H63F6EL-713312137142
 def setup() -> None:
     with open("authors.txt","r") as file:
         authors = file.readlines()
-        for author in authors:
-            try:
-                author = author[:-1]
-                author_filled = Author(author)
-                author_filled.setup_author('json/ouput.json')
-                print(f"Topics for {author} have been updated")
-            except Exception as e:
-                print(f"Couldn't find the google scholar profile for {author}: {e}")
+    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:  # Adjust max_workers as needed
+        executor.map(setup_json, authors)
 
 
+def setup_json(author):
+    try:
+        author = author[:-1]
+        author_filled = Author(author)
+        author_filled.setup_author('json/ouput.json')
+        print(f"Topics for {author} have been updated")
+    except Exception as e:
+        print(f"Couldn't find the google scholar profile for {author}: {e}")
+
+    
 
 def process_scholar(scholar):
     key = scholar[0]
@@ -119,6 +123,11 @@ def process_slash_command(payload):
             )
             print("/setup was successfully posted")
             setup()
+            client.chat_postMessage(
+                channel=channel_id,
+                text="Set up is complete"
+            )
+
         except SlackApiError as e:
             print(f"Error posting message: {e.response['error']}")
     
