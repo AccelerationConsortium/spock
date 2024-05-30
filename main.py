@@ -25,7 +25,7 @@ from slack_sdk.socket_mode.response import SocketModeResponse
 # print(author.get_last_publication())
 
 # Your Slack bot token
-slack_token = 'xoxb-1089129130001-7130503874147-1eJXyg9HdahYaxOHANd8iyc0'
+slack_token = 'xoxb-BOT'
 
 # Initialize a Web API client
 client = WebClient(token=slack_token)
@@ -35,7 +35,7 @@ channel_id = 'C072YU8S539'
 
 # The message you want to send
 
-socket_mode_client = SocketModeClient(app_token="xapp-1-A074H63F6EL-7133121371428-665e0a091a6bbdab0068fdfa9a939f66e538a35faa9cbd6db6667cf6d21c6d52", web_client=client)
+socket_mode_client = SocketModeClient(app_token="xapp-1-BOT", web_client=client)
 
 
 # Initial Set-up
