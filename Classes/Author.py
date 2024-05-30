@@ -5,6 +5,9 @@ from Classes.Publication import Publication
 class Author:
     def __init__(self,author) -> None:
         self.author_name = author
+        
+    def __repr__(self) -> str:
+        return self.author_name
 
 
 

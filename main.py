@@ -25,7 +25,7 @@ from slack_sdk.socket_mode.response import SocketModeResponse
 # print(author.get_last_publication())
 
 # Your Slack bot token
-slack_token = 'xoxb-BOT'
+slack_token = 'xoxb-1089129130001-7130503874147-1eJXyg9HdahYaxOHANd8iyc0'
 
 # Initialize a Web API client
 client = WebClient(token=slack_token)
@@ -35,7 +35,7 @@ channel_id = 'C072YU8S539'
 
 # The message you want to send
 
-socket_mode_client = SocketModeClient(app_token="xapp-1-BOT", web_client=client)
+socket_mode_client = SocketModeClient(app_token="xapp-1-A074H63F6EL-7133121371428-665e0a091a6bbdab0068fdfa9a939f66e538a35faa9cbd6db6667cf6d21c6d52", web_client=client)
 
 
 # Initial Set-up
@@ -54,39 +54,41 @@ def setup() -> None:
 
 
 def process_scholar(scholar):
-    for key,value in scholar:
-        try:
-            author = Author(key)
-            print(f'value title= {value["title"]} \n author title = {author.get_last_publication()["bib"]["title"]}')
-            if value['title'] != author.get_last_publication()['bib']['title']:
-                
-                print(f"Updating topics for {author}")
-                
-                try:
-                    last_publication = Publication(author.get_last_publication())
-                except Exception as e:
-                    print(f"Couldn't fetch the last publication for {author}: {e}")
-                    
-                
-                text_message = f":rolled_up_newspaper::test_tube: {author.author_name} has an update on Google Scholar!\n\
-                        ```Title: {last_publication.title}\nCitation: {last_publication.citation}\nYear: {last_publication.year}```"
-                try:
-                    response = client.chat_postMessage(
-                    channel="CHANNEL_ID", 
-                    text=text_message)
-                except Exception as e:
-                    print(f"Couldn't send the message to slack: {e}")
-                
-                # Updating the Json file
-                try:
-                    author.setup_author('json/ouput.json')
-                except Exception as e:
-                    print(f"Couldn't Overwrite the old data for: {author}: {e}")
+    key = scholar[0]
+    value = scholar[1]
+    try:
 
+        author = Author(key)
+        #print(f'value title= {value["title"]} \n author title = {author.get_last_publication()["bib"]["title"]}')
+        if value['title'] != author.get_last_publication()['bib']['title']:
             
-            print(f"Topics for {author} have been updated")
-        except Exception as e:
-            print(f"Couldn't find the google scholar profile for {author}: {e}")
+            print(f"Updating topics for {author}")
+            
+            try:
+                last_publication = Publication(author.get_last_publication())
+            except Exception as e:
+                print(f"Couldn't fetch the last publication for {author}: {e}")
+                
+            
+            text_message = f":rolled_up_newspaper::test_tube: {author.author_name} has an update on Google Scholar!\n\
+                    ```Title: {last_publication.title}\nCitation: {last_publication.citation}\nYear: {last_publication.year}```"
+            try:
+                response = client.chat_postMessage(
+                channel=channel_id, 
+                text=text_message)
+            except Exception as e:
+                print(f"Couldn't send the message to slack: {e}")
+            
+            # Updating the Json file
+            try:
+                author.setup_author('json/ouput.json')
+            except Exception as e:
+                print(f"Couldn't Overwrite the old data for: {author}: {e}")
+
+        
+        print(f"Topics for {author} have been updated")
+    except Exception as e:
+        print(f"Couldn't find the google scholar profile for {author}: {e}")
 
 def process_slash_command(payload):
     command = payload['command']
@@ -138,24 +140,9 @@ if __name__ == "__main__":
         with open('json/ouput.json', 'r') as file:
             scholars_publications = json.load(file)
 
-        #with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:  # Adjust max_workers as needed
-            #executor.map(process_scholar, scholars_publications.items())
+        with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:  # Adjust max_workers as needed
+            executor.map(process_scholar, scholars_publications.items())
         
-        map(process_scholar, scholars_publications.items())
 
         print('Waiting!')
-        time.sleep(1)
-
-"""
-while True:
-    
-    with open('json/ouput.json', 'r') as file:
-        scholars_publications = json.load(file)
-
-    with concurrent.futures.ThreadPoolExecutor(max_workers=100) as executor:  # Adjust max_workers as needed
-        executor.map(process_scholar, scholars_publications.items())
-
-    print('Waiting!')
-    time.sleep(900)
-    
-"""
+        time.sleep(900)
