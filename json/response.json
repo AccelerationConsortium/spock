@@ -1,111 +1,121 @@
 {
-    "ML": {
-      "keywords": [
-        "machine\\s?learning",
-        "data\\s?science",
-        "AI|artificial\\s?intelligence",
-        "neural\\s?networks",
-        "deep learning",
-        "supervised\\s?learning",
-        "unsupervised\\s?learning",
-        "reinforcement\\s?learning"
-      ]
-    },
-    "Batteries": {
-      "keywords": [
-        "batteries?",
-        "energy\\s?storage",
-        "lithium-ion",
-        "battery\\s?technology",
-        "solid\\s?state\\s?batteries",
-        "battery\\s?recycling",
-        "renewable\\s?energy",
-        "battery"
-      ]
-    },
-    "Self-Driving Labs": {
-      "keywords": [
-        "self-?driving\\s?labs?",
-        "automated\\s?research",
-        "robotic\\s?experimentation",
-        "lab\\s?automation",
-        "high-throughput\\s?screening",
-        "automated\\s?experiments"
-      ]
-    },
-    "Coding": {
-      "keywords": [
-        "programming",
-        "software\\s?development",
-        "coding",
-        "computer\\s?science",
-        "algorithm\\s?design",
-        "debugging",
-        "software\\s?engineering",
-        "web\\s?development"
-      ]
-    },
-    "IT": {
-      "keywords": [
-        "information\\s?technology",
-        "IT\\s?infrastructure",
-        "network\\s?security",
-        "cyber\\s?security",
-        "cloud\\s?computing",
-        "IT\\s?management",
-        "data\\s?centers"
-      ]
-    },
-    "Climate Change": {
-      "keywords": [
-        "climate\\s?change",
-        "global\\s?warming",
-        "sustainability",
-        "carbon\\s?footprint",
-        "renewable\\s?energy",
-        "climate\\s?policy",
-        "environmental\\s?impact",
-        "greenhouse\\s?gases"
-      ]
-    },
-    "Chemestry": {
-      "keywords": [
-        "chemistry",
-        "chemical\\s?engineering",
-        "organic\\s?chemistry",
-        "inorganic\\s?chemistry",
-        "physical\\s?chemistry",
-        "biochemistry",
-        "chemical\\s?reactions",
-        "chemical\\s?compounds",
-        "molecule\\s?"
-      ]
-    },
-    "Physics": {
-      "keywords": [
-        "physics",
-        "quantum\\s?mechanics",
-        "particle\\s?physics",
-        "astrophysics",
-        "nuclear\\s?physics",
-        "thermodynamics",
-        "quantum\\s?field\\s?theory",
-        "quantum\\s?gravity",
-        "quantum\\s?entanglement"
-      ]
-    },
-    "Biology": {
-      "keywords": [
-        "biology",
-        "genetics",
-        "molecular biology",
-        "cell\\s?biology",
-        "evolution",
-        "ecology",
-        "bioinformatics",
-        "biotechnology",
-        "biological\\s?systems"
-      ]
-    }
+  "Machine Learning": {
+    "keywords": [
+      "data\\s?science",
+      "reinforcement\\s?learning",
+      " forecasting",
+      "deep learning",
+      "neural\\s?networks",
+      "machine\\s?learning",
+      "unsupervised\\s?learning",
+      " deep learning",
+      " machine learning",
+      "supervised\\s?learning",
+      "AI|artificial\\s?intelligence",
+      " state of health"
+    ]
+  },
+  "Batteries": {
+    "keywords": [
+      "renewable\\s?energy",
+      "battery\\s?recycling",
+      " lithium-ion",
+      "batteries?",
+      " second-life applications",
+      "battery",
+      "lithium-ion",
+      " electric vehicles",
+      " usage",
+      " performance",
+      "battery\\s?technology",
+      "solid\\s?state\\s?batteries",
+      "energy\\s?storage",
+      " ev",
+      " state of health"
+    ]
+  },
+  "Self-Driving Labs": {
+    "keywords": [
+      "self-?driving\\s?labs?",
+      "automated\\s?research",
+      "robotic\\s?experimentation",
+      "lab\\s?automation",
+      "high-throughput\\s?screening",
+      "automated\\s?experiments"
+    ]
+  },
+  "Coding": {
+    "keywords": [
+      "programming",
+      "software\\s?development",
+      "coding",
+      "computer\\s?science",
+      "algorithm\\s?design",
+      "debugging",
+      "software\\s?engineering",
+      "web\\s?development"
+    ]
+  },
+  "IT": {
+    "keywords": [
+      "information\\s?technology",
+      "IT\\s?infrastructure",
+      "network\\s?security",
+      "cyber\\s?security",
+      "cloud\\s?computing",
+      "IT\\s?management",
+      "data\\s?centers"
+    ]
+  },
+  "Climate Change": {
+    "keywords": [
+      "climate\\s?change",
+      "global\\s?warming",
+      "sustainability",
+      "carbon\\s?footprint",
+      "renewable\\s?energy",
+      "climate\\s?policy",
+      "environmental\\s?impact",
+      "greenhouse\\s?gases"
+    ]
+  },
+  "Chemestry": {
+    "keywords": [
+      "chemistry",
+      "chemical\\s?engineering",
+      "organic\\s?chemistry",
+      "inorganic\\s?chemistry",
+      "physical\\s?chemistry",
+      "biochemistry",
+      "chemical\\s?reactions",
+      "chemical\\s?compounds",
+      "molecule\\s?"
+    ]
+  },
+  "Physics": {
+    "keywords": [
+      "physics",
+      "quantum\\s?mechanics",
+      "particle\\s?physics",
+      "astrophysics",
+      "nuclear\\s?physics",
+      "thermodynamics",
+      "quantum\\s?field\\s?theory",
+      "quantum\\s?gravity",
+      "quantum\\s?entanglement"
+    ]
+  },
+  "Biology": {
+    "keywords": [
+      "biology",
+      "genetics",
+      "molecular biology",
+      "cell\\s?biology",
+      "evolution",
+      "ecology",
+      "bioinformatics",
+      "biotechnology",
+      "biological\\s?systems"
+    ]
   }
-  
+}

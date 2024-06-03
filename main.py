@@ -55,7 +55,9 @@ def setup_json(author):
     except Exception as e:
         print(f"Couldn't find the google scholar profile for {author}: {e}")
 
-    
+
+def get_topic_LLM_all(): 
+    pass     # For all the abstracts
 
 def process_scholar(scholar):
     key = scholar[0]
@@ -142,7 +144,7 @@ def handle_socket_mode_request(client: SocketModeClient, req: SocketModeRequest)
 # Register the handler to the client
 socket_mode_client.socket_mode_request_listeners.append(handle_socket_mode_request)
 
-if __name__ == "__main__":
+if __name__ == "__main__":    
     socket_mode_client.connect()
     while True:
         
