@@ -4,6 +4,7 @@
 import concurrent.futures
 from author import Author
 from publication import Publication
+from bot import Bot
 
 
 def setup_json(author):
@@ -22,7 +23,7 @@ def setup() -> None:
         executor.map(setup_json, authors)
 
 
-def process_scholar(scholar):
+def process_scholar(scholar,Bot: Bot):
     key = scholar[0]
     value = scholar[1]
     try:
@@ -42,8 +43,8 @@ def process_scholar(scholar):
             text_message = f":rolled_up_newspaper::test_tube: {author.author_name} has an update on Google Scholar!\n\
                     ```Title: {last_publication.title}\nCitation: {last_publication.citation}\nYear: {last_publication.year}```"
             try:
-                response = client.chat_postMessage(
-                channel=channel_id, 
+                response = Bot.client.chat_postMessage(
+                channel=Bot.channel_id, 
                 text=text_message)
             except Exception as e:
                 print(f"Couldn't send the message to slack: {e}")
@@ -59,46 +60,3 @@ def process_scholar(scholar):
     except Exception as e:
         print(f"Couldn't find the google scholar profile for {author}: {e}")
 
-def process_slash_command(payload):
-    command = payload['command']
-    user_id = payload['user_id']
-    text = payload['text']
-    channel_id = payload['channel_id']
-
-    if command == '/hello':
-        response_message = f"Hello <@{user_id}>!"
-
-        try:
-            # Post the message
-            client.chat_postMessage(
-                channel=channel_id,
-                text=response_message
-            )
-            print("/hello was successfully posted")
-        except SlackApiError as e:
-            print(f"Error posting message: {e.response['error']}")
-            
-    elif command == '/setup':
-        response_message = f"Hello <@{user_id}>! It's loading Data, it might take some time"
-        try:
-            # Post the message
-            client.chat_postMessage(
-                channel=channel_id,
-                text=response_message
-            )
-            print("/setup was successfully posted")
-            setup()
-            client.chat_postMessage(
-                channel=channel_id,
-                text="Set up is complete"
-            )
-
-        except SlackApiError as e:
-            print(f"Error posting message: {e.response['error']}")
-    
-def handle_socket_mode_request(client: SocketModeClient, req: SocketModeRequest):
-    if req.type == "slash_commands":
-        process_slash_command(req.payload)
-        client.send_socket_mode_response(SocketModeResponse(envelope_id=req.envelope_id))
-
- 

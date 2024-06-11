@@ -6,7 +6,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 
 class Publication:
-    def __init__(self,publication_filled, llm_use:bool) -> None:
+    def __init__(self,publication_filled, llm_use:bool=True) -> None:
         self.publication_filled = publication_filled
         
         self.title = self.get_publication_title()
@@ -18,7 +18,7 @@ class Publication:
         self.topic = self.get_topic() if not llm_use else self.get_topic_LLM()
         
     def get_topic(self,output_file="json/ouput.json", # à voir cette histoire avec get_topic et __get_topic
-                  input_file="json/response.json"):
+                  input_file="json/response.json") -> list[str]:
         try:
             with open(output_file,'r') as file:
                 data = json.load(file)
@@ -26,98 +26,62 @@ class Publication:
         except Exception as e:
             return self.__get_topic(input_file)
         
-    def get_publication_url(self):
+    def get_publication_url(self) -> str:
         return self.publication_filled['pub_url']
     
-    def get_publication_title(self):
+    def get_publication_title(self) -> str:
         return self.publication_filled['bib']['title'] 
 
-    def get_publication_abstract(self):
+    def get_publication_abstract(self) -> str:
         return self.publication_filled['bib']['abstract']
 
-    def get_author_name(self):
+    def get_author_name(self) -> str:
         return self.publication_filled['bib']['author']
 
-    def get_year(self):
+    def get_year(self) -> str:
         return self.publication_filled['bib']['pub_year']
     
-    def get_citation(self):
+    def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic_LLM(self):
-        with open("json/response.json", 'r') as file:
-            data = json.load(file)
+    def get_topic_LLM(self,input_file="json/response.json") -> dict:
 
-        template = f"""
-        Here is a text: {self.abstract} Please identify the topics from the following list: {data.keys()}. If the topic is not found in the list, please determine the topic. 
-                    
-        Note: A single text can belong to multiple topics, so please list all relevant topics. Ensure that the keywords are extracted directly from the text. Don't use this symbol ":" anywhere in the output text except when it's required to avoid confusion"""
+
+
+        with open(input_file, 'r') as file:
+            data = json.load(file)
                     
         llm = Ollama(
         model="llama3")  # assuming you have Ollama installed and have llama3 model pulled with `ollama pull llama3 `
-
-        
-        
-
         parser = JsonOutputParser()
+        
+        new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
+
+        As an example, for the schema {"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
+        the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
+
+        Here is the output schema:
+        ```
+        {"topic": {'Machine Learning: [Keyword1, keyword2, keyword3], 'Batteries: [keyword1, keyword2, keyword3]}
+        ```
+        """
+
 
         prompt = PromptTemplate(
-            template="Answer the user query.\n{format_instructions}\n{query}\n",
-            input_variables=["query"],
-            partial_variables={"format_instructions": parser.get_format_instructions()},
+            template="Here is a text: {abstract} Please identify the topics from the following list: {liste}. Note: A single text can belong to multiple topics, so please list all relevant topics.  \n{format_instructions}"
+        ,
+            input_variables=["abstract","liste","topics"],
+            partial_variables={"format_instructions": new_text}
         )
 
+
         chain = prompt | llm | parser
-
-        chain.invoke({"query": template})
-                
-        """
-        
-        dico = {}
+        topics = chain.invoke({"abstract": self.abstract, "liste": data.keys()})
+        return topics['topic']
         
         
-        
-        response = ""
-
-        print(response)
-        
-        
-        for i in range(response.count(";")):
-            try:
-                var = response.split(";")[i]
-                #print(f'var: {var}\n --------')
-                topic, keywords = var.split("::")[0].split(":")[1], var.split("::")[1].split(",") # Enlever le `\n` et ne garder que la partie importante 
-                dico[topic.replace("\n","")] = keywords
-                #print(f' topic: {topic}, keywords: {keywords}\n --------')
-            except Exception as e:
-                try:
-                    topic, keywords = var.split("::")[0], var.split("::")[1].split(",") # Enlever le `\n` et ne garder que la partie importante 
-                    dico[topic.replace("\n","")] = keywords
-                    #print(f' topic: {topic}, keywords: {keywords}\n --------')
-                except Exception as e:
-                    #print(f"Couldn't split the topic and keywords: {e}")
-                    continue
-
-        print(dico)
-                
-        with open("json/response.json", 'r') as file:
-            data = json.load(file)
-        for key in dico:
-            try:
-                data[key]['keywords'] += list(map(lambda x: x.lower(),dico[key]))
-                data[key]['keywords'] = list(set(data[key]['keywords']))
-            except Exception as e:
-                data[key]['keywords'] = list(map(lambda x: x.lower(),dico[key]))
-                
-        with open("json/response.json", 'w') as file:
-            json.dump(data, file)
-            
-        return dico
-    """
-        
-                
     def __get_topic(self
-            , file):
+            , file) -> list[str]:
         
         topics = []
         with open(file, 'r') as file:

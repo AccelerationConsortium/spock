@@ -1,7 +1,19 @@
 """Main module."""
-socket_mode_client.connect()
+import json
+import time
+import concurrent.futures
+from publication import Publication
+from author import Author
+
+author = Author('Mehrad Ansari')
+pub = Publication(author.get_last_publication())
+print(pub.title)
+print(pub.abstract)
+print(pub.topic)
+
+"""
 while True:
-    
+        
     with open('json/ouput.json', 'r') as file:
         scholars_publications = json.load(file)
 
@@ -11,3 +23,4 @@ while True:
 
     print('Waiting!')
     time.sleep(900)
+"""
