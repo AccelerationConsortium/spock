@@ -2,8 +2,8 @@
 import json
 import time
 import concurrent.futures
-from publication import Publication
-from author import Author
+from .publication import Publication
+from .author import Author
 
 author = Author('Mehrad Ansari')
 pub = Publication(author.get_last_publication())

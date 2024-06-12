@@ -6,7 +6,7 @@ from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
-from common import setup
+from .common import setup
 
 class Bot:
     def __init__(self, slack_bot_token:str, slack_app_token:str, channel_id:str):

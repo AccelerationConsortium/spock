@@ -2,9 +2,9 @@
 """
 
 import concurrent.futures
-from author import Author
-from publication import Publication
-from bot import Bot
+from .author import Author
+from .publication import Publication
+from .bot import Bot
 
 
 def setup_json(author):

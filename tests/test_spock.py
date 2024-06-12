@@ -5,7 +5,7 @@
 import pytest
 
 
-from spock import spock
+from spock_literature import spock
 
 
 @pytest.fixture

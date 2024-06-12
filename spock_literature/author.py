@@ -1,6 +1,6 @@
 from scholarly import scholarly
 import json
-from publication import Publication
+from .publication import Publication
 
 class Author:
     def __init__(self,author) -> None:
@@ -36,3 +36,6 @@ class Author:
         
         with open(output_file,'w') as file:
             json.dump(data, file)
+
+
+print("test")
