@@ -2,16 +2,19 @@
 import json
 import time
 import concurrent.futures
-from .publication import Publication
-from .author import Author
+from publication import Publication
+from author import Author
 
 author = Author('Mehrad Ansari')
+print(author.get_last_publication())
+"""
 pub = Publication(author.get_last_publication())
+print(pub)
 print(pub.title)
 print(pub.abstract)
 print(pub.topic)
 
-"""
+
 while True:
         
     with open('json/ouput.json', 'r') as file:

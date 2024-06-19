@@ -2,19 +2,20 @@ import json
 from langchain_community.llms import Ollama
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
-from langchain_core.output_parsers import JsonOutputParser
-from langchain_core.prompts import PromptTemplate
+import requests
+from bs4 import BeautifulSoup
+
 
 class Publication:
     def __init__(self,publication_filled, llm_use:bool=True) -> None:
         self.publication_filled = publication_filled
-        
         self.title = self.get_publication_title()
         self.abstract = self.get_publication_abstract().lower()
         self.author = self.get_author_name()
         self.year = self.get_year()
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
+        self.pdf = self.get_pdf()
         self.topic = self.get_topic() if not llm_use else self.get_topic_LLM()
         
     def get_topic(self,output_file="json/ouput.json", # à voir cette histoire avec get_topic et __get_topic
@@ -96,6 +97,40 @@ class Publication:
     
                     
         return list(set(topics))
-                
+    
+    def get_pdf(self, local_file_path = ""):
+        url = f"https://scholar.google.com/scholar?q={self.title}"
+
+        # Make an HTTP request to fetch the page content
+        response = requests.get(url)
+
+        # Check if the request was successful (status code 200)
+        if response.status_code == 200:
+            html_content = response.text
+            try:
+                return self.__parse_google_scholar(html_content)
+            except:
+                return None
+
+
+        else:
+            # Print an error message if the request fails
+            print(f"Failed to fetch the page. Status code: {response.status_code}")
+            return None
+
+
+        
+    def __parse_google_scholar(self,html_content):
+
+        soup = BeautifulSoup(html_content, 'html.parser')
+
+        a_tags = soup.find_all('a')
+
+        pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
+        return pdf_link
         
     
+     
+                    
+            
+        

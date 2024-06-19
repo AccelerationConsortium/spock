@@ -6,7 +6,12 @@ from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
-from .common import setup
+try:
+    from .author import Author
+    from .publication import Publication
+except:
+    from author import Author
+    from publication import Publication
 
 class Bot:
     def __init__(self, slack_bot_token:str, slack_app_token:str, channel_id:str):
@@ -64,3 +69,39 @@ class Bot:
 
                 
         
+def process_scholar(scholar,Bot: Bot):
+    key = scholar[0]
+    value = scholar[1]
+    try:
+
+        author = Author(key)
+        #print(f'value title= {value["title"]} \n author title = {author.get_last_publication()["bib"]["title"]}')
+        if value['title'] != author.get_last_publication()['bib']['title']:
+            
+            print(f"Updating topics for {author}")
+            
+            try:
+                last_publication = Publication(author.get_last_publication())
+            except Exception as e:
+                print(f"Couldn't fetch the last publication for {author}: {e}")
+                
+            
+            text_message = f":rolled_up_newspaper::test_tube: {author.author_name} has an update on Google Scholar!\n\
+                    ```Title: {last_publication.title}\nCitation: {last_publication.citation}\nYear: {last_publication.year}```"
+            try:
+                response = Bot.client.chat_postMessage(
+                channel=Bot.channel_id, 
+                text=text_message)
+            except Exception as e:
+                print(f"Couldn't send the message to slack: {e}")
+            
+            # Updating the Json file
+            try:
+                author.setup_author('json/ouput.json')
+            except Exception as e:
+                print(f"Couldn't Overwrite the old data for: {author}: {e}")
+
+        
+        print(f"Topics for {author} have been updated")
+    except Exception as e:
+        print(f"Couldn't find the google scholar profile for {author}: {e}")

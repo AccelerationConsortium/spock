@@ -1,6 +1,6 @@
 from scholarly import scholarly
 import json
-from .publication import Publication
+from publication import Publication
 
 class Author:
     def __init__(self,author) -> None:
@@ -25,14 +25,17 @@ class Author:
     def setup_author(self,output_file):
         with open(output_file,'r') as file:
             data = json.load(file)
+        print("data loaded successfully")
         author_last_publication = Publication(self.get_last_publication())
+        print("publication loaded successfully")
         
         data[self.author_name] = {"title": author_last_publication.title,
                                     "abstract": author_last_publication.abstract,
                                     "topic": author_last_publication.topic, 
                                     "author": author_last_publication.author, 
                                     "year": author_last_publication.year,
-                                    "url": author_last_publication.url,}
+                                    "url": author_last_publication.url,
+                                    "pdf": author_last_publication.pdf,}
         
         with open(output_file,'w') as file:
             json.dump(data, file)
