@@ -4,6 +4,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 import requests
 from bs4 import BeautifulSoup
+from bot import Bot_LLM
 
 
 class Publication:
@@ -16,8 +17,10 @@ class Publication:
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
         self.pdf = self.get_pdf()
-        self.topic = self.get_topic() if not llm_use else self.get_topic_LLM()
-        
+        self.topic = self.get_topic()
+      
+      
+    '''  
     def get_topic(self,output_file="json/ouput.json", # à voir cette histoire avec get_topic et __get_topic
                   input_file="json/response.json") -> list[str]:
         try:
@@ -26,7 +29,7 @@ class Publication:
             return data[self.author]['topic']
         except Exception as e:
             return self.__get_topic(input_file)
-        
+     '''   
     def get_publication_url(self) -> str:
         return self.publication_filled['pub_url']
     
@@ -45,66 +48,12 @@ class Publication:
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic_LLM(self,input_file="json/response.json") -> dict:
-
-
-
-        with open(input_file, 'r') as file:
-            data = json.load(file)
-                    
-        llm = Ollama(
-        model="llama3")  # assuming you have Ollama installed and have llama3 model pulled with `ollama pull llama3 `
-        parser = JsonOutputParser()
-        
-        new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
-
-        As an example, for the schema {"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
-        the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
-
-        Here is the output schema:
-        ```
-        {"topic": {'Machine Learning: [Keyword1, keyword2, keyword3], 'Batteries: [keyword1, keyword2, keyword3]}
-        ```
-        """
-
-
-        prompt = PromptTemplate(
-            template="Here is a text: {abstract} Please identify the topics from the following list: {liste}. Note: A single text can belong to multiple topics, so please list all relevant topics.  \n{format_instructions}"
-        ,
-            input_variables=["abstract","liste","topics"],
-            partial_variables={"format_instructions": new_text}
-        )
-
-
-        chain = prompt | llm | parser
-        topics = chain.invoke({"abstract": self.abstract, "liste": data.keys()})
-        return topics['topic']
-        
-        
-    def __get_topic(self
-            , file) -> list[str]:
-        
-        topics = []
-        with open(file, 'r') as file:
-            data = json.load(file)
-        
-        for category, item in data.items():
-            for keyword in item['keywords']:
-                if keyword in self.abstract:
-                    topics.append(category)
-                if keyword in self.title:
-                    topics.append(category)
+    def get_topic(self,llm,input_file="json/response.json") -> dict:
+        return llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
     
-                    
-        return list(set(topics))
-    
-    def get_pdf(self, local_file_path = ""):
+    def get_pdf(self):
         url = f"https://scholar.google.com/scholar?q={self.title}"
-
-        # Make an HTTP request to fetch the page content
         response = requests.get(url)
-
-        # Check if the request was successful (status code 200)
         if response.status_code == 200:
             html_content = response.text
             try:
@@ -114,7 +63,6 @@ class Publication:
 
 
         else:
-            # Print an error message if the request fails
             print(f"Failed to fetch the page. Status code: {response.status_code}")
             return None
 
@@ -125,9 +73,46 @@ class Publication:
         soup = BeautifulSoup(html_content, 'html.parser')
 
         a_tags = soup.find_all('a')
+        try:
+            pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
+            print(f"PDF link found: {pdf_link}")
+            return pdf_link
+        except:
+            return None
+        
+        
+    
+    def download_pdf(self,path):
+        
+        import requests
+        path = path + self.title + ".pdf"
+        
+        if self.pdf is not None:
+            try:
+                response = requests.get(self.pdf)
+                if response.status_code == 200:
+                    with open(path, 'wb') as file:
+                        file.write(response.content)
+                    print(f"PDF successfully downloaded and saved to {path}")
+                else:
+                    print(f"Failed to download the PDF. HTTP Status Code: {response.status_code}")
 
-        pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
-        return pdf_link
+            except requests.exceptions.RequestException as e:
+                print(f"An error occurred while downloading the PDF: {e}")
+        else:
+            from scidownl import scihub_download
+            #  scidownl by title
+            try:
+                scihub_download(self.title, paper_type="title", out=path)
+            except:
+                try:
+                    # By URL
+                    scihub_download(self.pdf, out=path)
+                except:
+                    print("Couldn't download the PDF")
+           
+
+        
         
     
      

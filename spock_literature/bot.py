@@ -105,3 +105,85 @@ def process_scholar(scholar,Bot: Bot):
         print(f"Topics for {author} have been updated")
     except Exception as e:
         print(f"Couldn't find the google scholar profile for {author}: {e}")
+
+
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PDFPlumberLoader
+from langchain.embeddings import OllamaEmbeddings
+from langchain.vectorstores import Chroma
+from langchain_community.llms import Ollama
+import json
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+
+
+class Bot_LLM:
+    def __init__(self,model='llama3',embed_model='mxbai-embed-large', folder_path='db2'):
+        self.llm = Ollama(model=model)
+        self.oembed = OllamaEmbeddings(model=embed_model)
+        self.folder_path = folder_path
+        self.vectorestore = None
+
+    
+    def get_topic_publication_abstract(self, abstract:str, input_file:str):
+        with open(input_file, 'r') as file:
+            data = json.load(file)
+        
+        parser = JsonOutputParser()
+        
+        new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
+
+        As an example, for the schema {"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
+        the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
+
+        Here is the output schema:
+        ```
+        {"topic": {'Machine Learning: [Keyword1, keyword2, keyword3], 'Batteries: [keyword1, keyword2, keyword3]}
+        ```
+        """
+
+
+        prompt = PromptTemplate(
+            template="Here is a text: {abstract} Please identify the topics from the following list: {liste}. Note: A single text can belong to multiple topics, so please list all relevant topics.  \n{format_instructions}"
+        ,
+            input_variables=["abstract","liste","topics"],
+            partial_variables={"format_instructions": new_text}
+        )
+
+
+        chain = prompt | self.llm | parser
+        topics = chain.invoke({"abstract": abstract, "liste": data.keys()})
+        return topics['topic']
+
+    
+    def rag(self, document:str):
+        try:
+            # The document is a pdf file
+            loader = PDFPlumberLoader(document)
+            data = loader.load()
+            chunk_size = 500
+            chunk_overlap = 20
+
+        except:
+            data = TextLoader(document).load()
+
+            
+        text_splitter=RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        all_splits = text_splitter.split_documents(data)
+        self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)
+        
+    def query_rag(self, question:str) -> None:
+        if self.vectorstore:
+            docs = self.vectorstore.similarity_search(question)
+            from langchain.chains import RetrievalQA
+            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=True)
+            res = qachain.invoke({"query": question})
+            print(res['result'])
+
+
+        else:
+            raise Exception("No documents loaded")
+
+
+
+        

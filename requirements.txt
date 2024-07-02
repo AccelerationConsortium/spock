@@ -6,3 +6,5 @@ scholarly
 jupyter
 slack_bolt
 chromadb
+scidownl
+langchain.chains

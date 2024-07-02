@@ -105,6 +105,5 @@ ENV/
 
 # IDE settings
 .vscode/
-spock_literature/main.py
 spock_literature/__pycache__/
 spock_literature/rag.py
