@@ -38,7 +38,7 @@ class Author:
         first_publication_filled = scholarly.fill(first_publication)
         return first_publication_filled
 
-    def setup_author(self, output_file):
+    def setup_author(self, output_file, llm):
         """
         Setup the author by adding their last publication to a JSON file.
 
@@ -56,7 +56,7 @@ class Author:
         data[self.author_name] = {
             "title": author_last_publication.title,
             "abstract": author_last_publication.abstract,
-            "topic": author_last_publication.get_topic(llm=Bot_LLM()), 
+            "topic": author_last_publication.get_topic(llm=llm), 
             "author": author_last_publication.author, 
             "year": author_last_publication.year,
             "url": author_last_publication.url,
