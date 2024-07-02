@@ -2,6 +2,7 @@ from common import *
 import json
 import time
 import concurrent.futures
+from author import Author
 
 
 if __name__ == "__main__":
