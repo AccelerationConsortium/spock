@@ -6,13 +6,15 @@ from slack_sdk import WebClient
 from slack_sdk.socket_mode import SocketModeClient
 from slack_sdk.socket_mode.request import SocketModeRequest
 from slack_sdk.socket_mode.response import SocketModeResponse
+
+'''
 try:
     from .author import Author
     from .publication import Publication
 except:
     from author import Author
     from publication import Publication
-
+'''
 class Bot:
     def __init__(self, slack_bot_token:str, slack_app_token:str, channel_id:str):
         self.slack_bot_token = slack_bot_token
@@ -108,7 +110,7 @@ def process_scholar(scholar,Bot: Bot):
 
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PDFPlumberLoader
+from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
 from langchain.embeddings import OllamaEmbeddings
 from langchain.vectorstores import Chroma
 from langchain_community.llms import Ollama
@@ -165,7 +167,8 @@ class Bot_LLM:
             chunk_overlap = 20
 
         except:
-            data = TextLoader(document).load()
+            data = [TextLoader(text).load() for text in document]
+            data = [item for sublist in data for item in sublist]
 
             
         text_splitter=RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)

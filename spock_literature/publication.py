@@ -17,7 +17,7 @@ class Publication:
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
         self.pdf = self.get_pdf()
-        self.topic = self.get_topic()
+    
       
       
     '''  
@@ -48,8 +48,8 @@ class Publication:
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic(self,llm,input_file="json/response.json") -> dict:
-        return llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
+    def get_topic(self,llm,input_file="json/response.json") -> None:
+        self.topic: dict = llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
     
     def get_pdf(self):
         url = f"https://scholar.google.com/scholar?q={self.title}"
