@@ -155,6 +155,7 @@ class Bot_LLM:
 
         chain = prompt | self.llm | parser
         topics = chain.invoke({"abstract": abstract, "liste": data.keys()})
+        print('Topics: ', topics['topic'])
         return topics['topic']
 
     
