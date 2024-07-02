@@ -50,6 +50,7 @@ class Publication:
     
     def get_topic(self,llm,input_file="json/response.json") -> None:
         self.topic: dict = llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
+        return self.topic
     
     def get_pdf(self):
         url = f"https://scholar.google.com/scholar?q={self.title}"
