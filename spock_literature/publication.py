@@ -17,6 +17,7 @@ class Publication:
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
         self.pdf = self.get_pdf()
+        self.topic = None
     
       
       
@@ -31,23 +32,48 @@ class Publication:
             return self.__get_topic(input_file)
      '''   
     def get_publication_url(self) -> str:
-        return self.publication_filled['pub_url']
+        try:
+            return self.publication_filled['pub_url']
+        except:
+            return None
     
     def get_publication_title(self) -> str:
-        return self.publication_filled['bib']['title'] 
+        try:
+            return self.publication_filled['bib']['title']
+        except:
+            return None
 
     def get_publication_abstract(self) -> str:
-        return self.publication_filled['bib']['abstract']
+        try:
+
+            return self.publication_filled['bib']['abstract']
+        except:
+            return None
 
     def get_author_name(self) -> str:
-        return self.publication_filled['bib']['author']
+        try:
+
+            return self.publication_filled['bib']['author']
+        except:
+            return None
 
     def get_year(self) -> str:
-        return self.publication_filled['bib']['pub_year']
-    
+        try:
+            return self.publication_filled['bib']['pub_year']
+        except:
+            return None
+
     def get_citation(self) -> str:
-        return self.publication_filled['bib']['citation']
-    
+        try:
+            return self.publication_filled['bib']['citation']
+        except:
+            return None
+
+    def get_publication_url(self) -> str:
+        try:
+            return self.publication_filled['pub_url']
+        except:
+            return None
     def get_topic(self,llm,input_file="json/response.json") -> None:
         self.topic: dict = llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
         return self.topic
@@ -81,6 +107,17 @@ class Publication:
         except:
             return None
         
+    def __repr__(self) -> str:
+        self.available_attributes = {'title': self.title if self.title is not None else 'N/A',
+                                     'abstract' : self.abstract if self.abstract is not None else 'N/A',
+                                        'author': self.author if self.author is not None else 'N/A',
+                                        'year': self.year if self.year is not None else 'N/A',
+                                        'url': self.url if self.url is not None else 'N/A',
+                                        'citation': self.citation if self.citation is not None else 'N/A',
+                                        'pdf': self.pdf if self.pdf is not None else 'N/A',
+                                        'topic': self.topic if self.topic is not None else 'N/A'}
+        return str(self.available_attributes)
+
         
     
     def download_pdf(self,path):

@@ -7,6 +7,8 @@ from bot import Bot_LLM
 
 if __name__ == "__main__":
     bot_llm = Bot_LLM()
+    
+    
     with open('json/output.json','r') as file:
         data = json.load(file)
         
