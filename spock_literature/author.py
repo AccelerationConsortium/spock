@@ -1,6 +1,9 @@
 from scholarly import scholarly
 import json
-from publication import Publication
+try:
+    from publication import Publication
+except:
+    from .publication import Publication
 
 class Author:
     def __init__(self, author):
@@ -66,9 +69,9 @@ class Author:
         with open(output_file, 'w') as file:
             json.dump(data, file)
 
-'''
-author = Author('Mehrad Ansari')
-pub = Publication(author.get_last_publication())
+if __name__ == "__main__":
+    author = Author('False author')
+    print(author.get_last_publication())
+    #pub = Publication(author.get_last_publication())
 
-pub.download_pdf('pdfs/')
-'''
+#pub.download_pdf('pdfs/')
