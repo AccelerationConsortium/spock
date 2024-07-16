@@ -22,35 +22,40 @@ names = [
 
 
 def get_manually_latest_article(name:str):
-     import requests
-     search_query = scholarly.search_author(name)
-     scholar_id = next(search_query)['scholar_id']
-     url = f"https://scholar.google.com/citations?hl=en&user={scholar_id}&view_op=list_works&sortby=pubdate"
-     print(url)
-     response = requests.get(url)
-     print(response.status_code)
-     if response.status_code == 200:
-          html_content = response
-          soup = BeautifulSoup(html_content, 'html.parser')
-          tbody = soup.find('tbody', id='gsc_a_b')
-          first_tr = tbody.find('tr')
+    """
+    We manually get the latest article of an author from Google Scholar. We are
+    then going to compare it with the one fetched by the Author class.
 
-          title = first_tr.find('a', class_='gsc_a_at').text
+    """
+    import requests
+    search_query = scholarly.search_author(name)
+    scholar_id = next(search_query)['scholar_id']
+    url = f"https://scholar.google.com/citations?hl=en&user={scholar_id}&view_op=list_works&sortby=pubdate"
+    print(url)
+    response = requests.get(url)
+    print(response.status_code)
+    if response.status_code == 200:
+        html_content = response
+        soup = BeautifulSoup(html_content, 'html.parser')
+        tbody = soup.find('tbody', id='gsc_a_b')
+        first_tr = tbody.find('tr')
 
-          authors = first_tr.find_all('div', class_='gs_gray')[0].text
+        title = first_tr.find('a', class_='gsc_a_at').text
 
-          journal_info = first_tr.find_all('div', class_='gs_gray')[1].text
-          journal, year = journal_info.rsplit(',', 1)
-          year = year.strip() 
-          return {"title":title, "authors":authors, "journal":journal, "year":year}
+        authors = first_tr.find_all('div', class_='gs_gray')[0].text
 
-          # print(f"Title: {title}")
-          # print(f"Authors: {authors}")
-          # print(f"Journal: {journal}")
-          # print(f"Year: {year}")
-     else:
-          print(f"Failed to fetch the page. Status code: {response.status_code}")
-          return None
+        journal_info = first_tr.find_all('div', class_='gs_gray')[1].text
+        journal, year = journal_info.rsplit(',', 1)
+        year = year.strip() 
+        return {"title":title, "authors":authors, "journal":journal, "year":year}
+
+        # print(f"Title: {title}")
+        # print(f"Authors: {authors}")
+        # print(f"Journal: {journal}")
+        # print(f"Year: {year}")
+    else:
+        print(f"Failed to fetch the page. Status code: {response.status_code}")
+        return None
 
 get_manually_latest_article('Mehrad Ansari')
 @pytest.fixture(params=names)
@@ -120,21 +125,38 @@ def test_publication_initialization(publication, sample_publication):
 
 """
 
-
+import json
 from spock_literature.bot import Bot_LLM
-from langchain_community.llms import Ollama
 
+@pytest.fixture
+def sample_abstract():
+    return "lithium-ion batteries (libs) have attracted widespread attention as an efficient energy storage device on electric vehicles (ev) to achieve emission-free mobility. however, the performance of libs deteriorates with time and usage, and the state of health of used batteries are difficult to quantify. having accurate estimations of a battery\u2019s remaining life across different life stages would benefit maintenance, safety, and serve as a means of qualifying used batteries for second-life applications. since the full history of a battery may not always be available in downstream applications, in this study, we demonstrate a deep learning framework that enables dynamic degradation rate prediction, including both short-term and long-term forecasting, while requiring only the most recent battery usage information. specifically, our model takes a rolling window of current and voltage time-series inputs, and predicts the near-term and \u2026"
 
+@pytest.fixture
+def sample_json(tmp_path):
+    data = {
+        "Machine Learning": ["keyword1", "keyword2", "keyword3"],
+        "Batteries": ["keyword1", "keyword2", "keyword3"]
+    }
+    file_path = tmp_path / "response.json"
+    with open(file_path, 'w') as file:
+        json.dump(data, file)
+    return str(file_path)
 
-# Test the topic 
 @pytest.fixture
 def get_topic_publication_abstract():
-    def _get_topic_publication_abstract(abstract:str, input_file:str):
+    def _get_topic_publication_abstract(abstract: str, input_file: str):
         return Bot_LLM().get_topic_publication_abstract(abstract, input_file)
     return _get_topic_publication_abstract
-def test_bot_llm():
-    bot = Bot_LLM()
 
+def test_get_topic_publication_abstract(get_topic_publication_abstract, sample_abstract, sample_json):
+    topics = dict(get_topic_publication_abstract(abstract=sample_abstract, input_file=sample_json))
+    
+    expected_topics = {
+        "Machine Learning",
+        "Batteries"
+    }
+    
+    assert  expected_topics <= set(topics.keys())
+    print('Test passed for get_topic_publication_abstract with abstract')
 
-
-# Test tge
