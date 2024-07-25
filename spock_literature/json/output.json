@@ -8,7 +8,11 @@
     "pdf": null
     
   },
-  "Jay Werber": {
+
+  // Not the correct article 
+
+  
+  "Jay Werber": {    
     "title": "Clinical sequencing of the retinitis pigmentosa gene RPGR in over 1,000 cases of vision loss",
     "abstract": "rpgr pathogenic variants are the major cause of x-linked retinitis pigmentosa. here, we report the results from 1,033 clinical dna tests that included sequencing of rpgr. a total of 184 rpgr variants were identified: 78 pathogenic or likely pathogenic, 14 uncertain, and 92 likely benign or benign. among the pathogenic and likely pathogenic variants, 23 were novel, and most were frameshift or nonsense mutations (87%) and enriched (67%) in rpgr exon 15 (orf15). identical pathogenic variants found in different families were largely on different haplotype backgrounds, indicating relatively frequent, recurrent rpgr mutations. none of the 16 mother/affected son pairs showed de novo mutations; all 16 mothers were heterozygous for the pathogenic variant. these last two observations support the occurrence of most rpgr mutations in the male germline.",
     "topic": {
@@ -37,6 +41,8 @@
     "url": "https://www.nature.com/articles/s41524-024-01259-w",
     "pdf": null
   },
+
+  
   "Cheryl Arrowsmith": {
     "title": "A chemical probe to modulate human GID4 Pro/N-degron interactions",
     "abstract": "the c-terminal to lish (ctlh) complex is a ubiquitin ligase complex that recognizes substrates with pro/n-degrons via its substrate receptor glucose-induced degradation 4 (gid4), but its function and substrates in humans remain unclear. here, we report pfi-7, a potent, selective and cell-active chemical probe that antagonizes pro/n-degron binding to human gid4. use of pfi-7 in proximity-dependent biotinylation and quantitative proteomics enabled the identification of gid4 interactors and gid4-regulated proteins. gid4 interactors are enriched for nucleolar proteins, including the pro/n-degron-containing rna helicases ddx21 and ddx50. we also identified a distinct subset of proteins whose cellular levels are regulated by gid4 including hmgcs1, a pro/n-degron-containing metabolic enzyme. these data reveal human gid4 pro/n-degron targets regulated through a combination of degradative and \u2026",
