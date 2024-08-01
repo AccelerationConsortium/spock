@@ -103,7 +103,7 @@ print(scholarly.bibtex(pub))
 
 import pytest
 from unittest.mock import patch, MagicMock
-from spock_literature.publication import Publication  # Replace 'your_module' with the actual name of your module
+from spock_literature.publication import Publication  
 
 
 @pytest.fixture

@@ -199,10 +199,13 @@ class Publication:
                 print("Article found.")
                 url = result.pdf_url 
                 self.pdf = url # Maybe to Split the function in 2
+                
+                
+                
                 response = requests.get(url)
                 os.makedirs(directory, exist_ok = True)
-                self.title = standard_url_alphanumeric_arxiv(self.title)
-                with open(f"{self.title}.pdf", "wb") as f:
+                title = standard_url_alphanumeric_arxiv(self.title)
+                with open(f"{title}.pdf", "wb") as f:
                     f.write(response.content)
 
 
