@@ -189,6 +189,33 @@
             "models": "Yes",
             "funding": "Yes"
         },
+        "AGENT-BASED_LEARNING_OF_MATERIALS_DATASETS_FROM_SCIENTIFIC_LITERATURE.pdf": {
+            "affiliation": "Yes",
+            "topic": "Yes",
+            "new materials": "Yes",
+            "screening algorithms": "Yes",
+            "AI algorithms": "Yes",
+            "workflow": "Yes",
+            "methods": "Yes",
+            "models": "Yes",
+            "funding": "No"
+        },
+
+        "Learning_peptide_properties_with_positive_examples_only.pdf": {
+            "affiliation": "No",
+            "topic": "Yes",
+            "new materials": "Yes",
+            "screening algorithms": "Yes",
+            "AI algorithms": "Yes",
+            "workflow": "Yes",
+            "methods": "Yes",
+            "models": "Yes",
+            "funding": "No"
+        }
+
+
+    
+    
         
     
     
