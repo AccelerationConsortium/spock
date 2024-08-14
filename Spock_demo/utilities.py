@@ -54,8 +54,8 @@ class Publication:
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic(self,llm,input_file="json/response.json") -> None:
-        self.topic: dict = llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
+    def get_topic(self,llm) -> None:
+        self.topic: dict = llm.get_topic_publication(abstract=self.abstract)
         return self.topic
     
     def get_pdf(self):
@@ -241,7 +241,7 @@ class Bot_LLM:
         
         
 
-    def get_topic_publication_abstract(self, abstract:str):
+    def get_topic_publication(self):
         parser = JsonOutputParser()
         
         new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
