@@ -264,7 +264,7 @@ class Bot_LLM:
 
 
         chain = prompt | self.llm | parser
-        topics = chain.invoke()
+        topics = chain.invoke({"format_instructions": new_text})
         return topics['topic']
 
     
