@@ -55,7 +55,7 @@ class Publication:
         return self.publication_filled['bib']['citation']
     
     def get_topic(self,llm) -> None:
-        self.topic: dict = llm.get_topic_publication(abstract=self.abstract)
+        self.topic: dict = llm.get_topic_publication()
         return self.topic
     
     def get_pdf(self):
