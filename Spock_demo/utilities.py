@@ -262,8 +262,10 @@ class Bot_LLM:
         return topics['topic']
 
     
-    def rag(self, document:str):
+    def chunk_indexing(self, document:str):
         # Check if the document is a valid file path
+        from langchain_experimental.text_splitter import SemanticChunker
+
 
         data = []
         if isinstance(document, str) and os.path.isfile(document):
@@ -290,7 +292,10 @@ class Bot_LLM:
                 raise RuntimeError(f"Error processing text: {e}")
 
             
-        text_splitter=RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
+        text_splitter=text_splitter = SemanticChunker(
+    self.oembed, breakpoint_threshold_type="standard_deviation")
+
+
         all_splits = text_splitter.split_documents(data)
         self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)
         
@@ -301,14 +306,11 @@ class Bot_LLM:
             qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=True)
             res = qachain.invoke({"query": question})
             print(res['result'])
+            return res['result']
 
 
         else:
             raise Exception("No documents loaded")
-
-
-
-
 
 
 class Author:
