@@ -242,26 +242,22 @@ class Bot_LLM:
         
 
     def get_topic_publication(self):
+        
         parser = JsonOutputParser()
         
-        new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
-
-        As an example, for the schema {"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
-        the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
-
-        Here is the output schema:
-        ```
-        {"topic": {'Machine Learning: [Keyword1, keyword2, keyword3], 'Batteries: [keyword1, keyword2, keyword3]}
-        ```
+        new_text = """
+        {
+            "topic": {
+                "Machine Learning": ["Keyword1", "Keyword2", "Keyword3"],
+                "Batteries": ["Keyword1", "Keyword2", "Keyword3"]
+            }
+        }
         """
 
-
         prompt = PromptTemplate(
-            template="Please identify the topics from the following list the text given to you. Note: A single text can belong to multiple topics, so please list all relevant topics."
-        ,
-            partial_variables={"format_instructions": new_text}
+            template="Please identify the topics from the following list the text given to you. Note: A single text can belong to multiple topics, so please list all relevant topics. {format_instructions}",
+            input_variables=["format_instructions"]
         )
-
 
         chain = prompt | self.llm | parser
         topics = chain.invoke({"format_instructions": new_text})
