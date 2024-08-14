@@ -21,7 +21,7 @@ class Publication:
         self.year = self.get_year()
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
-        self.pdf = None
+        self.pdf = self.get_pdf()
         self.topic = None
     
       
@@ -59,18 +59,15 @@ class Publication:
         return self.topic
     
     def get_pdf(self):
-        query = self.title.replace(" ", "+")
+        query = self.title.lower().replace(" ", "+")
         url = f"https://scholar.google.com/scholar?q={query}"
-        print(url)
         response = requests.get(url)
         if response.status_code == 200:
             html_content = response.text
             try:
-                self.pdf = self.__parse_google_scholar(html_content)
+                return self.__parse_google_scholar(html_content)
             except Exception as e:
                 print(f"An error occurred while fetching the PDF link: {e}")
-
-
         else:
             print(f"Failed to fetch the page. Status code: {response.status_code}")
             return None
@@ -96,24 +93,25 @@ class Publication:
         try:
             pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
             print(f"PDF link found: {pdf_link}")
+            self.download_pdf(link=pdf_link)
             return pdf_link
         except Exception as e:
             print(f"An error occurred while parsing the PDF link: {e}")
         
         
     
-    def download_pdf(self,path):
+    def download_pdf(self,path=os.getcwd()+"/pdfs/",link=""):
         
         # Verifier si le path exist sinon le creer
         
         import os
         import requests
-        
+                
         
         path = path + self.title + ".pdf"
-        if self.pdf is not None:
+        if link != "":
             try:
-                response = requests.get(self.pdf)
+                response = requests.get(link)
                 if response.status_code == 200:
                     with open(path, 'wb') as file:
                         file.write(response.content)
@@ -349,7 +347,7 @@ class Author:
         first_publication_filled = scholarly.fill(first_publication)
         return first_publication_filled
 
-    def setup_author(self, output_file, llm,publication:Publication=None):
+    def setup_author(self, output_file,publication:Publication=None):
         """
         Setup the author by adding their last publication to a JSON file.
 

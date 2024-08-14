@@ -21,7 +21,7 @@ class Publication:
         self.year = self.get_year()
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
-        self.pdf = None
+        self.pdf = self.get_pdf()
         self.topic = None
     
       
@@ -54,23 +54,21 @@ class Publication:
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic(self,llm,input_file="json/response.json") -> None:
-        self.topic: dict = llm.get_topic_publication_abstract(abstract=self.abstract,input_file=input_file)
+    def get_topic(self,llm) -> None:
+        self.topic: dict = llm.get_topic_publication()
         return self.topic
     
     def get_pdf(self):
-        query = self.title.replace(" ", "+")
+        query = self.title.lower().replace(" ", "+")
         url = f"https://scholar.google.com/scholar?q={query}"
-        print(url)
         response = requests.get(url)
         if response.status_code == 200:
             html_content = response.text
+            print(html_content)  # Add this line to inspect the HTML content
             try:
-                self.pdf = self.__parse_google_scholar(html_content)
+                return self.__parse_google_scholar(html_content)
             except Exception as e:
                 print(f"An error occurred while fetching the PDF link: {e}")
-
-
         else:
             print(f"Failed to fetch the page. Status code: {response.status_code}")
             return None
@@ -96,24 +94,27 @@ class Publication:
         try:
             pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
             print(f"PDF link found: {pdf_link}")
+            self.download_pdf(link=pdf_link)
             return pdf_link
         except Exception as e:
             print(f"An error occurred while parsing the PDF link: {e}")
         
         
     
-    def download_pdf(self,path):
+    def download_pdf(self,path=os.getcwd()+"pdfs/",link=""):
         
         # Verifier si le path exist sinon le creer
         
         import os
         import requests
         
+        print("downloading pdf")
+        
         
         path = path + self.title + ".pdf"
-        if self.pdf is not None:
+        if self.pdf is not None or link != "":
             try:
-                response = requests.get(self.pdf)
+                response = requests.get(self.pdf) if self.pdf is not None else requests.get(link)
                 if response.status_code == 200:
                     with open(path, 'wb') as file:
                         file.write(response.content)
@@ -241,35 +242,26 @@ class Bot_LLM:
         
         
 
-    def get_topic_publication_abstract(self, abstract:str, input_file:str):
-        with open(input_file, 'r') as file:
-            data = json.load(file)
+    def get_topic_publication(self):
         
         parser = JsonOutputParser()
         
-        new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
-
-        As an example, for the schema {"properties": {"foo": {"title": "Foo", "description": "a list of strings", "type": "array", "items": {"type": "string"}}}, "required": ["foo"]}
-        the object {"foo": ["bar", "baz"]} is a well-formatted instance of the schema. The object {"properties": {"foo": ["bar", "baz"]}} is not well-formatted.
-
-        Here is the output schema:
-        ```
-        {"topic": {'Machine Learning: [Keyword1, keyword2, keyword3], 'Batteries: [keyword1, keyword2, keyword3]}
-        ```
+        new_text = """
+        {
+            "topic": {
+                "Machine Learning": ["Keyword1", "Keyword2", "Keyword3"],
+                "Batteries": ["Keyword1", "Keyword2", "Keyword3"]
+            }
+        }
         """
 
-
         prompt = PromptTemplate(
-            template="Here is a text: {abstract} Please identify the topics from the following list: {liste}. Note: A single text can belong to multiple topics, so please list all relevant topics.  \n{format_instructions}"
-        ,
-            input_variables=["abstract","liste","topics"],
-            partial_variables={"format_instructions": new_text}
+            template="Please identify the topics from the following list the text given to you. Note: A single text can belong to multiple topics, so please list all relevant topics. {format_instructions}",
+            input_variables=["format_instructions"]
         )
 
-
         chain = prompt | self.llm | parser
-        topics = chain.invoke({"abstract": abstract, "liste": data.keys()})
-        print('Topics: ', topics['topic'])
+        topics = chain.invoke({"format_instructions": new_text})
         return topics['topic']
 
     
@@ -358,7 +350,7 @@ class Author:
         first_publication_filled = scholarly.fill(first_publication)
         return first_publication_filled
 
-    def setup_author(self, output_file, llm):
+    def setup_author(self, output_file,publication:Publication=None):
         """
         Setup the author by adding their last publication to a JSON file.
 
@@ -370,14 +362,13 @@ class Author:
         """
         with open(output_file, 'r') as file:
             data = json.load(file)
-        author_last_publication = Publication(self.get_last_publication())
+        author_last_publication = Publication(self.get_last_publication()) if publication != None else publication
         
 
         
         data[self.author_name] = {
             "title": author_last_publication.title,
             "abstract": author_last_publication.abstract,
-            "topic": author_last_publication.get_topic(llm=llm), 
             "author": author_last_publication.author, 
             "year": author_last_publication.year,
             "url": author_last_publication.url,
