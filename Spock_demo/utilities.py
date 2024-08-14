@@ -241,10 +241,7 @@ class Bot_LLM:
         
         
 
-    def get_topic_publication_abstract(self, abstract:str, input_file:str):
-        with open(input_file, 'r') as file:
-            data = json.load(file)
-        
+    def get_topic_publication_abstract(self, abstract:str):
         parser = JsonOutputParser()
         
         new_text = """The output should be formatted as a JSON instance that conforms to the JSON schema below.
@@ -260,16 +257,14 @@ class Bot_LLM:
 
 
         prompt = PromptTemplate(
-            template="Here is a text: {abstract} Please identify the topics from the following list: {liste}. Note: A single text can belong to multiple topics, so please list all relevant topics.  \n{format_instructions}"
+            template="Please identify the topics from the following list the text given to you. Note: A single text can belong to multiple topics, so please list all relevant topics."
         ,
-            input_variables=["abstract","liste","topics"],
             partial_variables={"format_instructions": new_text}
         )
 
 
         chain = prompt | self.llm | parser
-        topics = chain.invoke({"abstract": abstract, "liste": data.keys()})
-        print('Topics: ', topics['topic'])
+        topics = chain.invoke()
         return topics['topic']
 
     
