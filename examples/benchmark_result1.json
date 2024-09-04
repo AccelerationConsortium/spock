@@ -68,7 +68,7 @@
       "workflow": "Yes",
       "methods": "Yes",
       "models": "Yes",
-      "funding": "No"
+      "funding": "Yes"
     }
   },
 
@@ -221,7 +221,7 @@
       "workflow": "Yes",
       "methods": "No",
       "models": "Yes",
-      "funding": "No"
+      "funding": "Yes"
     }
   },
 
@@ -277,7 +277,7 @@
       "workflow": "Yes",
       "methods": "Yes",
       "models": "Yes",
-      "funding": "No"
+      "funding": "Yes"
     }
   },
 

@@ -90,6 +90,7 @@ class Publication:
         soup = BeautifulSoup(html_content, 'html.parser')
 
         a_tags = soup.find_all('a')
+        if __name__ == "__main__": print(a_tags)
         try:
             pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
             print(f"PDF link found: {pdf_link}")
@@ -155,7 +156,7 @@ class Bot_LLM:
         self.llm = Ollama(model=model)
         self.oembed = OllamaEmbeddings(model=embed_model)
         self.folder_path = folder_path
-        self.vectorestore = None
+        self.vectorstore = None
 
     
     

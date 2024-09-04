@@ -17,7 +17,7 @@
         "topic": "Yes",
         "new materials": "No",
         "screening algorithms": "No",
-        "AI algorithms": "No",
+        "AI algorithms": "Yes",
         "workflow": "Yes",
         "methods": "Yes",
         "models": "No",
@@ -27,12 +27,12 @@
         "A_chemical_probe_to_modulate_human_GID4_Pro_N-degron_interactions.pdf": {
             "affiliation": "Yes",
             "topic": "Yes",
-            "new materials": "No",
+            "new materials": "Yes",
             "screening algorithms": "No",
-            "AI algorithms": "No",
+            "AI algorithms": "Yes",
             "workflow": "Yes",
             "methods": "Yes",
-            "models": "No",
+            "models": "Yes",
             "funding": "No"
         },
 
@@ -42,9 +42,9 @@
             "new materials": "Yes",
             "screening algorithms": "Yes",
             "AI algorithms": "No",
-            "workflow": "No",
+            "workflow": "Yes",
             "methods": "No",
-            "models": "No",
+            "models": "Yes",
             "funding": "No"
         },
 
@@ -78,7 +78,7 @@
             "new materials": "Yes",
             "screening algorithms": "Yes",
             "AI algorithms": "No",
-            "workflow": "No",
+            "workflow": "Yes",
             "methods": "Yes",
             "models": "No",
             "funding": "Yes"
@@ -88,7 +88,7 @@
             "topic": "Yes",
             "new materials": "Yes",
             "screening algorithms": "Yes",
-            "AI algorithms": "No",
+            "AI algorithms": "Yes",
             "workflow": "No",
             "methods": "No",
             "models": "Yes",
@@ -100,11 +100,11 @@
             "topic": "Yes",
             "new materials": "No",
             "screening algorithms": "Yes",
-            "AI algorithms": "No",
+            "AI algorithms": "Yes",
             "workflow": "No",
             "methods": "No",
-            "models": "No",
-            "funding": "No"
+            "models": "Yes",
+            "funding": "Yes"
         },
         "Efficient_first_principles_based_modeling_via_machine_learning_from_simple_representations_to_high_entropy_materials.pdf": {
             "affiliation": "Yes",
@@ -135,7 +135,7 @@
             "topic": "Yes",
             "new materials": "Yes",
             "screening algorithms": "Yes",
-            "AI algorithms": "No",
+            "AI algorithms": "Yes",
             "workflow": "Yes",
             "methods": "Yes",
             "models": "Yes",
@@ -158,7 +158,7 @@
             "affiliation": "No",
             "topic": "Yes",
             "new materials": "Yes",
-            "screening algorithms": "No",
+            "screening algorithms": "Yes",
             "AI algorithms": "Yes",
             "workflow": "Yes",
             "methods": "Yes",
@@ -210,7 +210,7 @@
             "workflow": "Yes",
             "methods": "Yes",
             "models": "Yes",
-            "funding": "No"
+            "funding": "Yes"
         }
 
 
