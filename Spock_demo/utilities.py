@@ -180,6 +180,7 @@ class Bot_LLM:
         )
         from langchain.load import dumps, loads
 
+        """
         def reciprocal_rank_fusion(results: list[list], k=60):
             """ Reciprocal_rank_fusion that takes multiple lists of ranked documents 
                 and an optional parameter k used in the RRF formula """
@@ -240,7 +241,7 @@ class Bot_LLM:
         
         
 
-    def get_topic_publication(self):
+    def get_topic_publication(self): # Add the abstarct (overwite it maybe)
         
         parser = JsonOutputParser()
         
