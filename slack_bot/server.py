@@ -69,6 +69,45 @@ Feel free to ask me questions or share your files for processing!
 # - Upgrading quality of the summaries - fixed
 
 
+
+def upload_audio_file(channel_id, file_path, initial_comment):
+    with open(file_path, 'rb') as file_content:
+        response = requests.post(
+            'https://slack.com/api/files.upload',
+            params={
+                'channels': channel_id,
+                'initial_comment': initial_comment
+            },
+            files={'file': file_content},
+            headers={'Authorization': f'Bearer {BOT_TOKEN}'}
+        )
+        response_data = response.json()
+        if response.status_code == 200 and response_data.get('ok'):
+            print('File uploaded successfully!')
+        else:
+            print(f"Failed to upload file: {response_data.get('error')}")
+
+# Slack event handler
+@app.command("generate_podcast")
+def handle_app_mention(event, say):
+    channel_id = event['channel']
+    user_id = event['user']
+
+    # Generate content
+    generated_text = generate_content() # To call the sbatch script
+
+    # Convert text to audio (implement this function)
+    audio_file_path = 'output_audio.mp3'
+    text_to_audio(generated_text, audio_file_path)
+
+    # Upload audio file to Slack
+    initial_comment = f"<@{user_id}> Here's the audio file you requested!"
+    upload_audio_file(channel_id, audio_file_path, initial_comment)
+
+    # Send a confirmation message
+    say(f"<@{user_id}> I've uploaded the audio file for you!")
+
+
 @app.command("/process_publication_title")
 def handle_process_publication_name(ack, body, client):
     ack()
