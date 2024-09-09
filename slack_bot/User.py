@@ -9,7 +9,7 @@ class User(object):
         return f"User({self.user_id}, {self.user_model})"
         
     def __str__(self) -> str:
-        return f"Your model is: {self.user_model} \n Your files are: {"\n".join(self.analyzed_files.keys())}"
+        return f"Your model is: {self.user_model}"
     
     def __dict__(self) -> dict:
         return {self.user_id: {"user_model": self.user_model, "analyzed_files": self.analyzed_files}}

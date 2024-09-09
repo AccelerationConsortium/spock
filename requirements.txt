@@ -310,3 +310,5 @@ wsproto==1.2.0
 yarl==1.9.4
 zipp==3.19.2
 langchain_ollama
+sentry-sdk
+promptic

@@ -230,7 +230,6 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         reduce_documents_chain = ReduceDocumentsChain(
             combine_documents_chain=combine_documents_chain,
             collapse_documents_chain=combine_documents_chain,
-            token_max=4000,
         )
 
         map_reduce_chain = MapReduceDocumentsChain(
@@ -241,7 +240,7 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         )
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=1750, chunk_overlap=20
+            chunk_size=2500, chunk_overlap=20
         )
         split_docs = text_splitter.split_documents(docs)
 

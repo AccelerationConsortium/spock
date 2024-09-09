@@ -18,6 +18,7 @@ def main():
     questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
+    
 
     # Prepare custom questions
     if questions_str:
