@@ -4,6 +4,7 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQA
+from pathlib import Path
 
 
 class LLM:
@@ -17,10 +18,72 @@ class LLM:
         
         
     def pdf_to_md(self, pdf_path:str) -> str:
-        nougat_cmd = f"nougat --markdown pdf '{pdf_path}' --out 'papers/mmd'"
-        os.system(nougat_cmd)
+        from transformers import AutoProcessor, VisionEncoderDecoderModel
+        import torch
+
+        processor = AutoProcessor.from_pretrained("facebook/nougat-base")
+        model = VisionEncoderDecoderModel.from_pretrained("facebook/nougat-base")
         
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model.to(device)
         
+        from typing import Optional, List
+        import io
+        import fitz
+
+        def rasterize_paper(
+            pdf: Path,
+            outpath: Optional[Path] = None,
+            dpi: int = 96,
+            return_pil=False,
+            pages=None,
+        ) -> Optional[List[io.BytesIO]]:
+            """
+            Rasterize a PDF file to PNG images.
+
+            Args:
+                pdf (Path): The path to the PDF file.
+                outpath (Optional[Path], optional): The output directory. If None, the PIL images will be returned instead. Defaults to None.
+                dpi (int, optional): The output DPI. Defaults to 96.
+                return_pil (bool, optional): Whether to return the PIL images instead of writing them to disk. Defaults to False.
+                pages (Optional[List[int]], optional): The pages to rasterize. If None, all pages will be rasterized. Defaults to None.
+
+            Returns:
+                Optional[List[io.BytesIO]]: The PIL images if `return_pil` is True, otherwise None.
+            """
+
+            pillow_images = []
+            if outpath is None:
+                return_pil = True
+            try:
+                if isinstance(pdf, (str, Path)):
+                    pdf = fitz.open(pdf)
+                if pages is None:
+                    pages = range(len(pdf))
+                for i in pages:
+                    page_bytes: bytes = pdf[i].get_pixmap(dpi=dpi).pil_tobytes(format="PNG")
+                    if return_pil:
+                        pillow_images.append(io.BytesIO(page_bytes))
+                    else:
+                        with (outpath / ("%02d.png" % (i + 1))).open("wb") as f:
+                            f.write(page_bytes)
+            except Exception:
+                pass
+            if return_pil:
+                return pillow_images
+        images = rasterize_paper(pdf=filepath, return_pil=True)
+        
+        # Maybe see with that later if it works correctly or not
+        image = Image.open(images[0])
+        
+        # prepare image for the model
+        pixel_values = processor(images=image, return_tensors="pt").pixel_values
+        #print(pixel_values.shape)
+        generated = processor.batch_decode(outputs[0], skip_special_tokens=True)[0]
+        generated = processor.post_process_generation(generated, fix_markdown=False)
+        #print(generated)
+        return generated
+    
         
     def split_markdown(self, md_path:str):
         markdown_document = open(md_path, "r").read()
