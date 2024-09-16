@@ -309,7 +309,7 @@ class Bot_LLM:
     def query_rag(self, question:str) -> None:
         if self.vectorstore:
             #docs = self.vectorstore.similarity_search(question)
-            self.retriever = vector_store.as_retriever(
+            self.retriever = self.vectorstore.as_retriever(
                     search_type="mmr",
                     search_kwargs={"k": 10, "fetch_k": 50},
                 )
