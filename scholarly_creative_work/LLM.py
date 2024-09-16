@@ -4,19 +4,14 @@ from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQA
-from pathlib import Path
-from bs4 import BeautifulSoup
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
-from langchain.embeddings import OllamaEmbeddings
-from langchain.vectorstores import Chroma
-from langchain_community.llms import Ollama
+from langchain.schema import Document
 import json
 from langchain_experimental.text_splitter import SemanticChunker
 from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 import requests
-from scholarly import scholarly
 
 
 class LLM:
@@ -24,12 +19,13 @@ class LLM:
         self.llm = Ollama(model=llm_model, temperature=0.2)
         self.embedding = OllamaEmbeddings(model=embedding_model)
         self.folder_path = None
+        self.vectorestore = None
         
     def set_folder_path(self, folder_path:str) -> None:
         self.folder_path = folder_path
         
         
-    def pdf_to_md(self, filepath:Path) -> str:
+    def pdf_to_md(self, filepath) -> str:
         from transformers import AutoProcessor, VisionEncoderDecoderModel
 
         import os
@@ -135,7 +131,7 @@ class LLM:
         # Check if the document is a valid file path
         from langchain_experimental.text_splitter import SemanticChunker
 
-
+        print(document)
         data = []
         if isinstance(document, str) and os.path.isfile(document):
             try:
@@ -168,24 +164,15 @@ class LLM:
         all_splits = text_splitter.split_documents(data)
         self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.embedding, persist_directory=self.folder_path)
         
-        
-    def embedding_chunk_md(self, chunks):
-        if self.folder_path is None:
-            raise ValueError("Please set the folder path using the set_folder_path method.")
-        self.vectorstore = Chroma.from_documents(documents=chunks, embedding=self.embedding, persist_directory=self.folder_path)
-        
-    def query_rag(self, question:str, **kwags) -> None:
-        try:
+       
+    def query_rag(self, question:str) -> None:
+        if self.vectorstore:
             docs = self.vectorstore.similarity_search(question)
             from langchain.chains import RetrievalQA
             qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=True)
             res = qachain.invoke({"query": question})
             print(res['result'])
             return res['result']
-
-
-        except Exception as e:
-            print(e)
 
 
 

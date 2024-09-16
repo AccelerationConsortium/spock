@@ -2,18 +2,19 @@ from LLM import LLM
 import os
 import json
 
-llm = LLM()
-pdf_list = os.listdir("papers")
+
+pdf_list = os.listdir("papers/papers")
+print(pdf_list)
 response = {}
 format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer."
 for i in range(10):
     response[i] = {}
-    try: 
-        llm.pdf_to_md(pdf_list[i])
-        llm.chunk_indexing()
-    except:
-        print("running split_and_embedding_chunk_pdf")
-        llm.split_and_embedding_chunk_pdf(pdf_list[i])
+    llm = LLM()
+    llm.set_folder_path("db/db"+str(i))
+    
+    
+    print("running split_and_embedding_chunk_pdf")
+    llm.split_and_embedding_chunk_pdf("papers/papers/"+pdf_list[i])
     response[i]['affiliation'] = llm.query_rag("What are the authors affiliation. Output a dictionary ? Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
     print("-----")
     response[i]['topic']  = llm.query_rag("What are topics of the paper ?Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
@@ -49,6 +50,7 @@ for i in range(10):
     print("-----")
     response[i]['clinical trials'] = llm.query_rag("Are there any clinical trials mentioned in the article? If yes, provide the details. Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
     print("-----")
+    print(response)
 
 with open("llm_ouput.json", "w") as f:
     json.dump(response, f)
