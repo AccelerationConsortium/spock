@@ -7,7 +7,7 @@ from utilities import Bot_LLM
 pdf_list = os.listdir("papers/papers")
 print(pdf_list)
 response = {}
-format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer."
+format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer. If you don't know the answer, right 'NA/'"
 for i in range(10):
     name = pdf_list[i].split('/')[-1].replace("_","/")
     response[pdf_list[i].split('/')[-1].replace("_","/")] = {}

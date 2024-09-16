@@ -308,9 +308,14 @@ class Bot_LLM:
         
     def query_rag(self, question:str) -> None:
         if self.vectorstore:
-            docs = self.vectorstore.similarity_search(question)
+            #docs = self.vectorstore.similarity_search(question)
+            self.retriever = vector_store.as_retriever(
+                    search_type="mmr",
+                    search_kwargs={"k": 10, "fetch_k": 50},
+                )
+
             from langchain.chains import RetrievalQA
-            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=False)
+            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.retriever, verbose=False)
             res = qachain.invoke({"query": question})
             print(res['result'])
             return res['result']
