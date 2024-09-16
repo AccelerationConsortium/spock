@@ -310,7 +310,7 @@ class Bot_LLM:
         if self.vectorstore:
             docs = self.vectorstore.similarity_search(question)
             from langchain.chains import RetrievalQA
-            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=True)
+            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.vectorstore.as_retriever(), verbose=False)
             res = qachain.invoke({"query": question})
             print(res['result'])
             return res['result']

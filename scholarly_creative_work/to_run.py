@@ -10,8 +10,8 @@ response = {}
 format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer."
 for i in range(10):
     response[pdf_list[i].split('/')[-1].replace("_","/")] = {}
-    llm = Bot_LLM(folder_path='db/db'+str(index))
-    llm.chunk_indexing(file)    
+    llm = Bot_LLM(folder_path='db/db'+str(i))
+    llm.chunk_indexing("papers/papers/"+pdf_list[i])    
 
 
     
@@ -19,17 +19,17 @@ for i in range(10):
     
     
     print("running split_and_embedding_chunk_pdf")
-    llm.split_and_embedding_chunk_pdf("papers/papers/"+pdf_list[i])
+   # llm.split_and_embedding_chunk_pdf("papers/papers/"+pdf_list[i])
     # Process 'affiliation'
-    output_llm = llm.query_rag("What are the authors affiliation. Output a dictionary ? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
-    response[i]['affiliation'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
-    print("-----")
+   # output_llm = llm.query_rag("What are the authors affiliation. Output a dictionary ? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
+   # response[i]['affiliation'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
+   # print("-----")
 
     # Process 'topic'
-    output_llm = llm.query_rag("What are topics of the paper? Output the topic of the paper '/' then a sentence from the document that supports your answer.") # To updatee
-    response[i]['topic'] =  output_llm.split('/')[0].strip()
-    response[i]['topic'].update({'sentence': output_llm.split('/')[1]})
-    print("-----")
+   # output_llm = llm.query_rag("What are topics of the paper? Output the topic of the paper '/' then a sentence from the document that supports your answer.") # To updatee
+   # response[i]['topic'] =  output_llm.split('/')[0].strip()
+    #response[i]['topic'].update({'sentence': output_llm.split('/')[1]})
+    #print("-----")
 
     # Process 'new materials'
     output_llm = llm.query_rag("Does the article mention any new material discovery? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
