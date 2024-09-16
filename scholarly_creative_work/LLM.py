@@ -5,6 +5,18 @@ from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 from langchain.chains import RetrievalQA
 from pathlib import Path
+from bs4 import BeautifulSoup
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
+from langchain.embeddings import OllamaEmbeddings
+from langchain.vectorstores import Chroma
+from langchain_community.llms import Ollama
+import json
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+import requests
+from scholarly import scholarly
 
 
 class LLM:
@@ -116,8 +128,48 @@ class LLM:
         # Split
         splits = text_splitter.split_documents(md_header_splits)
         return splits
+    
+    
+    
+    def split_and_embedding_chunk_pdf(self, document:str):
+        # Check if the document is a valid file path
+        from langchain_experimental.text_splitter import SemanticChunker
+
+
+        data = []
+        if isinstance(document, str) and os.path.isfile(document):
+            try:
+                loader = PDFPlumberLoader(document)
+                data = loader.load()
+                chunk_size = 2000
+                chunk_overlap = 20
+
+            except Exception as e:
+                raise RuntimeError(f"Error loading PDF: {e}")
+        else:
+            try:
+                # Treat the document as raw text content
+                if isinstance(document, str):
+                    data.append(Document(page_content=document))
+                elif isinstance(document, list):
+                    for text in document:
+                        data.append(Document(page_content=text))
+                chunk_size = 180
+                chunk_overlap = 5
+
+            except Exception as e:
+                raise RuntimeError(f"Error processing text: {e}")
+
+            
+        text_splitter=text_splitter = SemanticChunker(
+    self.embedding, breakpoint_threshold_type="standard_deviation")
+
+
+        all_splits = text_splitter.split_documents(data)
+        self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.embedding, persist_directory=self.folder_path)
         
-    def embedding_chunk(self, chunks):
+        
+    def embedding_chunk_md(self, chunks):
         if self.folder_path is None:
             raise ValueError("Please set the folder path using the set_folder_path method.")
         self.vectorstore = Chroma.from_documents(documents=chunks, embedding=self.embedding, persist_directory=self.folder_path)
@@ -137,36 +189,34 @@ class LLM:
 
 
 
+if __name__ == "__main__":
+    from huggingface_hub import hf_hub_download
+    import re
+    from PIL import Image
 
-from huggingface_hub import hf_hub_download
-import re
-from PIL import Image
+    from transformers import NougatProcessor, VisionEncoderDecoderModel
+    from datasets import load_dataset
+    import torch
 
-from transformers import NougatProcessor, VisionEncoderDecoderModel
-from datasets import load_dataset
-import torch
+    processor = NougatProcessor.from_pretrained("facebook/nougat-base")
+    model = VisionEncoderDecoderModel.from_pretrained("facebook/nougat-base")
 
-processor = NougatProcessor.from_pretrained("facebook/nougat-base")
-model = VisionEncoderDecoderModel.from_pretrained("facebook/nougat-base")
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model.to(device)
+    # prepare PDF image for the model
+    filepath = hf_hub_download(repo_id="hf-internal-testing/fixtures_docvqa", filename="nougat_paper.png", repo_type="dataset")
+    image = Image.open(filepath)
+    pixel_values = processor(image, return_tensors="pt").pixel_values
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-model.to(device)
-# prepare PDF image for the model
-filepath = "spock/scholarly_creative_work/papers/papers/10.1002_adbi.202000046.pdf"
-image = Image.open(filepath)
-pixel_values = processor(image, return_tensors="pt").pixel_values
+    # generate transcription (here we only generate 30 tokens)
+    outputs = model.generate(
+        pixel_values.to(device),
+        min_length=1,
+        max_new_tokens=30,
+        bad_words_ids=[[processor.tokenizer.unk_token_id]],
+    )
 
-# generate transcription (here we only generate 30 tokens)
-outputs = model.generate(
-    pixel_values.to(device),
-    min_length=1,
-    max_new_tokens=30,
-    Use_fast= False,
-    bad_words_ids=[[processor.tokenizer.unk_token_id]],
-)
-
-sequence = processor.batch_decode(outputs, skip_special_tokens=True)[0]
-sequence = processor.post_process_generation(sequence, fix_markdown=False)
-# note: we're using repr here such for the sake of printing the \n characters, feel free to just print the sequence
-print(repr(sequence))
-            
+    sequence = processor.batch_decode(outputs, skip_special_tokens=True)[0]
+    sequence = processor.post_process_generation(sequence, fix_markdown=False)
+    # note: we're using repr here such for the sake of printing the \n characters, feel free to just print the sequence
+    print(repr(sequence))
