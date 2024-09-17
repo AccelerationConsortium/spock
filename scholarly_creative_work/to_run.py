@@ -12,7 +12,7 @@ pdf_list = os.listdir("papers/papers")
 #print(pdf_list)
 #response = {}
 format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer. If you don't know the answer, right 'NA/'"
-for i in range(len(pdf_list)):
+for i in range(5):
     #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
     
     name = pdf_list[i]
@@ -42,6 +42,7 @@ for i in range(len(pdf_list)):
             #print("-----")
 
             # Process 'new materials'
+            
             output_llm = llm.query_rag("Does the article mention any new material discovery? Output either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer.")
             response[name]['new materials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
@@ -104,7 +105,8 @@ for i in range(len(pdf_list)):
             print("-----")
             with open("output_llm", "w") as f:
                 json.dump(response, f)
-        except:
+        except Exception as e:
+            print(e)
             continue
     break
 
