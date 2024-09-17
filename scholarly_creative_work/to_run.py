@@ -17,7 +17,7 @@ for i in range(5):
     
     name = pdf_list[i]
     print(name)
-    if not os.path.exists(name):
+    if not os.path.exists(f'files_output/{name}'):
         try:
             response[name] = {}
             llm = Bot_LLM(model="llama3.1", folder_path='db/db'+str(i))
