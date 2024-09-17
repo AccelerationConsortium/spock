@@ -13,10 +13,13 @@ pdf_list = os.listdir("papers/papers")
 #response = {}
 format_instruction = "Output  either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer. If you don't know the answer, right 'NA/'"
 for i in range(len(pdf_list)):
-    name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
-    if name not in response:
+    #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
+    
+    name = pdf_list[i]
+    print(name)
+    if not os.path.exists(name):
         try:
-            response[pdf_list[i].split('/')[-1].replace("_","/")] = {}
+            response[name] = {}
             llm = Bot_LLM(model="llama3.1", folder_path='db/db'+str(i))
             llm.chunk_indexing("papers/papers/"+pdf_list[i])    
 
@@ -99,10 +102,11 @@ for i in range(len(pdf_list)):
             output_llm = llm.query_rag("Are there any clinical trials mentioned in the article? If yes, provide the details. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
             response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
-            with open("llm_ouput.json", "w") as f:
+            with open("output_llm", "w") as f:
                 json.dump(response, f)
         except:
             continue
+    break
 
 
 print(response)
