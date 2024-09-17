@@ -103,12 +103,12 @@ for i in range(5):
             output_llm = llm.query_rag("Are there any clinical trials mentioned in the article? If yes, provide the details. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
             response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
-            with open("output_llm", "w") as f:
+            os.mknod(f"{name}.json") 
+            with open(f"files_output/{name}.json", "w",indent=4) as f:
                 json.dump(response, f)
         except Exception as e:
             print(e)
             continue
-    break
 
 
 print(response)
