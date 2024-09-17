@@ -1,0 +1,86 @@
+{
+    "10.1002_adhm.201800296.pdf": {
+        "new materials": {
+            "Yes/No": "Yes",
+            "sentence": " The transformation of Fe@Fe O nanoparticles in the future."
+        },
+        "screening algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The upregulating of phosphatidylserine on the outer surface of apoptotic cancer cells provides a chance to improve the targeting efficiency of nanoparticles and results in the enhancement of tumor theranostics."
+        },
+        "AI algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The MNPs"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " The mice were devided into eight groups randomly for investigating amplifying apoptosis-targeted photothermal therapy on the apoptotic II model.\n\nThe other models mentioned in the article are:\n- Different tumor models (e.g., 4T1, group e) used to evaluate the performance of MNPs"
+        },
+        "funding": {
+            "Yes/No": "No",
+            "sentence": " There is no information provided in the snippet about funding for this research."
+        },
+        "material datasets": {
+            "Yes/No": "Yes",
+            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
+        },
+        "drug formulations explored": {
+            "Yes/No": "Yes",
+            "sentence": " The nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+        },
+        "novel drug formulations": {
+            "Yes/No": "Yes",
+            "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "Yes",
+            "sentence": " In an apoptotic xenograft model constructed by doxorubicin."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention any specific clinical trials but rather discusses strategies and concepts related to cancer theranostics."
+        }
+    },
+    "10.1007_s12598-020-01402-8.pdf": {
+        "new materials": {
+            "Yes/No": "Yes",
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction.\n\nThere are no screening algorithms mentioned in the paper as it discusses light-emitting diodes and perovskite materials for next-generation displays, rather than medical or health-related screenings."
+        },
+        "AI algorithms": {
+            "Yes/No": "No",
+            "sentence": " The emphasis of the new Rec. 2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction."
+        },
+        "models": {
+            "Yes/No": "No",
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was < 3 nm at low temperature and high power, and less than 0.3 nm V-1 at working voltage (Fig. 1c)."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " The authors note that this work was published with the support of The Nonferrous Metals Society of China and Springer-Verlag GmbH Germany, part of Springer Nature."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " The authors mention that they have achieved a champion luminance of 70 cd"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention drug formulations at all; it discusses light-emitting diodes and perovskite materials."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention anything about novel drug formulations. It discusses light-emitting diodes and perovskite materials for ultra-high-definition television displays, but does not touch on pharmaceuticals or drugs."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention any lead small-molecule drug candidates. It is focused on discussing perovskite materials for light-emitting diodes and mentions heavy metal leakage as an issue, but it does not discuss pharmaceuticals."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " There is no mention of clinical trials in the article. The text discusses research on light-emitting diodes (LEDs) and perovskites, but does not reference any human clinical trials."
+        }
+    }
+}

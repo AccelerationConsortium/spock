@@ -1,0 +1,44 @@
+{
+    "10.1002_adhm.201800296.pdf": {
+        "new materials": {
+            "Yes/No": "Yes",
+            "sentence": " The transformation of Fe@Fe O nanoparticles in the future."
+        },
+        "screening algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The upregulating of phosphatidylserine on the outer surface of apoptotic cancer cells provides a chance to improve the targeting efficiency of nanoparticles and results in the enhancement of tumor theranostics."
+        },
+        "AI algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The MNPs"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " The mice were devided into eight groups randomly for investigating amplifying apoptosis-targeted photothermal therapy on the apoptotic II model.\n\nThe other models mentioned in the article are:\n- Different tumor models (e.g., 4T1, group e) used to evaluate the performance of MNPs"
+        },
+        "funding": {
+            "Yes/No": "No",
+            "sentence": " There is no information provided in the snippet about funding for this research."
+        },
+        "material datasets": {
+            "Yes/No": "Yes",
+            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
+        },
+        "drug formulations explored": {
+            "Yes/No": "Yes",
+            "sentence": " The nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+        },
+        "novel drug formulations": {
+            "Yes/No": "Yes",
+            "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "Yes",
+            "sentence": " In an apoptotic xenograft model constructed by doxorubicin."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention any specific clinical trials but rather discusses strategies and concepts related to cancer theranostics."
+        }
+    }
+}
