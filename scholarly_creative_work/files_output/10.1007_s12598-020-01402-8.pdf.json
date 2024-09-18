@@ -43,36 +43,36 @@
     },
     "10.1002_adhm.201800296.pdf": {
         "new materials": {
-            "Yes/No": "Yes",
-            "sentence": " The concentration of MNPs"
+            "Yes/No": "No",
+            "sentence": " The MNP"
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The document does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow."
+            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
         },
         "experimental methodology": {
-            "Yes/No": "Yes",
-            "sentence": " \"A novel apoptosis-targeted MRI contrast agent was developed, and its amplifying apoptotic imaging effect in vivo was studied.\"\n\nThe screening algorithms used in the document are:\nNo"
+            "Yes/No": "**Novel experimental methodology:** Yes",
+            "sentence": " The amplifying apoptosis-targeted T2-weighted MR imaging in vivo of MNPs"
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The apoptosis-homing nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics, where the expression can further be elevated as a response to enhanced apoptosis during the cancer therapy."
+            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
         },
         "funding": {
-            "Yes/No": "No",
-            "sentence": " The authors declare no competing financial interest."
+            "Yes/No": "Yes",
+            "sentence": " The authors acknowledge the financial support of the National Natural Science Foundation of China (Grant Nos. 81671862 and 81972297)."
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " The amplifying apoptosis-targeted MR imaging in vivo of MNPs"
+            "sentence": " The amplifying apoptosis-targeted T- weighted MR imaging in vivo of MNPs"
         },
         "drug formulations explored": {
             "Yes/No": "Yes",
-            "sentence": " The MNP formulations, including MNPs"
+            "sentence": " Notably, they can be incorporated in pharmaceutical formulations to enhance drug solubility, absorption, and bioavailability due to the formulation itself and the P-gp inhibitory effects of the excipients."
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
@@ -80,57 +80,57 @@
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
-            "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
+            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There is no information available about any ongoing, planned, or published clinical trials in this document."
+            "sentence": " The lack of information on current or future clinical trials involving MNPs"
         }
     },
     "10.1007_s12598-020-01402-8.pdf": {
         "new materials": {
             "Yes/No": "Yes",
-            "sentence": " The work introduces HPA as a viable solution to the oxidation issues of Sn-based perovskite and opens a pathway for future developments of Sn-based perovskite devices with even higher performance."
+            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction, which relies on the following primary colors: 630 nm for red, 532 nm for green, and 467 nm for blue..."
         },
         "screening algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " Recently in Advanced Science, Liang and colleagues reported the successful realization of ultra-pure red emission with Sn-based perovskites. The CIE of the lead-free red LEDs is (0.706, 0.294), matching closely the Rec. 2020 standard for red emission (0.708, 0.292) [7]."
+            "Yes/No": "No",
+            "sentence": " The authors \"investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step.\""
         },
         "experimental methodology": {
-            "Yes/No": "No",
-            "sentence": " The current work presents a modified battery module configuration employing two-layer nanoparticle enhanced phase change materials (nePCM) for solid-state batteries, and demonstrates an efficient thermal management strategy to improve the overall performance of these devices."
+            "Yes/No": "The document mentions introducing HPA (Hydrogen Phosphate) as a viable solution to the oxidation issues of Sn-based perovskite, which is a novel experimental methodology.\n\nYes",
+            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step. With this knowledge, preventing the formation of SnI was proposed as an effective solution."
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " The document does not mention the development of any new machine learning and deep learning algorithm or AI model"
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was<3 nm at low temperature and high power, and less than 0.3 nm V-1 at working voltage (Fig. 1c). \n\n(There is no mention of any new machine learning or deep learning algorithm development in this document)"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The work introduces HPA as a viable solution to the oxidation issues of Sn-based perovskite and opens a pathway for future developments of Sn-based perovskite devices with even higher performance."
+            "sentence": " The authors introduced HPA (hydrogen phosphoric acid) as a viable solution to the oxidation issues of Sn-based perovskite and opens a pathway for future developments of Sn-based perovskite devices with even higher performance."
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " The emphasis of the new Rec. 2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction."
+            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction, and this work was supported in part by RareMet. https:"
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " \nNone of the above sentences are present in the given text, however, the following might be close but it's about material development not dataset"
+            "sentence": " Overall, the report by Liang and coworkers demonstrates a promising candidate for UHDTVs."
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " Notably, they can be incorporated in pharmaceutical formulations to enhance drug solubility, absorption, and bioavailability due to the formulation itself and the P-gp inhibitory effects of the excipients."
+            "sentence": " To avoid oxidation, the authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step."
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " The report by Liang and coworkers demonstrates a promising candidate for UHDTVs, but it does not identify any novel drug formulations."
+            "sentence": " The authors report that H PO (HPA) was introduced into Sn precursors as a mild reducing agent with good coordinating ability, which not only impedes the oxidation through inhibiting SnI formation but also improves film quality via seeding the crystal growth."
         },
         "lead small-molecule drug candidates": {
-            "Yes/No": "Yes",
-            "sentence": " The work introduces HPA as a viable solution to the oxidation issues of Sn-based perovskite and opens a pathway for future developments of Sn-based perovskite devices with even higher performance."
+            "Yes/No": "No",
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " The authors chose the Sn-based perovskites with natural faith- quantum well structure as active layers for light emission."
+            "sentence": " The authors evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was\\3 nm at low temperature and high power, and less than 0.3 nm(cid:2)V-1 at working voltage (Fig. 1c)."
         }
     }
 }
