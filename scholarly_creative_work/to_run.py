@@ -12,8 +12,8 @@ pdf_list = os.listdir("papers/papers")
 #print(pdf_list)
 #response = {}
 format_instruction = "Answer  either 'Yes' or 'No' followed by a '/' then an exact sentence from the document that\
-      supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
-for i in range(1):
+      justifies your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
+for i in range(10):
     #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
     
     name = pdf_list[i]
@@ -22,7 +22,7 @@ for i in range(1):
         try:
             response = {}
             response[name] = {}
-            llm = Bot_LLM(model="llama3.1", folder_path='db/db'+str(i))
+            llm = Bot_LLM(model="llama3.1:70b", folder_path='db/db'+str(i))
             llm.chunk_indexing("papers/papers/"+pdf_list[i])    
 
 

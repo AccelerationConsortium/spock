@@ -1,0 +1,48 @@
+{
+    "10.1002_qute.202000069.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " None of the provided text mentions new or novel materials discovered. The text is focused on quantum computing and machine learning, discussing various algorithms and their applications, but it does not mention the discovery of new materials."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " Not explicitly mentioned in the context provided. However, it does mention various quantum machine learning algorithms and their applications, such as Variational Quantum Eigensolvers (VQE), Quantum Approximate Optimization Algorithm (QAOA), and Quantum Generative Adversarial Networks (QGANs)."
+        },
+        "experimental methodology": {
+            "Yes/No": "Yes",
+            "sentence": " The authors declare no conflict of interest."
+        },
+        "ML algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The authors\u2019 results pave the way for experimental exploration of different quantum machine learning algorithms on noisy intermediate-scale quantum devices.\n\n(Note: While this sentence does not explicitly mention the development of a new algorithm, it implies that the authors' work enables further exploration and potentially the development of new algorithms. However, upon re-reading the text, I found another sentence that more directly supports the answer.)\n\nYes "
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " In this paper, a hybrid architecture for quantum generative adversarial networks (QGANs) is presented."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " FocusedAward.A.A.G.isgratefulforthefundingfromtheVannevarBush W.-K.Mok,S.Sim,L.-C.Kwek,A.Aspuru-Guzik,arXiv:2101.08448,\nFacultyFellowshipProgram,andtheCanadaResearchChairsProgram."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": "None"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " None of the provided sentences mention exploring drug formulations."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " None."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " (no relevant sentence found in the provided text snippet)"
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " None"
+        }
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "10.1007_s12598-020-01402-8.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " Exploring alternative substitutes, non-monochromatic light sources with precisely defined emission profiles, is highly desirable but challenging."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " N"
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " There are no sentences in the document related to the development of new machine learning and deep learning algorithms or AI models"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " To avoid oxidation, the authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step."
+        },
+        "funding": {
+            "Yes/No": "No",
+            "sentence": " \n\n(There is no mention of funding, award or financial support in the provided text.)"
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " (There is no mention of developing new material-related datasets or databases in the provided text.)"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " There is no mention of identifying new lead small-molecule drug candidates in the provided text. The text primarily discusses perovskite light-emitting diodes, their properties, and potential applications, with a focus on materials science and optoelectronics."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " (There is no mention of clinical trials in the document.)"
+        }
+    }
+}
