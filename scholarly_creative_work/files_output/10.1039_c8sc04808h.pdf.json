@@ -1,24 +1,70 @@
 {
-    "10.1002_adhm.201800296.pdf": {
+    "10.1002/adhm.201800296.pdf": {
         "new materials": {
             "Yes/No": "Yes",
-            "sentence": " The transformation of Fe@Fe O nanoparticles in the future."
+            "sentence": " The article mentions the development of ZnDPA-conjugated Fe"
         },
         "screening algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " The upregulating of phosphatidylserine on the outer surface of apoptotic cancer cells provides a chance to improve the targeting efficiency of nanoparticles and results in the enhancement of tumor theranostics."
+            "Yes/No": "No",
+            "sentence": " The paper does not mention any specific screening algorithms, but it discusses the development of an apoptosis-homing nanoplatform for tumor theranostics, which implies a method or approach to identify individuals with certain conditions or traits."
         },
         "AI algorithms": {
             "Yes/No": "Yes",
-            "sentence": " The MNPs"
+            "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The mice were devided into eight groups randomly for investigating amplifying apoptosis-targeted photothermal therapy on the apoptotic II model.\n\nThe other models mentioned in the article are:\n- Different tumor models (e.g., 4T1, group e) used to evaluate the performance of MNPs"
+            "sentence": " The mice were divided into eight groups randomly.\n\nThe models mentioned in the article are:\n\n* Apoptotic I (4T1 tumor-bearing mice induced by DOX)\n* Apoptotic II (4T1 tumor-bearing mice induced by DOX twice for 3 d)\n* Normal group (4T1 tumor-bearing mice without treatment of DOX)\n\nThese groups are used to evaluate the amplifying apoptosis-targeted property of MNPs"
         },
         "funding": {
             "Yes/No": "No",
-            "sentence": " There is no information provided in the snippet about funding for this research."
+            "sentence": " There is no indication in this document that mentions who funded the research. The text only provides information about the study itself, its methods, and results, but does not include any information on funding sources or sponsors."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " The article does not mention sharing any AI or material-related datasets, as there is no mention of such sharing in the provided text."
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " The article has successfully developed ZnDPA-conjugated Fe@Fe3O4 NPs by strain-promoted click chemistry, which could be rendered as a nanotheranostic agent for enhanced photothermal therapy in vivo."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " The article does not specifically identify any novel drug formulations, but rather reports on the development of ZnDPA-conjugated Fe@Fe3O4 NPs for enhancing MRI and photothermal therapy in cancer treatment."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " According to the provided context, there is no mention of lead small-molecule drug candidates. The article primarily focuses on the development and characterization of Fe@Fe3O4 nanoparticles conjugated with ZnDPA for targeted photothermal therapy and imaging of apoptotic cancer cells."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " There is no mention of clinical trials in the article; it appears to be a research study focused on developing and evaluating an apoptosis-homing nanoplatform for tumor theranostics."
+        }
+    },
+    "10.1002_adhm.201800296.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " The amplifying apoptosis-targeted T -weighted MR imaging in vivo of MNPs"
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The researchers were able to enhance the accumulation value of MNPs"
+        },
+        "experimental methodology": {
+            "Yes/No": "Based on the provided text, here are the answers:\n\n**New or novel experimental methodology used?**\n\n* No",
+            "sentence": " The document does not mention any new or novel experimental methodology used.\n\nThe document seems to be a research article in the field of biomedical science, focusing on the application of magnetic nanoparticles (MNPs) and fluorescent tags for targeted accumulation and amplification of apoptosis imaging. While it discusses various methods such as confocal laser scanning microscopy, terminal deoxynucleotidyl transferase-mediated dUTP-biotin nick end-labeling (TUNEL) staining, and MRI imaging, there is no mention of novel experimental methodologies.\n\n**Screening algorithms used in the document?**\n\n* No "
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " We developed an apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " \"The authors thank the National Natural Science Foundation of China (Nos. 81772796, 81903153), the Fundamental Research Funds for the Central Universities (No. 2019kfyXJQD-045) and the Program of Introducing Talents in Guangdong Province (No. 2017GC0015).\""
         },
         "material datasets": {
             "Yes/No": "Yes",
@@ -26,103 +72,111 @@
         },
         "drug formulations explored": {
             "Yes/No": "Yes",
-            "sentence": " The nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+            "sentence": " A novel formulation of MNPs"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
-            "sentence": " In an apoptotic xenograft model constructed by doxorubicin."
+            "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
         },
         "clinical trials": {
-            "Yes/No": "No",
-            "sentence": " The article does not mention any specific clinical trials but rather discusses strategies and concepts related to cancer theranostics."
+            "Yes/No": "Yes",
+            "sentence": " There is no specific mention of \"clinical trials\" in the provided text, but it mentions an \"apoptotic xenograft model constructed by doxorubicin\", which could be related to pre-clinical trial studies. "
         }
     },
     "10.1007_s12598-020-01402-8.pdf": {
         "new materials": {
             "Yes/No": "Yes",
-            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
+            "sentence": " The emphasis of the new Rec. 2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction, which relies on the following primary colors: 630 nm for red, 532 nm for green, 467 nm for blue, and..."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction.\n\nThere are no screening algorithms mentioned in the paper as it discusses light-emitting diodes and perovskite materials for next-generation displays, rather than medical or health-related screenings."
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential... \n\n(This sentence implies a measurement of some kind, but it doesn't mention a new or novel high-throughput screening algorithm. It's more about evaluating existing properties of the material rather than discovering new ones through a large-scale screen.)"
         },
-        "AI algorithms": {
+        "experimental methodology": {
+            "Yes/No": "Yes",
+            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step. With this knowledge, preventing the formation of SnI was proposed as an effective strategy to retard the oxidation of Sn.\n\nThe document mentions a novel solution (HPA as a mild reducing agent) but not a completely new or novel experimental methodology used in the context of the question."
+        },
+        "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " The emphasis of the new Rec. 2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction."
+            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction. \n\nThere are no sentences in the provided text mentioning the development of a machine learning or deep learning algorithm, AI model, or architecture."
         },
         "models": {
-            "Yes/No": "No",
-            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was < 3 nm at low temperature and high power, and less than 0.3 nm V-1 at working voltage (Fig. 1c)."
+            "Yes/No": "Yes",
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " The authors note that this work was published with the support of The Nonferrous Metals Society of China and Springer-Verlag GmbH Germany, part of Springer Nature."
+            "sentence": " RareMet. https:"
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " The authors mention that they have achieved a champion luminance of 70 cd"
+            "sentence": " None of the sentences provided in the examples describe the development of new material-related datasets or databases, and neither does the given text."
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " The article does not mention drug formulations at all; it discusses light-emitting diodes and perovskite materials."
+            "sentence": " Despite excellent external quantum efficiencies (EQE) and brightness of QD-based or lead halide perovskite light-emitting diodes, their color purities cannot meet the luminanceof70 cd(cid:2)m-2under5.8 VwithanEQEof0.3%"
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " The article does not mention anything about novel drug formulations. It discusses light-emitting diodes and perovskite materials for ultra-high-definition television displays, but does not touch on pharmaceuticals or drugs."
+            "sentence": " This work introduces HPA as a viable solution to the oxidation issues of Sn-based perovskite."
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " The article does not mention any lead small-molecule drug candidates. It is focused on discussing perovskite materials for light-emitting diodes and mentions heavy metal leakage as an issue, but it does not discuss pharmaceuticals."
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was <3 nm at low temperature and high power, and less than 0.3 nm(V-1) at working voltage (Fig. 1c)."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There is no mention of clinical trials in the article. The text discusses research on light-emitting diodes (LEDs) and perovskites, but does not reference any human clinical trials."
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission. \n\nThere is no mention of clinical trials in the provided text, only discussions about research on materials and devices for ultra-high-definition television displays."
         }
     },
     "10.1039_c8sc04808h.pdf": {
         "new materials": {
-            "Yes/No": "Yes",
-            "sentence": " The polymerization of XMg-Th-Cl, XMg-Th-Br(I"
+            "Yes/No": "No",
+            "sentence": " The unexpected presence of Ni(II)-thienyl iodide a\ue09der polymerizing XMg-Th-Cl or XMg-Th-Br (I"
         },
         "screening algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " The catalyst rests as dissociated Ni(phosphine) complex and Ni(II)-dithienyl complex 2 in the polymerization of XMg-Th-Cl.\n\nThe paper discusses various screening algorithms used to identify individuals who may have or be at risk for a particular condition or trait within a large population. However, it does not specifically mention any screening algorithms being used in the context of the poly(methylthienylene) (PMTh) synthesis and its dependence on halogenated magnesium salts (XMg-Th-X). The paper focuses on the mechanism of TM polymerization, the influence of different halides, and the identification of resting states using 31P NMR spectroscopy."
+            "Yes/No": "No",
+            "sentence": " The KCTP catalytic cycle involves four steps: transmetalation, reductive elimination, ring walking, and oxidative addition (Scheme 1)."
         },
-        "AI algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " The controlled synthesis of p-conjugated polymers is an important aspect in polymer chemistry, where cross coupling reactions play a crucial role. "
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " The document does not mention any new or novel experimental methodology used.\n\nNo "
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " We here therefore introduce ionbot, a novel open modification search engine that is the first to fully merge machine learning with peptide identification."
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " A DFT model is used to calculate the activation energies for TM propagating polymer chains."
+            "sentence": " The catalysts used were novel 3D porous polymers synthesized via the sol-gel process, which was first time employed for this application."
         },
         "funding": {
-            "Yes/No": "No",
-            "sentence": " No information is provided in the article regarding funding."
+            "Yes/No": "Yes",
+            "sentence": " None of these references have an acknowledgement section mentioning funding, award or financial support."
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " The unexpected presence of Ni(II)-thienyl iodide a\ue09der poly-merizing XMg-Th-Cl or XMg-Th-Br (I"
+            "sentence": " The unexpected presence of Ni(II)-thienyl iodide after polymerizing XMg-Th-Cl or XMg-Th-Br (I"
         },
         "drug formulations explored": {
-            "Yes/No": "No",
-            "sentence": " The article does not mention exploring new drug formulations."
+            "Yes/No": "Yes",
+            "sentence": " The catalyst rests as dissociated Ni(phosphine) complex and Ni(II)-dithienylcomplex2 in the polymerization of XMg-Th-Cl."
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " The results indicate that 6-aminopenicillanic acid (6-APA) was converted into 7-ACA in good yields with both NBS and PDS under microwave heating, leading to the formation of a new semisynthetic penicillin formulation."
+            "sentence": " The observed singlet does not match any intermediates in the catalytic cycle (complex 1\u20134 in Scheme 1) suggesting that some of the active catalyst is diffusing away from the propagating polymer chain, likely due to the difficult OA or other side reactions.7a,17 This is consistent with a mixture of polymers with different end-group compositions being observed in this polymerization(Fig.S9,ESI\u2020).15b,19"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
-            "sentence": " Based on previous reports and experiments with similar systems, we assign the catalyst resting state to Ni(II)-dithienyl complex 2 (Scheme 1)."
+            "sentence": " In polymer chemistry, cross coupling reactions are particularly important for the synthesis of p-conjugated polymers."
         },
         "clinical trials": {
-            "Yes/No": "No",
-            "sentence": " There is no mention of clinical trials in the provided text."
+            "Yes/No": "Yes",
+            "sentence": " The percent buried volume (%V ) around the Ni centre in complex 1 increases moving from Cl to Br to I (Fig. S10, ESI\u2020).21 Alter- natively, weaker Mg\u2013I interactions serve to further increase the AE for I (so\ue09d base) compared to Br and Cl."
         }
     }
 }

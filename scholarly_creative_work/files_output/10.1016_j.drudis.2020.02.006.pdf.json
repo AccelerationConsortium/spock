@@ -44,31 +44,31 @@
     "10.1002_adhm.201800296.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " None of the materials discovered in this research are referred to as new or novel, but rather it is stated that MNPs"
+            "sentence": " The amplifying apoptosis-targeted T -weighted MR imaging in vivo of MNPs"
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The document does not mention any new or novel high-throughput or large-scale screening algorithm, methods, or workflow."
+            "sentence": " The researchers were able to enhance the accumulation value of MNPs"
         },
         "experimental methodology": {
-            "Yes/No": "Based on the provided text, here are the answers to your questions:\n\n1. Does the document mention any new or novel experimental methodology used?\n\nYes",
-            "sentence": " This study employs magnetic nanoparticles (MNPs) conjugated with fluorescent isothiocyanate (FITC) and zinc dipyridylamide (ZnDPA) for targeted MR imaging and apoptosis detection.\n\n2. What are the screening algorithms used in the document?\n\nNo "
+            "Yes/No": "Based on the provided text, here are the answers:\n\n**New or novel experimental methodology used?**\n\n* No",
+            "sentence": " The document does not mention any new or novel experimental methodology used.\n\nThe document seems to be a research article in the field of biomedical science, focusing on the application of magnetic nanoparticles (MNPs) and fluorescent tags for targeted accumulation and amplification of apoptosis imaging. While it discusses various methods such as confocal laser scanning microscopy, terminal deoxynucleotidyl transferase-mediated dUTP-biotin nick end-labeling (TUNEL) staining, and MRI imaging, there is no mention of novel experimental methodologies.\n\n**Screening algorithms used in the document?**\n\n* No "
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " An apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+            "sentence": " We developed an apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " We gratefully acknowledge financial support from the National Natural Science Foundation of China (Grant No. 81772066, 81501552, and 81372182), the Zhejiang Provincial Natural Science Foundation (No. LR16H060001, LY17H080008, and QD18F050002), the Key Research and Development Program of Zhejiang Province (2017C03045), and the Key Research and Development Program of Hangzhou City (20180403306)."
+            "sentence": " \"The authors thank the National Natural Science Foundation of China (Nos. 81772796, 81903153), the Fundamental Research Funds for the Central Universities (No. 2019kfyXJQD-045) and the Program of Introducing Talents in Guangdong Province (No. 2017GC0015).\""
         },
         "material datasets": {
-            "Yes/No": "No",
-            "sentence": " The amplifying apoptosis-targeted T -2 fluorescence intensity ratio of green channel to red channel."
+            "Yes/No": "Yes",
+            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
         },
         "drug formulations explored": {
             "Yes/No": "Yes",
@@ -76,75 +76,177 @@
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
+            "sentence": " A novel formulation of MNPs"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
             "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
         },
         "clinical trials": {
-            "Yes/No": "No",
-            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
+            "Yes/No": "Yes",
+            "sentence": " There is no specific mention of \"clinical trials\" in the provided text, but it mentions an \"apoptotic xenograft model constructed by doxorubicin\", which could be related to pre-clinical trial studies. "
         }
     },
     "10.1007_s12598-020-01402-8.pdf": {
         "new materials": {
             "Yes/No": "Yes",
-            "sentence": " Recently in Advanced Science, Liang and colleagues reported the successful realization of ultra-pure red emission with Sn-based perovskites."
+            "sentence": " The emphasis of the new Rec. 2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction, which relies on the following primary colors: 630 nm for red, 532 nm for green, 467 nm for blue, and..."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was <3 nm at low temperature and high power, and less than 0.3 nm"
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential... \n\n(This sentence implies a measurement of some kind, but it doesn't mention a new or novel high-throughput screening algorithm. It's more about evaluating existing properties of the material rather than discovering new ones through a large-scale screen.)"
         },
         "experimental methodology": {
-            "Yes/No": "No",
-            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step.\n\nThe document mentions using HPO (HPA) as a mild reducing agent with good coordinating ability with Sn intermediates to impede the oxidation through inhibiting SnI formation, which is a novel experimental methodology."
+            "Yes/No": "Yes",
+            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step. With this knowledge, preventing the formation of SnI was proposed as an effective strategy to retard the oxidation of Sn.\n\nThe document mentions a novel solution (HPA as a mild reducing agent) but not a completely new or novel experimental methodology used in the context of the question."
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " The report by Liang and coworkers does not mention the development of any new machine learning and deep learning algorithm or AI model"
+            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction. \n\nThere are no sentences in the provided text mentioning the development of a machine learning or deep learning algorithm, AI model, or architecture."
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was < 3 nm at low temperature and high power, and less than 0.3 nm V-1 at working voltage (Fig. 1c)."
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was\\3 nm at low temperature and high power, and less than 0.3 nm(cid:2)V-1 at working voltage (Fig. 1c)."
+            "sentence": " RareMet. https:"
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential... (Fig. 1c)."
+            "sentence": " None of the sentences provided in the examples describe the development of new material-related datasets or databases, and neither does the given text."
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step."
+            "sentence": " Despite excellent external quantum efficiencies (EQE) and brightness of QD-based or lead halide perovskite light-emitting diodes, their color purities cannot meet the luminanceof70 cd(cid:2)m-2under5.8 VwithanEQEof0.3%"
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " The authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step. With this knowledge, preventing the formation of SnI was proposed as an effective strategy to retard the oxidation of Sn."
+            "sentence": " This work introduces HPA as a viable solution to the oxidation issues of Sn-based perovskite."
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " The emphasis of the new Rec.2020 ultra-high-definition television (UHDTV) standard is not on resolution but on color reproduction."
+            "sentence": " The authors also evaluated the color stability under changing temperatures, power and applied potential, finding that the emission shift was <3 nm at low temperature and high power, and less than 0.3 nm(V-1) at working voltage (Fig. 1c)."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There is no mention of clinical trials in the provided context."
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission. \n\nThere is no mention of clinical trials in the provided text, only discussions about research on materials and devices for ultra-high-definition television displays."
         }
     },
     "10.1039_c8sc04808h.pdf": {
         "new materials": {
-            "Yes/No": "Yes",
-            "sentence": " This experiment causes two of the original peaks (43 and 59 ppm) to disappear and two peaks with the same chemical shi\ue09ds as those found a\ue09der the polymerization of XMg-Th-Cl or XMg-Th-Br (I"
+            "Yes/No": "No",
+            "sentence": " The unexpected presence of Ni(II)-thienyl iodide a\ue09der polymerizing XMg-Th-Cl or XMg-Th-Br (I"
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The KCTP catalytic cycle involves four steps: transmetalation, reductive elimination, ring walking, and oxidative addition."
+            "sentence": " The KCTP catalytic cycle involves four steps: transmetalation, reductive elimination, ring walking, and oxidative addition (Scheme 1)."
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " The document does not mention any new or novel experimental methodology used.\n\nNo "
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " We here therefore introduce ionbot, a novel open modification search engine that is the first to fully merge machine learning with peptide identification."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " The catalysts used were novel 3D porous polymers synthesized via the sol-gel process, which was first time employed for this application."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " None of these references have an acknowledgement section mentioning funding, award or financial support."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " The unexpected presence of Ni(II)-thienyl iodide after polymerizing XMg-Th-Cl or XMg-Th-Br (I"
+        },
+        "drug formulations explored": {
+            "Yes/No": "Yes",
+            "sentence": " The catalyst rests as dissociated Ni(phosphine) complex and Ni(II)-dithienylcomplex2 in the polymerization of XMg-Th-Cl."
+        },
+        "novel drug formulations": {
+            "Yes/No": "Yes",
+            "sentence": " The observed singlet does not match any intermediates in the catalytic cycle (complex 1\u20134 in Scheme 1) suggesting that some of the active catalyst is diffusing away from the propagating polymer chain, likely due to the difficult OA or other side reactions.7a,17 This is consistent with a mixture of polymers with different end-group compositions being observed in this polymerization(Fig.S9,ESI\u2020).15b,19"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "Yes",
+            "sentence": " In polymer chemistry, cross coupling reactions are particularly important for the synthesis of p-conjugated polymers."
+        },
+        "clinical trials": {
+            "Yes/No": "Yes",
+            "sentence": " The percent buried volume (%V ) around the Ni centre in complex 1 increases moving from Cl to Br to I (Fig. S10, ESI\u2020).21 Alter- natively, weaker Mg\u2013I interactions serve to further increase the AE for I (so\ue09d base) compared to Br and Cl."
+        }
+    },
+    "10.1016_j.conbuildmat.2018.03.223.pdf": {
+        "new materials": {
+            "Yes/No": "Yes",
+            "sentence": " The r-MgO used in this study has a density of 3.15 g"
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The document does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow."
+        }
+    },
+    "10.1002_qute.202000069.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " The result revealed that novel peptides accumulated only in adenocarcinoma lung cancer cell-derived xenograft tissue, and this was not present in this document."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The QGAN training was done over 4500 epochs of training, which is a significant number of circuit evaluations for every measurement value. \n\nThis sentence does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow. However, it does describe the process of training a Quantum Generator Algorithm (QGAN) over a large number of epochs, which could be considered a form of large-scale screening in the context of quantum computing and machine learning. But this is not what you are looking for as per your question."
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " The current study aims to investigate whether QGANs can be used for generative modeling in the presence of noise, given the current state of quantum resources.\n\nThere are no specific screening algorithms mentioned in the provided snippet."
+        },
+        "ML algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The hybrid quantum-classical (HQC)[5\u20137] approach provides a way around this, by using the quantum resources in tandem with classical computers to improve the overall efficiency of the algorithm."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " A QGAN can be used in various scenarios-a fully quantum GAN with quantum circuits as discriminator and generator, for quantum data; hybrid quantum GAN with quantum circuit as discriminator and NNs as generator, for quantum or classical data."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " We acknowledge the support of the Qatar Computing Research Institute (QCRI) and the State of Qatar for providing access to their quantum computing resources through the IBM Q Hub."
+        },
+        "material datasets": {
+            "Yes/No": "Yes",
+            "sentence": " We used different directivestatements(pragmas)availablein the Forest platform[37] to modify your noiseless circuit."
+        },
+        "drug formulations explored": {
+            "Yes/No": "Yes",
+            "sentence": " The objective of this study is to investigate if QGANs can be used for generative modeling in the presence of noise, given the current state of quantum resources."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " The workflow of combined in silico methods (virtual drug screening, molecular docking and supervised machine learning algorithms) was used to identify the best discriminator for the generator."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " The project focuses on developing algorithms and methods for using quantum computers to discover new lead small-molecule drug candidates, but does not mention identifying them. \n\n(Note: This is based on my understanding of the question. If you meant to ask if they mention developing small molecule drug candidates or identifying small molecule drug candidates, I'd be happy to provide an answer accordingly.)"
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " The objective of this study is to investigate whether QGANs can be used for generative modeling in the presence of noise, given the current state of quantum resources."
+        }
+    },
+    "10.1145_3386527.3405924.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " The document mentions techniques for supporting learners\u2019 self-regulated strategies in MOOCs, but it does not mention new materials discovered."
+        },
+        "screening algorithms": {
+            "Yes/No": "**High-throughput Screening Algorithms Mentioned**\n\n1. Yes",
+            "sentence": " \"In this study, we propose a large-scale (drug\u2013target interactions) DTI prediction system, DEEPScreen, for early stage drug discovery, using deep convolutional neural network.\"\n2. Yes "
         },
         "experimental methodology": {
             "Yes/No": "Yes",
-            "sentence": " The current work presents a novel modified battery module configuration employing two-layer nanoparticle enhanced phase change materials (nePCM) is not found, but a modified version of TM (Transition Metal) catalysis using DFT (Density Functional Theory) calculations to determine the activation energies for the three monomers XMg-Th-I, XMg-Th-Br and XMg-Th-Cl (Fig.4).\n\n"
+            "sentence": " The current study employs a novel experimental methodology involving student peer assessment and data visualization to analyze gaming behavior and its impact on learning outcomes, which allows for a more nuanced understanding of how students interact with online learning systems."
         },
         "ML algorithms": {
             "Yes/No": "No",
@@ -152,15 +254,61 @@
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The document does not explicitly mention new methods, models and workflows but it is clear in the provided example sentence about novel synthesis method for hydrothermal reactions under a phosphoric acid medium. "
+            "sentence": " The visualization clearly shows this, as shown in Section 3 (Context Understanding of Gaming): \"submitting the answer many times within a very short period of time\", and \"submitting an empty solution first, followed by another answer shortly afterward according to the partial score returned by the system\"."
         },
         "funding": {
-            "Yes/No": "No",
-            "sentence": " I am unable to find any information regarding funding, awards, or financial support in the provided snippet of the acknowledgements."
+            "Yes/No": "Yes",
+            "sentence": " The authors would like to acknowledge the support of the National Science Foundation under Award No. OIA-1946391 and the Google Research Scholar Program."
         },
         "material datasets": {
             "Yes/No": "Yes",
-            "sentence": " This experiment causes two of the original peaks (43 and 59 ppm) to disappear and two peaks with the same chemical shift as those found after the polymerization of XMg-Th-Cl or XMg-Th-Br (I"
+            "sentence": " No new material-related datasets or databases are mentioned in the document, as per the text, there is no such information provided."
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " We also added another baseline (Baseline2)\u2013historical submission records on these four problems from the previous semester by two authors."
+        },
+        "novel drug formulations": {
+            "Yes/No": "Yes",
+            "sentence": " The COVID-19 vaccine was produced using the novel formulation KK-46 based on peptide dendrimers (PD) to achieve safe and efficient siRNA delivery into the lung."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " I couldn't find any mention of developing lead small-molecule drug candidates in the provided document."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " [The study on middle school student interaction with an intelligent tutoring system in WanMohdNazmeeWanZainon.2017.A Study on the Effectiveness of Tree-Maps as Tree Visualization Techniques, In Educational Data Mining 2013.]"
+        }
+    },
+    "10.1021_acsenergylett.0c02401.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
+        },
+        "screening algorithms": {
+            "Yes/No": "Yes",
+            "sentence": " The conventional approach to mitigate the effects of carbonate salt formation has been to rinse the electrode with water, either by disassembling the cell or injecting water periodically into the CO supply during operation."
+        },
+        "experimental methodology": {
+            "Yes/No": "The document mentions a novel experimental methodology used. \n\nThe screening algorithms used in the document are 'None'",
+            "sentence": "...This study did not mention any specific screening algorithms.\n\nHowever, it does describe a computational model of CO RR (carbon monoxide reduction reaction) to assess concentration profiles of key species during operation, indicating some form of computational or modeling-based approach was used."
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " A computational model of CO RR was developed to assess the concentration profiles of key species during operation (Figure S1)."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " A computational model of CO RR was developed to assess the concentration profiles of key species during operation (Figure S1)."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " The authors declare no competing financial interest."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
         },
         "drug formulations explored": {
             "Yes/No": "No",
@@ -168,205 +316,61 @@
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " The catalyst rests as dissociated Ni(phosphine) complex and Ni(II)-dithienylcomplex2 in the polymerization of XMg-Th-Cl."
-        },
-        "lead small-molecule drug candidates": {
-            "Yes/No": "Yes",
-            "sentence": " These represent the best routes to well-de\ue103ned, high molecular weight p-conjugated polymers.5 Important considerations for these polymerizations include catalyst design, monomer structure, and the utilization of additives."
-        },
-        "clinical trials": {
-            "Yes/No": "Yes",
-            "sentence": " There are no specific clinical trials mentioned in the provided document; however, DFT (Density Functional Theory) calculations are discussed as part of the experimental methods."
-        }
-    },
-    "10.1016_j.conbuildmat.2018.03.223.pdf": {
-        "new materials": {
-            "Yes/No": "Yes",
-            "sentence": " The specific surface area of r-MgO is 2.22m2"
-        },
-        "screening algorithms": {
-            "Yes/No": "No",
-            "sentence": " In contrast to conventional concrete samples of identical mix designs and size, only one sample of each r-MgO-PC was tested for dynamic elastic modulus in this study."
-        },
-        "experimental methodology": {
-            "Yes/No": "Based on the provided snippet of the document:\n\nThere is no mention of any novel experimental methodology used.\n\nAs for the screening algorithms, the answer is:\n\nNo",
-            "sentence": " The document does not mention any specific screening algorithms."
-        },
-        "ML algorithms": {
-            "Yes/No": "No",
-            "sentence": " The document does not mention the development of new machine learning and deep learning algorithm or AI model"
-        },
-        "models": {
-            "Yes/No": "Yes",
-            "sentence": " The principle of this method is based on the precipitation of whitish silver chloride, when silver nitrate is sprayed on Cl-penetrated areas, and brownish silver oxide precipitation, when silver nitrate is sprayed on OH(-) rich areas."
-        },
-        "funding": {
-            "Yes/No": "No",
-            "sentence": " The authors would like to thank R.Zhang for his experimental work, and D.K.Panesar is supported in part through his position at Iowa State University."
-        },
-        "material datasets": {
-            "Yes/No": "Yes",
-            "sentence": " The same colorized area of the C50 concrete in Fig. 9(a) and (b) clearly illustrates this problem."
-        },
-        "drug formulations explored": {
-            "Yes/No": "No",
-            "sentence": " The document does not mention exploring any drug formulations."
-        },
-        "novel drug formulations": {
-            "Yes/No": "Yes",
-            "sentence": " The principle of this method is based on the precipitation of whitish silver chloride, when silver nitrate is sprayed on Cl-penetrated areas."
-        },
-        "lead small-molecule drug candidates": {
-            "Yes/No": "No",
-            "sentence": " No information is provided in this text about identifying to developing lead small-molecule drug candidates."
-        },
-        "clinical trials": {
-            "Yes/No": "No",
-            "sentence": " The investigations on the potential application of r-MgO as a partial replacement for Portland cement (PC) in concrete production begins with the examination of r-MgOpaste with and without accelerated carbonation [5,7,13,14], which demonstrates the hydration and carbonation mechanisms of the r-MgO-PC system."
-        }
-    },
-    "10.1002_qute.202000069.pdf": {
-        "new materials": {
-            "Yes/No": "No",
-            "sentence": " The result revealed that novel peptides accumulated only in adenocarcinoma lung cancer cell-derived xenograft tissue."
-        },
-        "screening algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " The training was done over 4500 epochs, this cutoff value is chosen to do a fair comparison between different HQGAN trainings."
-        },
-        "experimental methodology": {
-            "Yes/No": "Yes",
-            "sentence": " The objective of this study is to investigate whether QGANs can be used for generative modeling in the presence of noise, given the current state of quantum resources."
-        },
-        "ML algorithms": {
-            "Yes/No": "No",
-            "sentence": " The hybrid quantum-classical (HQC) approach provides a way around this, by using the quantum resources in tandem with classical computers to improve the overall efficiency of the algorithm."
-        },
-        "models": {
-            "Yes/No": "Yes",
-            "sentence": " We employ a hybrid quantum generative adversarial network (HQGAN) that learns a classical target data distribution in the presence of noise, given the current state of quantum resources."
-        },
-        "funding": {
-            "Yes/No": "Yes",
-            "sentence": " The authors acknowledge support for this work through the U.S. Department of Energy, Office of Science, National Quantum Information Science Research Centers Program."
-        },
-        "material datasets": {
-            "Yes/No": "Yes",
-            "sentence": " We used different directivestatements (pragmas) available in the Forest platform to modify our noiseless circuit."
-        },
-        "drug formulations explored": {
-            "Yes/No": "Yes",
-            "sentence": " The training of a GAN is carried out in an iterative manner where the discriminator and generator objective functions are optimized alternatively, and the parameters of the generator and discriminational circuits using PyQuil."
-        },
-        "novel drug formulations": {
-            "Yes/No": "No",
-            "sentence": " The classical GAN uses neural networks as discriminator and generator, for quantum or classical data."
-        },
-        "lead small-molecule drug candidates": {
-            "Yes/No": "Yes",
-            "sentence": " The first, thenumber of inputsamplesaffectedstheobjectivefunctioncalculationfortheQGAN,whilethesecond,thenumberofcircuitevaluationsforexpectationvaluecalculationaffects theoutputofthequantumgenerator."
-        },
-        "clinical trials": {
-            "Yes/No": "Yes",
-            "sentence": " The objective of this study is to investigate if QGANs can be used for generative modeling in the presence of noise, given the current state of quantum resources."
-        }
-    },
-    "10.1145_3386527.3405924.pdf": {
-        "new materials": {
-            "Yes/No": "No",
-            "sentence": " The document does not mention any new or novel materials discovered."
-        }
-    },
-    "10.1021_acsenergylett.0c02401.pdf": {
-        "new materials": {
-            "Yes/No": "No",
-            "sentence": " The results demonstrate that increasing the regeneration time using carbon paper and PTFE-based electrodes for silver and copper catalysts, respectively, we perform CO 2 electrolysis in an MEA."
-        },
-        "screening algorithms": {
-            "Yes/No": "No",
-            "sentence": " This study does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow. The provided snippet discusses electrochemical CO2 reduction reaction (CO2RR) and carbonates formed on electrode surfaces but doesn't discuss screening algorithms."
-        },
-        "experimental methodology": {
-            "Yes/No": "Yes",
-            "sentence": " The computational model of CO RR was developed to assess the concentration profiles of key species during operation.\n\nThis study utilizes pulsed electrolysis strategies with alternating voltage and regeneration potential, a novel approach in CO electrolyzers. No specific screening algorithms are mentioned in the document."
-        },
-        "ML algorithms": {
-            "Yes/No": "No",
-            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage (Figure 1c)."
-        },
-        "models": {
-            "Yes/No": "Yes",
-            "sentence": " A computational model of CO RR was developed to assess the concentration profiles of key species during operation."
-        },
-        "funding": {
-            "Yes/No": "Yes",
-            "sentence": " We acknowledge the support of the US Department of Energy, Basic Energy Sciences under Contract DE-AC02-07CH11358 and the National Science Foundation under Award No. DGE-1745303."
-        },
-        "material datasets": {
-            "Yes/No": "Yes",
-            "sentence": " To better understand this salt prevention strategy, a computational model of CO RR was developed to assess the concentration profiles of key species during operation."
-        },
-        "drug formulations explored": {
-            "Yes/No": "No",
-            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
-        },
-        "novel drug formulations": {
-            "Yes/No": "No",
             "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
         },
         "lead small-molecule drug candidates": {
-            "Yes/No": "No",
-            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
+            "Yes/No": "Yes",
+            "sentence": " The results demonstrate that increasing the regeneration time demonstrates much better stability, 157 h of operation (236 h of total duration) as compared to \u223c10 h when copper\u2212 PTFE electrodes were operated continuously."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There are no specific clinical trials mentioned in the document, but it does mention a \"techno-economic analysis\" of CO2 electrolysis systems."
+            "sentence": " There are no clinical trials mentioned in the document."
         }
     },
     "10.1016_j.drudis.2020.02.006.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " None of the sentences provided mention new materials discovery, only mentions domains in the human genome and proteins."
+            "sentence": " The proteins in the human genome with putative druggable domains are listed, but there is no mention of new or novel materials discovered."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The document mentions the use of various protein domains and ligand desolvation, but it does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow."
+            "sentence": " None of the sentences in the provided text mention new high-throughput or large-scale screening algorithm, methods, or workflow. The text appears to be discussing protein domains and their characteristics, rather than proposing a new method or algorithm for screening or drug discovery."
         },
         "experimental methodology": {
             "Yes/No": "No",
-            "sentence": " The protein kinase domain contains 482 proteins in the human genome with bound ligands in the PDB.\n\nThe document provides an overview of putative druggable domains in the human genome, listing various domains and their corresponding number of proteins in the human genome. However, it does not mention any novel experimental methodology used to identify or characterize these domains.\n\nAs for screening algorithms, there is no specific mention of them in the document."
+            "sentence": " All 46 domains present in at least 20 human proteins and where median ligand desolvation upon binding is equal to or greater than that found in bromodomains are listed.\n\nThere is no mention of novel experimental methodology used. The document appears to be a compilation of data from the Protein Data Bank (PDB) and other sources, presenting a list of putative druggable domains in the human genome.\n\nThe screening algorithms used are not explicitly mentioned in the provided text snippet."
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " No new machine learning and deep learning algorithm or AI model"
+            "sentence": " I have found no such mentions in the provided text."
         },
         "models": {
             "Yes/No": "No",
-            "sentence": " The SGC is a registered charity number 1097737 that receives funds from AbbVie, Bayer Pharma AG, Boehringer Ingelheim, ..."
+            "sentence": " Emerging efforts to systematically develop chemical reagents for the human proteome [9]."
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " The SGC is a registered charity number 1097737 that receives funds from AbbVie, Bayer Pharma AG, Boehringer Ingelheim, and others."
+            "sentence": " The SGC is a registered charity number 1097737 that receives funds from AbbVie, Bayer Pharma AG, Boehringer Ingelheim."
         },
         "material datasets": {
-            "Yes/No": "No",
-            "sentence": " The corresponding list of 3440 human proteins (Table S3 in the supplemental information online)"
+            "Yes/No": "Yes",
+            "sentence": " In this study, we thus designed a database of \u223c20,000 hypothetical MOFs, keeping in mind their chemical diversity in terms of pore geometry, metal chemistry, linker chemistry, and functional groups (Table 1) are not mentioned but the document does contain a reference to Table S3 that contains 3440 human proteins"
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " The document does not mention exploring any drug formulations."
+            "sentence": " This review does not specifically mention exploring drug formulations, but rather focuses on the human genome and its druggable domains."
         },
         "novel drug formulations": {
-            "Yes/No": "No",
-            "sentence": " The SGC is a registered charity number 1097737 that receives funds from AbbVie, Bayer Pharma AG, Boehringer Ingelheim, Drug Discovery Today(cid:1)Volume 25, Number 3(cid:1)March 2020 contains information about the SGC and its funding but does not identify any novel drug formulations."
+            "Yes/No": "Yes",
+            "sentence": " The SGC is a registered charity number 1097737 that receives funds from AbbVie, Bayer Pharma AG, Boehringer Ingelheim, ..."
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
-            "sentence": " Table 2 shows the putative druggable domains in the human genome, indicating steps towards developing lead small-molecule drug candidates."
+            "sentence": " All rights reserved. https:"
         },
         "clinical trials": {
-            "Yes/No": "Yes",
-            "sentence": " The document does not explicitly mention any clinical trials, but it is discussing drug development and druggable domains in the human genome, which implies the potential for future clinical trials."
+            "Yes/No": "No",
+            "sentence": " There are no specific clinical trials mentioned in the provided document, which discusses druggable domains in the human genome."
         }
     }
 }
