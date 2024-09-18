@@ -3,7 +3,7 @@ import os
 import json
 from utilities import Bot_LLM
 
-with open("llm_output.json", "r") as f:
+with open("llm_ouput.json", "r") as f:
     response = json.load(f)
     
     
@@ -13,7 +13,7 @@ pdf_list = os.listdir("papers/papers")
 #response = {}
 format_instruction = "Answer  either 'Yes' or 'No' followed by a '/' then an exact sentence from the document that\
       supports your answer. If you don't know the answer, say 'NA/'"
-for i in range(5):
+for i in range(10):
     #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
     
     name = pdf_list[i]
