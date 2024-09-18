@@ -161,89 +161,20 @@ from langchain_community.vectorstores import Chroma
 
 class Bot_LLM:
     def __init__(self,model='llama3',embed_model='mxbai-embed-large', folder_path='db2'):
+        import getpass
+        import os
+
+        if not os.getenv("OPENAI_API_KEY"):
+            os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter your OpenAI API key: ")
+
+
         self.llm = Ollama(model=model)
         self.oembed = OllamaEmbeddings(model=embed_model)
         self.folder_path = folder_path
         self.vectorstore = None
 
     
-    
-    def rag_fusion(self, question):
-        from langchain.prompts import ChatPromptTemplate
-
-        # RAG-Fusion: Related
-        template = """You are a helpful assistant that generates multiple search queries based on a single input query. \n
-        Generate multiple search queries related to: {question} \n
-        Output (4 queries):"""
-        
-        
-        prompt_rag_fusion = ChatPromptTemplate.from_template(template)
-        from langchain_core.output_parsers import StrOutputParser
-
-        generate_queries = (
-            prompt_rag_fusion 
-            | self.llm(temperature=0)
-            | StrOutputParser() 
-            | (lambda x: x.split("\n"))
-        )
-        from langchain.load import dumps, loads
-
-        def reciprocal_rank_fusion(results: list[list], k=60):
-            """ Reciprocal_rank_fusion that takes multiple lists of ranked documents 
-                and an optional parameter k used in the RRF formula """
             
-            # Initialize a dictionary to hold fused scores for each unique document
-            fused_scores = {}
-
-            # Iterate through each list of ranked documents
-            for docs in results:
-                # Iterate through each document in the list, with its rank (position in the list)
-                for rank, doc in enumerate(docs):
-                    # Convert the document to a string format to use as a key (assumes documents can be serialized to JSON)
-                    doc_str = dumps(doc)
-                    # If the document is not yet in the fused_scores dictionary, add it with an initial score of 0
-                    if doc_str not in fused_scores:
-                        fused_scores[doc_str] = 0
-                    # Retrieve the current score of the document, if any
-                    previous_score = fused_scores[doc_str]
-                    # Update the score of the document using the RRF formula: 1 / (rank + k)
-                    fused_scores[doc_str] += 1 / (rank + k)
-
-            # Sort the documents based on their fused scores in descending order to get the final reranked results
-            reranked_results = [
-                (loads(doc), score)
-                for doc, score in sorted(fused_scores.items(), key=lambda x: x[1], reverse=True)
-            ]
-
-            # Return the reranked results as a list of tuples, each containing the document and its fused score
-            return reranked_results
-
-        retrieval_chain_rag_fusion = generate_queries | retriever.map() | reciprocal_rank_fusion
-        docs = retrieval_chain_rag_fusion.invoke({"question": question})
-        len(docs)
-        from langchain_core.runnables import RunnablePassthrough
-
-        # RAG
-        template = """Answer the following question based on this context:
-
-        {context}
-
-        Question: {question}
-        """
-
-        prompt = ChatPromptTemplate.from_template(template)
-
-        final_rag_chain = (
-            {"context": retrieval_chain_rag_fusion, 
-            "question": itemgetter("question")} 
-            | prompt
-            | self.llm
-            | StrOutputParser()
-        )
-
-        final_rag_chain.invoke({"question":question})
-
-        
         
         
 
@@ -271,16 +202,18 @@ class Bot_LLM:
     
     def chunk_indexing(self, document:str):
         # Check if the document is a valid file path
-        from langchain_experimental.text_splitter import SemanticChunker
+        from langchain_experimental.text_splitter import SemanticChunker, RecursiveCharacterTextSplitter
 
-
+        text_splitter = CharacterTextSplitter(
+            chunk_size=500, chunk_overlap=20)        
         data = []
         if isinstance(document, str) and os.path.isfile(document):
             try:
                 loader = PDFPlumberLoader(document)
                 data = loader.load()
-                chunk_size = 2000
+                chunk_size = 500
                 chunk_overlap = 20
+                sliced_pages = text_splitter.split_documents(data)
 
             except Exception as e:
                 raise RuntimeError(f"Error loading PDF: {e}")
@@ -299,12 +232,10 @@ class Bot_LLM:
                 raise RuntimeError(f"Error processing text: {e}")
 
             
-        text_splitter=text_splitter = SemanticChunker(
-    self.oembed, breakpoint_threshold_type="standard_deviation")
+        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed, persist_directory=self.folder_path)
 
-
-        all_splits = text_splitter.split_documents(data)
-        self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)
+        #all_splits = text_splitter.split_documents(data)
+        #self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)
         
     def query_rag(self, question:str) -> None:
         if self.vectorstore:

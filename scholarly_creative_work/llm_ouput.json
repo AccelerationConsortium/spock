@@ -1,1 +1,44 @@
-{"10.1002/adhm.201800296.pdf": {"new materials": {"Yes/No": "Yes", "sentence": " The article mentions the development of ZnDPA-conjugated Fe"}, "screening algorithms": {"Yes/No": "No", "sentence": " The paper does not mention any specific screening algorithms, but it discusses the development of an apoptosis-homing nanoplatform for tumor theranostics, which implies a method or approach to identify individuals with certain conditions or traits."}, "AI algorithms": {"Yes/No": "Yes", "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"}, "models": {"Yes/No": "Yes", "sentence": " The mice were divided into eight groups randomly.\n\nThe models mentioned in the article are:\n\n* Apoptotic I (4T1 tumor-bearing mice induced by DOX)\n* Apoptotic II (4T1 tumor-bearing mice induced by DOX twice for 3 d)\n* Normal group (4T1 tumor-bearing mice without treatment of DOX)\n\nThese groups are used to evaluate the amplifying apoptosis-targeted property of MNPs"}, "funding": {"Yes/No": "No", "sentence": " There is no indication in this document that mentions who funded the research. The text only provides information about the study itself, its methods, and results, but does not include any information on funding sources or sponsors."}, "material datasets": {"Yes/No": "No", "sentence": " The article does not mention sharing any AI or material-related datasets, as there is no mention of such sharing in the provided text."}, "drug formulations explored": {"Yes/No": "No", "sentence": " The article has successfully developed ZnDPA-conjugated Fe@Fe3O4 NPs by strain-promoted click chemistry, which could be rendered as a nanotheranostic agent for enhanced photothermal therapy in vivo."}, "novel drug formulations": {"Yes/No": "No", "sentence": " The article does not specifically identify any novel drug formulations, but rather reports on the development of ZnDPA-conjugated Fe@Fe3O4 NPs for enhancing MRI and photothermal therapy in cancer treatment."}, "lead small-molecule drug candidates": {"Yes/No": "No", "sentence": " According to the provided context, there is no mention of lead small-molecule drug candidates. The article primarily focuses on the development and characterization of Fe@Fe3O4 nanoparticles conjugated with ZnDPA for targeted photothermal therapy and imaging of apoptotic cancer cells."}, "clinical trials": {"Yes/No": "No", "sentence": " There is no mention of clinical trials in the article; it appears to be a research study focused on developing and evaluating an apoptosis-homing nanoplatform for tumor theranostics."}}}
+{
+  "10.1002/adhm.201800296.pdf": {
+    "new materials": {
+      "Yes/No": "Yes",
+      "sentence": " The article mentions the development of ZnDPA-conjugated Fe"
+    },
+    "screening algorithms": {
+      "Yes/No": "No",
+      "sentence": " The paper does not mention any specific screening algorithms, but it discusses the development of an apoptosis-homing nanoplatform for tumor theranostics, which implies a method or approach to identify individuals with certain conditions or traits."
+    },
+    "AI algorithms": {
+      "Yes/No": "Yes",
+      "sentence": " The apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+    },
+    "models": {
+      "Yes/No": "Yes",
+      "sentence": " The mice were divided into eight groups randomly.\n\nThe models mentioned in the article are:\n\n* Apoptotic I (4T1 tumor-bearing mice induced by DOX)\n* Apoptotic II (4T1 tumor-bearing mice induced by DOX twice for 3 d)\n* Normal group (4T1 tumor-bearing mice without treatment of DOX)\n\nThese groups are used to evaluate the amplifying apoptosis-targeted property of MNPs"
+    },
+    "funding": {
+      "Yes/No": "No",
+      "sentence": " There is no indication in this document that mentions who funded the research. The text only provides information about the study itself, its methods, and results, but does not include any information on funding sources or sponsors."
+    },
+    "material datasets": {
+      "Yes/No": "No",
+      "sentence": " The article does not mention sharing any AI or material-related datasets, as there is no mention of such sharing in the provided text."
+    },
+    "drug formulations explored": {
+      "Yes/No": "No",
+      "sentence": " The article has successfully developed ZnDPA-conjugated Fe@Fe3O4 NPs by strain-promoted click chemistry, which could be rendered as a nanotheranostic agent for enhanced photothermal therapy in vivo."
+    },
+    "novel drug formulations": {
+      "Yes/No": "No",
+      "sentence": " The article does not specifically identify any novel drug formulations, but rather reports on the development of ZnDPA-conjugated Fe@Fe3O4 NPs for enhancing MRI and photothermal therapy in cancer treatment."
+    },
+    "lead small-molecule drug candidates": {
+      "Yes/No": "No",
+      "sentence": " According to the provided context, there is no mention of lead small-molecule drug candidates. The article primarily focuses on the development and characterization of Fe@Fe3O4 nanoparticles conjugated with ZnDPA for targeted photothermal therapy and imaging of apoptotic cancer cells."
+    },
+    "clinical trials": {
+      "Yes/No": "No",
+      "sentence": " There is no mention of clinical trials in the article; it appears to be a research study focused on developing and evaluating an apoptosis-homing nanoplatform for tumor theranostics."
+    }
+  }
+}
