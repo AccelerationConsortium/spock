@@ -1,0 +1,48 @@
+{
+    "10.1021_acsenergylett.0c02401.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The conventional approach to mitigate the effects of carbonate salt formation has been to rinse the electrode with water, either by disassembling the cell or injecting water periodically into the CO supply during operation.22,23 \n\n(Note: There is no mention of any high-throughput screening algorithm in this document)"
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " This study used alternating voltage approach to prevent salt formation during CO2 electrolysis, employing a computational model and MEA with carbon paper and PTFE-based electrodes for silver and copper catalysts. \n\nThe document does not mention any new or novel experimental methodology used. However, it describes an existing method of preventing salt formation by employing a regeneration potential that lowers the reaction rate to nearly 0 mA cm\u22122, eliminating hydroxide formation, while maintaining a sufficiently negative polarization at the cathode to transport carbonate ions to the anode under electromigration.\n\nAs for screening algorithms, there is no mention of any in the provided text."
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " A computational model of CO RR was developed to assess the concentration profiles of key species during operation."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " A computational model of CO RR was developed to assess the concentration profiles of key species during operation (Figure S1)."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " The authors declare no competing financial interest."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " To better understand this salt prevention strategy, a computational model of CO RR was developed to assess the concentration profiles of key species during operation (Figure S1)."
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage (Figure 1c)."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " In this work, we sought to prevent salt formation by alternating our applied cell voltage between an operational voltage and a lower regeneration voltage (Figure 1c)."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " To better understand this salt prevention strategy, a computational model of CO RR was developed to assess the concentration profiles of key species during operation (Figure S1)."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " This study did not include a formal techno-economic analysis, but rather employed an analytical approach to evaluate the performance of electrochemical CO2 reduction at small scales for potential bench-scale or pilot-scale systems."
+        }
+    }
+}
