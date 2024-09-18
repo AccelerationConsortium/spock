@@ -12,8 +12,8 @@ pdf_list = os.listdir("papers/papers")
 #print(pdf_list)
 #response = {}
 format_instruction = "Answer  either 'Yes' or 'No' followed by a '/' then an exact sentence from the document that\
-      supports your answer. If you don't know the answer, say 'NA/'"
-for i in range(10):
+      supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
+for i in range(1):
     #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
     
     name = pdf_list[i]
@@ -190,7 +190,7 @@ for i in range(10):
             response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
              
-            with open(f"files_output/{name}.json", "w") as f:
+            with open(f"files_output/{name}_llama3.1:70b_openai.json", "w") as f:
                 json.dump(response, f, indent=4)
         except Exception as e:
             print(e)

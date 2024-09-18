@@ -1,0 +1,48 @@
+{
+    "10.1002_adhm.201800296.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " A promising strategy to address the limitations of these conventional tumor-targeting approaches is upregulating the number of existing targets or producing the expression of novel targets."
+        },
+        "funding": {
+            "Yes/No": "No",
+            "sentence": ""
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": ""
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " None of the sentences in this snippet are related to identifying or developing lead small-molecule drug candidates. The text appears to be discussing magnetic nanoparticles (MNPs) and their use in MRI imaging, as well as apoptosis-targeted MR imaging in vivo."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": ""
+        }
+    }
+}
