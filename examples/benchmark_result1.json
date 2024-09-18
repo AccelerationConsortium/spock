@@ -1,0 +1,591 @@
+{
+  "Closing the Execution Gap in Generative AI for Chemicals and Materials: Freeways or Safeguards": {
+    "abstract": "Designing chemicals and materials is a winner-takes-all game in a chemical space. Out of a nearly endless list of candidate chemicals, only a tiny subset can practically be made and tested for a given task. Of those, a mere handful will advance to the clinic or the market because of regulatory and economic factors, like Food and Drug Administration approval or Capital Expenditure for manufacturing. This attrition is slow, expensive, and high stakes; committing to the wrong chemical can ruin a clinical trial or doom a consumer device. Generative AI has undoubtedly broadened and accelerated the early stages of chemical design. However, real-world success takes place further downstream, where the impact of AI has been limited so far. Here, we identify the nature of this \u2018execution gap\u2019and analyze its technical and social sources with a focus on the domain-specific nuances that separate chemistry and materials from other applications of AI. We explore strategies to address the gap and include directions for algorithmic development, strategies for efficient creation and sharing of data, and maximization of feedback between early discovery and downstream validation. Like any powerful technology, generative AI in chemistry brings ethical concerns and dual-use risks. In our analysis, these are not as critical or immediate as they are in other applications of AI. Precisely because of the execution gap, AI has so far not meaningfully lowered the barrier for bad actors to produce chemicals known to be harmful and nor has AI creativity practically broadened the risk spectrum in terms of the types and severity of potential misuse.",
+    "authors": "Akshay Subramanian and Wenhao Gao and Regina Barzilay and Jeffrey C Grossman and Tommi Jaakkola and Stefanie Jegelka and Mingda Li and Ju Li and Wojciech Matusik and Elsa Olivetti and Connor W Coley and Rafael Gomez-Bombarelli",
+    "author_affiliations": {
+      "Akshay Subramanian": [
+        "Department of Materials Science and Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Wenhao Gao": [
+        "Department of Chemical Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Regina Barzilay": [
+        "Department of Electrical Engineering and Computer Science, MIT, Cambridge, Masachusetts 02139, USA",
+        "Computer Science and Artificial Intelligence Laboratory, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Jeffrey C. Grossman": [
+        "Department of Materials Science and Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Tommi Jaakkola": [
+        "Department of Electrical Engineering and Computer Science, MIT, Cambridge, Massachusetts 02139, USA; Computer Science and Artificial Intelligence Laboratory, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Stefanie Jegelka": [
+        "Department of Electrical Engineering and Computer Science, MIT, Cambridge, Massachusetts 02139, USA; Computer Science and Artificial Intelligence Laboratory, MIT, Cambridge, Massachusetts 02139, USA",
+        "Department of Computer Science, TU Munich, 85748 Garching, Germany"
+      ],
+      "Mingda Li": [
+        "Department of Nuclear Science and Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Ju Li": [
+        "Department of Nuclear Science and Engineering, MIT, Cambridge Massachusetts 02139, USA"
+      ],
+      "Wojciech Matusik": [
+        "Department of Electrical Engineering and Computer Science, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Elsa Olivetti": [
+        "Department of Materials Science and Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Connor W. Coley": [
+        "Department of Chemical Engineering, MIT, Cambridge, Massachusetts 02139, USA",
+        "Department of Electrical Engineering and Computer Science, MIT, Cambridge, Massachusetts 02139, USA"
+      ],
+      "Rafael Gomez-Bombarelli": [
+        "Department of Materials Science and Engineering, MIT, Cambridge, Massachusetts 02139, USA"
+      ]
+    },
+    "topic": [
+      "Generative AI",
+      "drug discovery",
+      "autonomous laboratories",
+      "sustainability",
+      "materials science"
+    ],
+    "new materials": "NA",
+    "screening algorithms": "NA",
+    "AI algorithms": "NA",
+    "workflow": "literature review",
+    "methods_description": "discussion on generalizable representations; generation of high-quality training and validation data; measures of validation; methods of validating the performances of generative algorithms and producing experimental validations; and discussions on the ethical and dual-use risks and mitigation strategies",
+    "models": "NA",
+    "year": 2024,
+    "funding": "NA",
+    "impact_factor": 0,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Investigating the influence of treatments on carbon felts for vanadium redox flow batteries": {
+    "abstract": "Vanadium redox flow battery (VRFB) electrodes face challenges related to their long\u2010term operation. We investigated different electrode treatments mimicking the aging processes during operation, including thermal activation, aging, soaking, and storing. Several characterization techniques were used to deepen the understanding of the treatment of carbon felts. Synchrotron X\u2010ray imaging, electrochemical impedance spectroscopy (EIS) with the distribution of relaxation times analysis, and dynamic vapor sorption (DVS) revealed differences between the wettability of felts. The bulk saturation after electrolyte injection into the carbon felts significantly differed from 8\u2009% to 96\u2009%. DVS revealed differences in the sorption/desorption behavior of carbon felt ranging from a slight change of 0.8\u2005wt\u2009% to over 100\u2005wt\u2009%. Additionally, the interactions between the water vapor and the sample change from type V to type H2 \u2026",
+    "authors": "Monja Schilling and L\u00e1szl\u00f3 Eifert and Kerstin K\u00f6ble and Maximilian Jaugstetter and Nico Bevilacqua and Kieran F Fahy and Kristina Tschulik and Aimy Bazylak and Roswitha Zeis",
+    "author_affiliations": {
+      "Monja Schilling": [
+        "Helmholtz Institute UlmKarlsruhe Institute of TechnologyHelmholtzstraße 11, 89081 Ulm (Germany)"
+      ],
+      "L\u00e1szl\u00f3 Eifert": [
+        "Helmholtz Institute UlmKarlsruhe Institute of TechnologyHelmholtzstraße 11, 89081 Ulm (Germany)"
+      ],
+      "Kerstin K\u00f6ble": [
+        "Helmholtz Institute UlmKarlsruhe Institute of TechnologyHelmholtzstraße 11, 89081 Ulm (Germany)"
+      ],
+      "Maximilian Jaugstetter": [
+        "Faculty of Chemistry and Biochemistry, Analytical Chemistry IIRuhr University BochumUniversitätsstraße 150, 44801 Bochum (Germany)"
+      ],
+      "Nico Bevilacqua": [
+        "Helmholtz Institute UlmKarlsruhe Institute of TechnologyHelmholtzstraße 11, 89081 Ulm (Germany)"
+      ],
+      "Kieran F. Fahy": [
+        "Faculty of Applied Science & Engineering, Department of Mechanical &Industrial EngineeringUniversity of Toronto5 King’s College Road, Toronto, Ontario, M5S 3G8 (Canada)"
+      ],
+      "Kristina Tschulik": [
+        "Faculty of Chemistry and Biochemistry, Analytical Chemistry IIRuhr University BochumUniversitätsstraße 150, 44801 Bochum (Germany)"
+      ],
+      "Aimy Bazylak": [
+        "Faculty of Applied Science & Engineering, Department of Mechanical &Industrial EngineeringUniversity of Toronto5 King’s College Road, Toronto, Ontario, M5S 3G8 (Canada)"
+      ],
+      "Roswitha Zeis": [
+        "Faculty of Engineering, Department of Electrical, Electronics, and Communi-cation EngineeringFriedrich-Alexander-Universität Erlangen-Nürnberg (FAU)Cauerstraße 9, 91058 Erlangen (Germany)",
+        "Helmholtz Institute UlmKarlsruhe Institute of TechnologyHelmholtzstraße 11, 89081 Ulm (Germany)",
+        "Faculty of Applied Science & Engineering, Department of Mechanical &Industrial EngineeringUniversity of Toronto5 King’s College Road, Toronto, Ontario, M5S 3G8 (Canada)"
+      ]
+    },
+    "topic": ["vanadium redox flow batteries", "carbon felts"],
+    "new materials": "NA",
+    "screening algorithms": "NA",
+    "AI algorithms": "NA",
+    "workflow": "investigation of how different treatments mimicing aging processes affect carbon felt properties",
+    "methods_description": "treat carbon felts with thermal activation, aging, soaking, and storing; subsequent characterization using synchrotron X-ray imaging, electrochemical impedance spectroscopy, dynamic vapor sorption",
+    "models": "NA",
+    "year": 2023,
+    "funding": "Kekule PhD fellowship by the Fonds der Chemischen Industrie (FCI); Natural Sciences and Engineering Research Council of Canada (NSERC) Discovery Grant Program and the Canada Research Chairs Program; Deutsche Forschungsgemeinschaft (DFG, German ResearchFoundation)-GRK2376/331085229; Projekt DEAL",
+    "impact_factor": 8.4,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Reactive Carbon Capture Enables CO2 Electrolysis with Liquid Feedstocks": {
+    "abstract": "The electrochemical reduction of carbon dioxide (CO2RR) is a promising strategy for mitigating global CO2 emissions while simultaneously yielding valuable chemicals and fuels, such as CO, HCOO\u2013, and C2H4. This approach becomes especially appealing when integrated with surplus renewable electricity, as the ensuing production of fuels could facilitate the closure of the carbon cycle. Despite these advantages, the realization of industrial-scale electrolyzers fed with CO2 will be challenged by the substantial energy inputs required to isolate, pressurize, and purify CO2 prior to electrolysis.To address these challenges, we devised an electrolyzer capable of directly converting reactive carbon solutions (e.g., a bicarbonate-rich eluent that exits a carbon capture unit) into higher value products. This \u201creactive carbon electrolyzer\u201d operates by reacting (bi)carbonate with acid generated within the \u2026",
+    "authors": "Douglas JD Pimlott and Yongwook Kim and Curtis P Berlinguette",
+    "author_affiliations": {
+      "Douglas JD Pimlott": [
+        "Department of Chemistry, The University of British Columbia, Vancouver, British Columbia V6T 1Z1, Canada"
+      ],
+      "Yongwook Kim": [
+        "Department of Chemistry, TheUniversity of British Columbia, Vancouver, British Columbia V6T 1Z1, Canada"
+      ],
+      "Curtis P. Berlinguette": [
+        "Department of Chemistry, TheUniversity of British Columbia, Vancouver, British Columbia V6T 1Z1, Canada; Department of Chemical and BiologicalEngineering, The University of British Columbia, Vancouver,British Columbia V6T 1Z3, Canada; Stewart BlussonQuantum Matter Institute, The University of BritishColumbia, Vancouver, British Columbia V6T 1Z4, Canada;Canadian Institute for Advanced Research (CIFAR), Toronto,Ontario M5G 1M1, Canada"
+      ]
+    },
+    "topic": ["carbon capture", "liquid feedstocks", "electrochemistry"],
+    "new materials": "NA",
+    "screening algorithms": "NA",
+    "AI algorithms": "NA",
+    "workflow": "development of an electrolyzer to convert reactive carbon solutions into higher value products",
+    "methods_description": "study impact of carbonate concentration, counter ions, ionic impurities on product formation with metrics of Faradaic efficiency, full cell voltage, CO2 utilization efficiency",
+    "models": "NA",
+    "year": 2024,
+    "funding": "patent filed for the reactive carbon electrolyzer",
+    "impact_factor": 16.4,
+    "scores": {
+      "affiliation": "Yes",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Accelerated chemical science with AI": {
+    "abstract": "In light of the pressing need for practical materials and molecular solutions to renewable energy and health problems, to name just two examples, one wonders how to accelerate research and development in the chemical sciences, so as to address the time it takes to bring materials from initial discovery to commercialization. Artificial intelligence (AI)-based techniques, in particular, are having a transformative and accelerating impact on many if not most, technological domains. To shed light on these questions, the authors and participants gathered in person for the ASLLA Symposium on the theme of \u2018Accelerated Chemical Science with AI\u2019 at Gangneung, Republic of Korea. We present the findings, ideas, comments, and often contentious opinions expressed during four panel discussions related to the respective general topics: \u2018Data\u2019, \u2018New applications\u2019, \u2018Machine learning algorithms\u2019, and \u2018Education\u2019. All \u2026",
+    "authors": "Seoin Back and Al\u00e1n Aspuru-Guzik and Michele Ceriotti and Ganna Gryn'ova and Bartosz Grzybowski and Geun Ho Gu and Jason Hein and Kedar Hippalgaonkar and Rodrigo Horm\u00e1zabal and Yousung Jung and Seonah Kim and Woo Youn Kim and Seyed Mohamad Moosavi and Juhwan Noh and Changyoung Park and Joshua Schrier and Philippe Schwaller and Koji Tsuda and Tejs Vegge and O Anatole von Lilienfeld and Aron Walsh",
+    "topic": [
+      "accelerated chemical science",
+      "artificial intelligence",
+      "machine learning algorithms",
+      "education"
+    ],
+    "new materials": "NA",
+    "screening algorithms": "NA",
+    "AI algorithms": "NA",
+    "workflow": "findings, ideas, comments, opinions related to data, new applications, machine learning algorithms, and education pertaining to accelerated research and development in the chemical sciences",
+    "methods_description": "in-person discussions at the ASLLA Symposium on the theme of Accelerated Chemical Science with AI at Gangneung, Republic of Korea",
+    "models": "NA",
+    "year": 2024,
+    "funding": "KIST; IITP Korea (No. 2021-0-01343, Artificial Intelligence Graduate School Program for Seoul National University & No. 2021-0-02068, Artificial Intelligence Innovation Hub); NRF of Korea funded by Ministry of Science and ICT (RS-2023-00283902); NCCR Catalysis (grant number 180544), a National Centre of Competence in Research funded by the Swiss National Science Foundation; Acceleration Consortium; Canada First Research Excellence Fund at the University of Toronto; Anders G. Froseth",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Understanding Causalities in Organic Photovoltaics Device Degradation in a Machine\u2010Learning\u2010Driven High\u2010Throughput Platform": {
+    "topic": [
+      "device stability",
+      "organic solar cells",
+      "Gaussian process regression",
+      "high-throughput"
+    ],
+    "new materials": "NA",
+    "screening algorithms": "Gaussian process regression, drift-diffusion simulations",
+    "AI algorithms": "Gaussian process regression",
+    "workflow": "Gaussian process regression used to predict electrical performance and degradation from features of active layer morphology obtained from spectral decomposition of UV-vis spectroscopy. Effect of active layer thickness and order also studied by drift-diffusion simulations.",
+    "methods_description": "Morphological fingerprints obtained from automated spectral modeling, which are inputted into a Gaussian process regression model to find deterministic relationsihps between features and process conditions and device functionality.",
+    "models": "Gaussian process regression , drift-diffusion simulations",
+    "year": 2024,
+    "impact_factor": 29.4,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "No",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Term Sheets in Venture Capital": {
+    "abstract": "Of considerable interest to the venture capital community is the nature of the contracts formed by entrepreneurs and investors and the impact that those agreements have on financial outcomes. Sahlman (1988) observed that the goal of this contracting exercise is to decide how the interested parties divide the future risks of the deal as well as the ownership of the future cash flows it generates. Importantly, he argued that how the value of the overall enterprise is split between the suppliers and users of financial capital will be determined by these negotiations. Kaplan and Str\u00f6mberg (2003) documented that VC contracts generally provide separate provisions for cash flow and company control rights, which can impact firm valuations. Cumming (2008) and Cumming and Johan (2014) showed that the control rights negotiated initially influence how the company eventually exits (ie, by public offering or acquisition). Ewens \u2026",
+    "authors": "Keith C Brown and Kenneth W Wiles",
+    "new materials": "NA",
+    "screening algorithms": "NA",
+    "AI algorithms": "NA",
+    "workflow": "NA",
+    "methods_description": "NA",
+    "models": "NA",
+    "year": 2023,
+    "funding": "NA",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "Yes",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Delocalized, asynchronous, closed-loop discovery of organic laser emitters": {
+    "abstract": "Contemporary materials discovery requires intricate sequences of synthesis, formulation, and characterization that often span multiple locations with specialized expertise or instrumentation. To accelerate these workflows, we present a cloud-based strategy that enabled delocalized and asynchronous design-make-test-analyze cycles. We showcased this approach through the exploration of molecular gain materials for organic solid-state lasers as a frontier application in molecular optoelectronics. Distributed robotic synthesis and in-line property characterization, orchestrated by a cloud-based artificial intelligence experiment planner, resulted in the discovery of 21 new state-of-the-art materials. Gram-scale synthesis ultimately allowed for the verification of best-in-class stimulated emission in a thin-film device. Demonstrating the asynchronous integration of five laboratories across the globe, this workflow provides a \u2026",
+    "authors": "Felix Strieth-Kalthoff and Han Hao and Vandana Rathore and Joshua Derasp and Th\u00e9ophile Gaudin and Nicholas H Angello and Martin Seifrid and Ekaterina Trushina and Mason Guy and Junliang Liu and Xun Tang and Masashi Mamada and Wesley Wang and Tuul Tsagaantsooj and Cyrille Lavigne and Robert Pollice and Tony C Wu and Kazuhiro Hotta and Leticia Bodo and Shangyu Li and Mohammad Haddadnia and Agnieszka Wo\u0142os and Rafa\u0142 Roszak and Cher Tian Ser and Carlota Bozal-Ginesta and Riley J Hickman and Jenya Vestfrid and Andr\u00e9s Aguilar-Granda and Elena L Klimareva and Ralph C Sigerson and Wenduan Hou and Daniel Gahler and Slawomir Lach and Adrian Warzybok and Oleg Borodin and Simon Rohrbach and Benjamin Sanchez-Lengeling and Chihaya Adachi and Bartosz A Grzybowski and Leroy Cronin and Jason E Hein and Martin D Burke and Al\u00e1n Aspuru-Guzik",
+
+    "topic": [
+      "materials discovery",
+      "organic solid-state lasers",
+      "organic laser emitters",
+      "Suzuki-Miyaura coupling",
+      "robotic synthesis"
+    ],
+    "new materials": "21 new state-of-the-art organic laser emitters",
+    "screening algorithms": "Gaussian process regression, graph neural networks, Bayesian optimization",
+    "AI algorithms": "Gaussian process regression, graph neural networks, Bayesian optimization",
+    "workflow": "Trained machine learning models on emission properties of organic molecules to propose candidates, along with on-the-fly input from internationally-coordinated parallel experiments conducted by robots. Led to discovery of 21 state-of-the-art small-molecule emitters.",
+    "models": "NA",
+    "year": 2024,
+    "impact_factor": 47.7,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Enhancing Protein\u2013Ligand Binding Affinity Predictions Using Neural Network Potentials": {
+    "abstract": "This letter gives results on improving protein\u2013ligand binding affinity predictions based on molecular dynamics simulations using machine learning potentials with a hybrid neural network potential and molecular mechanics methodology (NNP/MM). We compute relative binding free energies with the Alchemical Transfer Method and validate its performance against established benchmarks and find significant enhancements compared with conventional MM force fields like GAFF2.",
+    "authors": "Francesc Sabane\u0301s Zariquiey and Raimondas Galvelis and Emilio Gallicchio and John D Chodera and Thomas E Markland and Gianni De Fabritiis",
+    "topic": [
+      "protein ligand binding affinity",
+      "neural network potentials",
+      "molecular dynamics"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "neural networks potentials, ANI-2X",
+    "workflow": "Evaluated various protein-ligand pair systems using ANI-2X by computing binding free energies and their corresponding uncertainties. Comparisons of results to experimental values show low prediction errors at cost of increased computational times",
+    "models": "ANI-2X, neural network potential and molecular mechanics",
+    "year": 2024,
+    "funding": "National Institutes of Health. National Science Foundation. Parker Institute for Cancer Immunotherapy. Relay Therapeutics. Entasis Therapeutics. Silicon Therapeutics. EMD Serono (Merck KGaA). AstraZeneca. Vir Biotechnology. Bayer. XtalPi. Interline Therapeutics. Molecular Sciences Software Institue. Starr Cancer Consortium. Open Force Field Consortium. Cycle for Survival. Louis V. Gerstner Young Investigator Award. Sloan Kettering Institute.",
+    "impact_factor": 5.6,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Cell penetration of oxadiazole-containing macrocycles": {
+    "abstract": "Passive membrane permeability is an important property in drug discovery and biological probe design. To elucidate the cell-penetrating ability of oxadiazole-containing (Odz) peptides, we employed the Chloroalkane Penetration Assay. The present study demonstrates that Odz cyclic peptides can be highly cell-penetrant depending on the position of specific side chains and the chloroalkane tag. Solution NMR shows that Odz cyclic peptides adopt a \u03b2-turn conformation. However, despite observing high cell penetration, we observed low passive permeability in experiments with artificial membranes. These findings highlight the complexity of controlling cell penetration for conformationally sensitive macrocycles and suggest that Odz cyclic peptides may provide a framework for designing cell-penetrant cyclic peptides.",
+    "authors": "Sungjoon Huh and Nefeli Batistatou and Jing Wang and George J Saunders and Joshua A Kritzer and Andrei K Yudin",
+    "topic": [
+      "membrane permeability",
+      "oxadiazole-containing peptides",
+      "chloroalkane penetration assay"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "NA",
+    "workflow": "Assessed the cell membrane pentrating capabilities of various oxadiazole-containing macrocycles via chloroalkane penetration assay (CAPA).",
+    "models": "NA",
+    "year": 2023,
+    "funding": "United States National Institute of Health (GM127585 and GM148407). Natural Science and Engineering Research Council of Canada.",
+    "impact_factor": 4.2,
+    "scores": {
+      "affiliation": "Yes",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Efficient multicarbon formation in acidic CO2 reduction via tandem electrocatalysis": {
+    "abstract": "The electrochemical reduction of CO2 in acidic conditions enables high single-pass carbon efficiency. However, the competing hydrogen evolution reaction reduces selectivity in the electrochemical reduction of CO2, a reaction in which the formation of CO, and its ensuing coupling, are each essential to achieving multicarbon (C2+) product formation. These two reactions rely on distinct catalyst properties that are difficult to achieve in a single catalyst. Here we report decoupling the CO2-to-C2+ reaction into two steps, CO2-to-CO and CO-to-C2+, by deploying two distinct catalyst layers operating in tandem to achieve the desired transformation. The first catalyst, atomically dispersed cobalt phthalocyanine, reduces CO2 to CO with high selectivity. This process increases local CO availability to enhance the C\u2013C coupling step implemented on the second catalyst layer, which is a Cu nanocatalyst with a Cu\u2013ionomer \u2026",
+    "authors": "Yuanjun Chen and Xiao-Yan Li and Zhu Chen and Adnan Ozden and Jianan Erick Huang and Pengfei Ou and Juncai Dong and Jinqiang Zhang and Cong Tian and Byoung-Hoon Lee and Xinyue Wang and Shijie Liu and Qingyun Qu and Sasa Wang and Yi Xu and Rui Kai Miao and Yong Zhao and Yanjiang Liu and Chenyue Qiu and Jehad Abed and Hengzhou Liu and Heejong Shin and Dingsheng Wang and Yadong Li and David Sinton and Edward H Sargent",
+    "topic": ["electrochemistry", "catalysis"],
+    "new materials": "NA",
+    "AI algorithms": "NA",
+    "workflow": "Investigation into decoupling the CO2-to-C2+ electrochemical reaction into two steps each optimized with its individual catalyst.",
+    "models": "NA",
+    "year": 2024,
+    "funding": "Ontario Research Foundation's Research Excellence programme. Natural Sciences and Engineering Research Council (NSERC) of Canada. TotalEnergies SE. US Department of Energy, contract no. DE-AC02-06CH11357. Youth Innovation Promotion Association of the Chinese Academy of Sciences (Y2022006).",
+    "impact_factor": 38.1,
+    "scores": {
+      "affiliation": "Yes",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Evaluating the feasibility of medium chain oleochemical synthesis using microbial chain elongation": {
+    "abstract": "Chain elongating bacteria are a unique guild of strictly anaerobic bacteria that have garnered interest for sustainable chemical manufacturing from carbon-rich wet and gaseous waste streams. They produce C6-C8 medium-chain fatty acids which are valuable platform chemicals that can be used directly, or derivatized to service a wide range of chemical industries. However, the application of chain elongating bacteria for synthesizing products beyond C6-C8 medium-chain fatty acids has not been evaluated. In this study, we assess the feasibility of expanding the product spectrum of chain elongating bacteria to C9-C12 fatty acids, along with the synthesis of C6 fatty alcohols, dicarboxylic acids, diols, and methyl ketones. We propose several metabolic engineering strategies to accomplish these conversions in chain elongating bacteria and utilize constraint-based metabolic modelling to predict pathway stoichiometries, assess thermodynamic feasibility, and estimate ATP and product yields. We also evaluate how producing alternative products impacts the growth rate of chain elongating bacteria via resource allocation modelling, revealing a trade-off between product carbon length and class versus cell growth rate. Together, these results highlight the potential for using chain elongating bacteria as a platform for diverse oleochemical biomanufacturing and offer a starting point for guiding future metabolic engineering efforts aimed at expanding their product range.",
+    "authors": "Ethan Agena and Ian Gois and Connor M Bowers and Radhakrishnan Mahadevan and Matthew J Scarborough and Christopher Evan Lawson",
+    "topic": [
+      "oleochemical synthesis",
+      "metabolic modelling",
+      "anaerobic chain elongating bacteria"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "NA",
+    "workflow": "Utilization of constraing-based metabolic modelling to predict pathway stoichiometries, thermodynamic feasability, ATP/product yields.",
+    "models": "NA",
+    "year": 2024,
+    "funding": "Natural Sciences and Engineering Research Council of Canada (ALLRP 580897-22, RGPIN-2021-02684).",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Ru-doped functional porous materials for electrocatalytic water splitting": {
+    "abstract": "Electrolytic water splitting (EWS) is an attractive and promising technique for the production of hydrogen energy. Nevertheless, the sluggish kinetic rate of hydrogen/oxygen evolution reactions leads to a high overpotential and low energy efficiency. Up to date, Pt/Ir-based nanocatalysts have become the state-of-the-art EWS catalysts, but disadvantages such as high cost and low earth abundance greatly limit their applications in EWS devices. As an attractive candidate for the Pt/Ir catalysts, series of Ru-based nanomaterials have aroused much attention for their low price, Pt-like hydrogen bond strength, and high EWS activity. In particular, Ru-doped functional porous materials have been becoming one of the most representative EWS catalysts, which can not only achieve the dispersion and adjustment for active Ru sites, but also simultaneously solve the problems of mass transfer and catalytic conversion in EWS. In \u2026",
+    "authors": "Chongao Tian and Rui Liu and Yu Zhang and Wenxiu Yang and Bo Wang",
+    "author_affiliations": [
+      "Beijing Key Laboratory of Photoelectronic/Electrophotonic Conversion Materials, Advanced Technology Research Institute (Jinan), Advanced Research Institute of Multidisciplinary Science, School of Chemistry and Chemical Engineering, Beijing Institute of Technology, Beijing 10081, China",
+      "Beijing Institute of Technology Library, Beijing Institute of Technology, Beijing 10081, China"
+    ],
+    "topic": [
+      "electrocatalytic water splitting",
+      "ruthenium doping",
+      "functional porous materials"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "NA",
+    "workflow": "literature review on design and preparation strategies of Ru-doped functional porous materials toward electrolytic water splitting.",
+    "models": "NA",
+    "year": "2023",
+    "funding": "National Key Research and Development Program of China (No. 2020YFB1506300). National Natural Science Foundation of China (Nos. 21971017, 21922502, 22075018). Young Elite Scientists Sponsorship Program by BAST (No. BYESS2023163). CNPC Innovation Found (No. 2022DQ02-0606). Beijing Institute of Technology Research Fund Program.",
+    "impact_factor": 14.3,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "No",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+  "Towards comprehensive coverage of chemical space: Quantum mechanical properties of 836k constitutional and conformational closed shell neutral isomers consisting of HCNOFSiPSClBr": {
+    "abstract": "The Vector-QM24 (VQM24) dataset attempts to more comprehensively cover all possible neutral closed shell small organic and inorganic molecules and their conformers at state of the art level of theory. We have used density functional theory (B97X-D3/cc-pVDZ) to optimize 577k conformational isomers corresponding to 258k constitutional isomers.Isomers included contain up to five heavy atoms (non-hydrogen) consisting of -block elements C, N, O, F, Si, P, S, Cl, Br. Single point diffusion quantum Monte Carlo (DMC@PBE0(ccECP/cc-pVQZ)) energies are reported for the sub-set of the lowest conformers of 10,793 molecules with up to 4 heavy atoms.This dataset has been systematically generated by considering all combinatorially possible stoichiometries, and graphs (according to Lewis rules as implemented in the {\tt SURGE} package), along with all stable conformers identified by GFN2-xTB. Apart from graphs, geometries, rotational constants, and vibrational normal modes, VQM24 includes internal, atomization, electron-electron repulsion, exchange correlation, dispersion, vibrational frequency, Gibbs free, enthalpy, ZPV, molecular orbital energies; as well as entropy, and heat capacities. Electronic properties include multipole moments (dipole, quadrupole, octupole, hexadecapole), electrostatic potentials at nuclei (alchemical potential), Mulliken charges, and molecular wavefunctions. VQM24 represents a highly accurate and unbiased dataset of molecules, ideal for testing and training transferable, scalable, and generative ML models of real quantum systems.",
+    "authors": "Danish Khan and Anouar Benali and Scott YH Kim and Guido Falk von Rudorff and O Anatole von Lilienfeld",
+    "author_affiliations": [
+      "Chemical Physics Theory Group, Department of Chemistry, University of Toronto, St. George campus, Toronto, ON, Canada",
+      "Vector Institute for Artificial Intelligence, Toronto, ON, M5S 1M1, Canada",
+      "Computational Science Division, Argonne National Laboratory, Argonne, Illinois 60439, United States",
+      "Institute of Chemistry, University of Kassel, 34109 Kassel, Germany",
+      "Center for Interdisciplinary Nanostructure Science and Technology (CINSaT), 34132 Kassel, Germany",
+      "Department of Materials Science and Engineering, University of Toronto, St. George campus, Toronto, ON, Canada",
+      "ML Group, Technishe Universitat Berlin and Institute for the Foundations of Learning and Data, 10587 Berlin, Germany",
+      "Berlin Institute for the Foundations of Learning and Data, 10587 Berlin, Germany",
+      "Department of Physics, University of Toronto, St. George campus, Toronto, ON, Canada",
+      "Acceleration Consortium, University of Toronto, Toronto, ON"
+    ],
+    "topic": [
+      "density functional theory",
+      "isomers",
+      "molecules data set",
+      "machine learning"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "NA",
+    "workflow": "generation of ab initio computed properties of 836k closed shell neutral isomers using density functional theory and diffusion quantum Monte Carlo",
+    "models": "NA",
+    "year": 2024,
+    "funding": "Natural Sciences and Engineering Research Council of Canada (NSERC) (funding reference number RGPIN-2023-04853). University of Toronto's Acceleration Consortium from the Canada First Research Excellence Fund, grant number CFREF-2022-00042. Ed Clark Chair of Advanced Materials. Canada CIFAR AI Chair. European Research Council (ERC) under the European Union's Horizon 2020 research and innovation programme (grant agreement No. 772834). US Department of Energy, Office of Science, Basic Energy Sciences, Materials Sciences and Engineering Division. Innovative and Novel Computational Impact on Theory and Experiment (INCITE) program.",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Synergistic effects of thermosensitive liposomal doxorubicin, mild hyperthermia, and radiotherapy in breast cancer management: an orthotopic mouse model study": {
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "Yes"
+    }
+  },
+
+  "Photoresponsive Organic Cages – Computationally Driven Discovery of Azobenzene-Derived Organic Cages": {
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+  "Language models can identify enzymatic binding sites in protein sequences": {
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Navigating the Materials Space with ML-Generated Electronic Fingerprints": {
+    "abstract": "Finding materials with good performance in a specific application, especially when the origin of good performance is not well understood or not easily computable, is a major challenge in materials science. Trial-and-error random exploration is prohibitively expensive due to the vastness of the materials space. A more practical approach is to search for new materials within the proximity of known compounds that possess the desired property. In such an approach, assessing materials’ similarity requires deriving some fingerprint relevant for material’s performance. Typically, material’s structure is used as the fingerprint, which often does not translate into similarity in properties. Electronic structure fingerprints, e.g., density of states (DOS) or electronic band structure, were proposed as a better alternative, however, the computational cost of their calculation on the scale of 100,000 materials remains too high for rapid exploration. In this work, we developed a Graph Convolutional Network (GCN) ProDosNet which is trained on orbital-resolved and atom-resolved projected density of states (PDOS) data and is capable of predicting the electronic structure of materials at extremely low computational cost. With this model, we were able to generate PDOS fingerprints for all compounds present in the Materials Projects database and cluster them by similarity of their orbital-resolved PDOS. We demonstrate that these electronic fingerprints allow finding materials with similar electronic properties but drastically different structures for applications in photovoltaics, catalysis, and batteries.",
+    "authors": "Neporozhnii I and Wang Z and Bajpai R and Gomez C and Chakraborty N and Dong T and Tamblyn I and Voznyy O.",
+    "topic": ["molecular fingerprints", "graph convoluational network"],
+    "new materials": "NA",
+    "AI algorithms": "graph convolutional network",
+    "workflow": "Trained graph convolutional network on orbital-resolved and atom-resolved projected density of states to predict electronic structure of test samples.",
+    "models": "ProDosNet",
+    "year": "2023",
+    "funding": "Natural Sciences and Engineering Research Council of Canada (NSERC CRD grant number 537463-18 and NSERC Discovery 2019-04897). Huawei Canada.",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "Yes",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Degradable π‑Conjugated Polymers": {
+    "impact_factor": 14.4,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "QueST: Self-Supervised Skill Abstractions for Learning Continuous Control": {
+    "workflow": "Developed novel architecture called quantized skill transformer (QueST) for learning generalizable low-level skills within a discrete latent space.",
+    "models": "QueST",
+    "year": 2024,
+    "funding": "NA",
+    "impact_factor": "NA",
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  },
+
+  "Inverse design of porous materials: a diffusion model approach": {
+    "abstract": "The success of diffusion models in the field of image processing has propelled the creation of software such as Dall-E, Midjourney and Stable Diffusion, which are tools used for text-to-image generation. Mapping this workflow onto material discovery, a new diffusion model was developed for the generation of pure silica zeolite, marking one of the first applications of diffusion models to porous materials. Our model demonstrates the ability to generate novel crystalline porous materials that are not present in the training dataset, while exhibiting exceptional performance in inverse design tasks targeted on various chemical properties including the void fraction, Henry coefficient and heat of adsorption. Comparing our model with a Generative Adversarial Network (GAN) revealed that the diffusion model outperforms the GAN in terms of structure validity, exhibiting an over 2000-fold improvement in performance. We firmly believe that diffusion models (along with other deep generative models) hold immense potential in revolutionizing the design of new materials, and anticipate the wide extension of our model to other classes of porous materials.",
+    "authors": "Junkil Park and Aseem partap Singh Gill and Seyed Mohamad Moosavi and Jihan Kim",
+    "topic": [
+      "inverse design",
+      "crystalline porous materials",
+      "diffusion models"
+    ],
+    "new materials": "NA",
+    "AI algorithms": "diffusion models",
+    "workflow": "Trained diffusion models for generation of pure silica zeolite, with constraints like void fraction, Henry coefficient, heat of adsorption.",
+    "models": "ZeoDiff",
+    "year": 2024,
+    "funding": "National Research Foundation of Korea (NRF), grant no. 2021R1A2C200358313 and 2021M3A7C208974513. Natural Sciences and Engineering Research Council of Canada (NSERC), grant no. RGPIN-2023-04232.",
+    "impact_factor": 10.7,
+    "scores": {
+      "affiliation": "No",
+      "topic": "Yes",
+      "new materials": "Yes",
+      "screening algorithms": "Yes",
+      "AI algorithms": "Yes",
+      "workflow": "Yes",
+      "methods": "Yes",
+      "models": "Yes",
+      "funding": "No"
+    }
+  }
+}

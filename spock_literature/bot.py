@@ -111,8 +111,8 @@ def process_scholar(scholar,Bot: Bot):
 
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
-from langchain.embeddings import OllamaEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_community.embeddings import OllamaEmbeddings
+from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 import json
 from langchain_core.output_parsers import JsonOutputParser
