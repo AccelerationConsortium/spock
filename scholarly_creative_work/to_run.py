@@ -140,7 +140,7 @@ for i in range(5):
             print("-----")
 
             # Process 'drug formulations explored'
-            output_llm = llm.query_rag("Has the document mention exploring any drug formulations?\
+            output_llm = llm.query_rag("Has the document mentioned exploring any drug formulations?\
                                        Examples sentences for exploring drug formulations:\
                                        1. In this review, we tried to explore the major considerations and target factors in\
                                         drug delivery through the nasal-brain\
@@ -148,7 +148,7 @@ for i in range(5):
                                        2. Notably, they can be incorporated in pharmaceutical formulations to enhance drug solubility,\
                                         absorption, and bioavailability due to the formulation itself and the P-gp inhibitory effects of the excipients.\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from the document\
-                                        that supports your answer.")
+                                        that supports your answer.")s
             response[name]['drug formulations explored'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
