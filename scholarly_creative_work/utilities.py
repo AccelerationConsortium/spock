@@ -1,4 +1,6 @@
-
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+import faiss
 import os
 from bs4 import BeautifulSoup
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -163,13 +165,18 @@ class Bot_LLM:
     def __init__(self,model='llama3',embed_model='mxbai-embed-large', folder_path='db2'):
         import getpass
         import os
+        from dotenv import load_dotenv
+        
+
+# Load the .env file
+        load_dotenv()
 
         if not os.getenv("OPENAI_API_KEY"):
             os.environ["OPENAI_API_KEY"] = getpass.getpass("Enter your OpenAI API key: ")
 
 
         self.llm = Ollama(model=model)
-        self.oembed = OllamaEmbeddings(model=embed_model)
+        self.oembed = OpenAIEmbeddings(model="text-embedding-3-large")
         self.folder_path = folder_path
         self.vectorstore = None
 
@@ -202,9 +209,9 @@ class Bot_LLM:
     
     def chunk_indexing(self, document:str):
         # Check if the document is a valid file path
-        from langchain_experimental.text_splitter import SemanticChunker, RecursiveCharacterTextSplitter
+        #from langchain_experimental.text_splitter import SemanticChunker, RecursiveCharacterTextSplitter
 
-        text_splitter = CharacterTextSplitter(
+        text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=500, chunk_overlap=20)        
         data = []
         if isinstance(document, str) and os.path.isfile(document):
@@ -232,7 +239,7 @@ class Bot_LLM:
                 raise RuntimeError(f"Error processing text: {e}")
 
             
-        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed, persist_directory=self.folder_path)
+        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed)
 
         #all_splits = text_splitter.split_documents(data)
         #self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)

@@ -1,0 +1,48 @@
+{
+    "10.1002_adhm.201800296.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " The result showed that there was no notable change of MR image in the tumor for normal tumor group, remaining a T"
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " The document does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow."
+        },
+        "experimental methodology": {
+            "Yes/No": "Based on the provided text, here are my answers to your questions:\n\n**Question 1:** Yes",
+            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics.\n\nHowever, there is no mention of novel experimental methodology in this sentence. But, looking through the entire document, I found that it does not explicitly mention any new or novel experimental methodology used either.\n\n**Question 2:** Yes "
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " I don't see any mention of machine learning, deep learning algorithm or AI model"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " Following a method strategy will open up a new avenue in the field of in vivo tumor-targeted theranostics."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " The Key Laboratory of Resource Chemistry of Ministry of Education, Shanghai Municipal Education Committee Key Laboratory of Molecular Imaging Probes and Sensors, and International Joint Laboratory on Resource Chemistry (IJLRC) are acknowledged for financial support."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " The statistical analysis was performed using one-way analysis of variance (ANOVA) with Tukey\u2019s significant difference post hoc test using SPSS18.0 software (SPSS Inc., USA)."
+        },
+        "drug formulations explored": {
+            "Yes/No": "Yes",
+            "sentence": " The nanoparticles were purified by dialysis (molecular weight cutoff, MWCO 3000 Da), followed by adding water (5 mL) and ZnDPA-N[16] (2 mg) to the solution, followed by shaking for 0.5 h."
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics, but it does not specifically identify novel drug formulations."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " I couldn't find any mention of identifying to developing lead small-molecule drug candidates in the provided document."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " The Supporting Information is available from the Wiley Online Library or [9] a) D. Ye, A. J. Shuhendler, P. Pandit, K. D. Brewer, S. S. Tee, L. Cui, G. Tikhomirov, B. Rutt, J. Rao, Chem. Sci. 2014, 5, 3845; b) Y. Yuan, Adv. Healthcare Mater. 2018, 1800296"
+        }
+    }
+}
