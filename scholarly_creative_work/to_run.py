@@ -28,7 +28,7 @@ for i in range(5):
             #llm.set_folder_path("db/db"+str(i))
             
             
-            print("running split_and_embedding_chunk_pdf")
+            print("running chunk_indexing")
         # llm.split_and_embedding_chunk_pdf("papers/papers/"+pdf_list[i])
             # Process 'affiliation'
         # output_llm = llm.query_rag("What are the authors affiliation. Output a dictionary ? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
@@ -43,7 +43,11 @@ for i in range(5):
 
             # Process 'new materials'
             
-            output_llm = llm.query_rag("Does the article mention any new material discovery? Output either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer.")
+            output_llm = llm.query_rag("""Does the article mention any new material discovery? Examples for new materials:
+Here we report the in vitro validation of eight novel GPCR peptide activators
+The result revealed that novel peptides accumulated only in adenocarcinoma lung cancer cell-derived xenograft tissue
+This led to the discovery of several novel catalyst compositions for ammonia decomposition, which were experimentally validated against "state-of-the-art" ammonia decomposition catalysts and were found to have exceptional low-temperature performance at substantially lower weight loadings of Ru
+Output either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer.""")
             response[name]['new materials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -53,8 +57,9 @@ for i in range(5):
             print("-----")
 
             # Process 'AI algorithms' To edit
-            output_llm = llm.query_rag("AI algorithms are computational methods and processes used to solve specific tasks by mimicking human intelligence. These algorithms enable machines to learn from data, make decisions, and perform tasks that typically require human intelligence. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
-            response[name]['AI algorithms'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
+            output_llm = llm.query_rag(""" A machine learning algorithm is a method that enables computers to learn from data and make predictions or decisions without being explicitly programmed; for example, a linear regression algorithm predicts outcomes by modeling relationships between variables in a dataset.
+. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.""")
+            response[name]['ML algorithms'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
             # Process 'workflow'
@@ -69,7 +74,7 @@ for i in range(5):
             print("-----")
             '''
             # Process 'models'
-            output_llm = llm.query_rag("What are the models used in the article? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
+            output_llm = llm.query_rag("Are specific models used in the article? Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
             response[name]['models'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -80,7 +85,7 @@ for i in range(5):
             print("-----")
 
             # Process 'material datasets'
-            output_llm = llm.query_rag("Does the article share any AI or material-related datasets? If yes, provide the details. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
+            output_llm = llm.query_rag("Does the article share or mention any material-related datasets? If yes, provide the details. Output either 'Yes' or 'No' followed by a '/' then a sentence from the document that supports your answer.")
             response[name]['material datasets'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
