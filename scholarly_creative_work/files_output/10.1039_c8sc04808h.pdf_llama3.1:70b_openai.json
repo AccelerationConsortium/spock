@@ -1,0 +1,48 @@
+{
+    "10.1039_c8sc04808h.pdf": {
+        "new materials": {
+            "Yes/No": "Yes",
+            "sentence": " We therefore synthesized the asymmetric monomer 2-bromo-3-(2-ethylhexyl)-5-iodotellurophene, (Scheme S2, ESI\u2020)."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "experimental methodology": {
+            "Yes/No": "No",
+            "sentence": " In situ 31P NMR studies and DFT calculations were used to demonstrate the unique mechanistic influence of LiCl as an additive in KCTP."
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " There is no mention of developing new machine learning and deep learning algorithms in the provided text."
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " We demonstrate how these new insights can be used to guide future monomer design for obtaining higher quality and more precise p-conjugated polymers."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " D.S.S.isgratefulfromsupportfromtheNSERCofCanada,TheCanadianfoundationforInnovation,theOntarioresearchfund2011,133,9700\u20139703.and the Ontario Centres of Excellence. S. Y. is grateful for the supportofColinHahnemannBayleyFellowship.Thisresearchwas enabled in part by support provided by SHARCNET and ComputeCanada."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": ""
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " No specific sentence in the document mentions novel drug formulations. The text appears to be related to chemistry and polymerization, not pharmaceuticals or medicine."
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " There is no mention of identifying or developing lead small-molecule drug candidates in the provided document. The document appears to be focused on catalyst transfer polycondensation for p-conjugated polymers and discusses various aspects of this process, including the role of halogens and the use of different monomers and catalysts."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " None"
+        }
+    }
+}
