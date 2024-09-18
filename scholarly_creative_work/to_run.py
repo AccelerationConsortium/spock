@@ -20,6 +20,7 @@ for i in range(10):
     print(name)
     if not os.path.exists(f'files_output/{name}'):
         try:
+            response = {}
             response[name] = {}
             llm = Bot_LLM(model="llama3.1", folder_path='db/db'+str(i))
             llm.chunk_indexing("papers/papers/"+pdf_list[i])    
