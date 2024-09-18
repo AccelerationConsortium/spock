@@ -43,48 +43,48 @@
     },
     "10.1002_adhm.201800296.pdf": {
         "new materials": {
-            "Yes/No": "No",
-            "sentence": " The amplifying apoptosis-targeted T -weighted MR imaging in vivo of MNPs"
+            "Yes/No": "Yes",
+            "sentence": " The concentration of MNPs"
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " The researchers were able to enhance the accumulation value of MNPs"
+            "sentence": " The document does not mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow."
         },
         "experimental methodology": {
-            "Yes/No": "Based on the provided text, here are the answers:\n\n**New or novel experimental methodology used?**\n\n* No",
-            "sentence": " The document does not mention any new or novel experimental methodology used.\n\nThe document seems to be a research article in the field of biomedical science, focusing on the application of magnetic nanoparticles (MNPs) and fluorescent tags for targeted accumulation and amplification of apoptosis imaging. While it discusses various methods such as confocal laser scanning microscopy, terminal deoxynucleotidyl transferase-mediated dUTP-biotin nick end-labeling (TUNEL) staining, and MRI imaging, there is no mention of novel experimental methodologies.\n\n**Screening algorithms used in the document?**\n\n* No "
+            "Yes/No": "Yes",
+            "sentence": " \"A novel apoptosis-targeted MRI contrast agent was developed, and its amplifying apoptotic imaging effect in vivo was studied.\"\n\nThe screening algorithms used in the document are:\nNo"
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " The tumor-homing ability of nanomaterials plays a key role in achieving their cancer precision theranostics."
+            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " We developed an apoptosis-homing nanoplatform based on zinc(II) dipicolylamine (ZnDPA) conjugated Fe"
+            "sentence": " The apoptosis-homing nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics, where the expression can further be elevated as a response to enhanced apoptosis during the cancer therapy."
         },
         "funding": {
-            "Yes/No": "Yes",
-            "sentence": " \"The authors thank the National Natural Science Foundation of China (Nos. 81772796, 81903153), the Fundamental Research Funds for the Central Universities (No. 2019kfyXJQD-045) and the Program of Introducing Talents in Guangdong Province (No. 2017GC0015).\""
+            "Yes/No": "No",
+            "sentence": " The authors declare no competing financial interest."
         },
         "material datasets": {
-            "Yes/No": "Yes",
-            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
+            "Yes/No": "No",
+            "sentence": " The amplifying apoptosis-targeted MR imaging in vivo of MNPs"
         },
         "drug formulations explored": {
             "Yes/No": "Yes",
-            "sentence": " The degree of apoptosis on the different tumor models was further confirmed by fluorescent TUNEL staining (Figure S7, Supporting Information)."
+            "sentence": " The MNP formulations, including MNPs"
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " A novel formulation of MNPs"
+            "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "Yes",
             "sentence": " The amplifying apoptosis-targeted T-weighted MR imaging in vivo of MNPs"
         },
         "clinical trials": {
-            "Yes/No": "Yes",
-            "sentence": " There is no specific mention of \"clinical trials\" in the provided text, but it mentions an \"apoptotic xenograft model constructed by doxorubicin\", which could be related to pre-clinical trial studies. "
+            "Yes/No": "No",
+            "sentence": " There is no information available about any ongoing, planned, or published clinical trials in this document."
         }
     }
 }

@@ -188,7 +188,7 @@ for i in range(10):
                                         from the document that supports your answer.")
             response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
-            os.mknod(f"files_output/{name}.json") 
+             
             with open(f"files_output/{name}.json", "w") as f:
                 json.dump(response, f, indent=4)
         except Exception as e:
