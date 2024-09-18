@@ -1,0 +1,979 @@
+{
+
+    "History-agnostic battery degradation inference":{
+        "abstract": "lithium-ion batteries (libs) have attracted widespread attention as an efficient energy storage device on electric vehicles (ev) to achieve emission-free mobility. however, the performance of libs deteriorates with time and usage, and the state of health of used batteries are difficult to quantify. having accurate estimations of a battery\u2019s remaining life across different life stages would benefit maintenance, safety, and serve as a means of qualifying used batteries for second-life applications. since the full history of a battery may not always be available in downstream applications, in this study, we demonstrate a deep learning framework that enables dynamic degradation rate prediction, including both short-term and long-term forecasting, while requiring only the most recent battery usage information. specifically, our model takes a rolling window of current and voltage time-series inputs, and predicts the near-term and \u2026",
+        "author": "Mehrad Ansari and Steven B Torrisi and Amalie Trewartha and Shijing Sun",
+        "author_affiliation":{
+            "Mehrad Ansari":["Energy & Materials Division, Toyota Research Institute, Los Altos, CA 94022, USA", "Department of Chemical Engineering, University of Rochester, Rochester, NY, 14627, USA"],
+            "Steven B Torrisi":["Energy & Materials Division, Toyota Research Institute, Los Altos, CA 94022, USA"],
+            "Amalie Trewartha":["Energy & Materials Division, Toyota Research Institute, Los Altos, CA 94022, USA"],
+            "Shijing Sun":["Energy & Materials Division, Toyota Research Institute, Los Altos, CA 94022, USA"]
+        },
+        "topic": ["Batteries", "artificial intelligence (Deep learning)"],
+        "New materials":"N/A",
+        "screening algortihms":"N/A",
+        "AI algorithms":"The time-series current and voltage data for fixed number of N cycles is normalized and defined as the input. The temporal correlation between past and future data within each window of cycles are learned using a convolutional neural network (CNN). We apply the CNN to each cycle within the input",
+        "workflow":"1. Battery cycling experiments. 2. Data preprocessing. 3. Model training. 4. Model evaluation and benchmarking",
+        "methods description":"model takes a rolling window of current and voltage time-series inputs, and predicts the near-term and long-term capacity fade via a recurrent neural network",
+        "models":"Deep learning model",
+        "year": 2024,
+        "funding": "N/A",
+        "impact factor":0,
+        "other":"Deep learning model is compared to a naive extrapolating model, showing superior accuracy in predicting battery degradation"
+        },
+
+
+
+    "JARVIS-Leaderboard: a large scale benchmark of materials design methods":
+    {
+        "abstract": "lack of rigorous reproducibility and validation are significant hurdles for scientific development across many fields. materials science, in particular, encompasses a variety of experimental and theoretical approaches that require careful benchmarking. leaderboard efforts have been developed previously to mitigate these issues. however, a comprehensive comparison and benchmarking on an integrated platform with multiple data modalities with perfect and defect materials data is still lacking. this work introduces jarvis-leaderboard, an open-source and community-driven platform that facilitates benchmarking and enhances reproducibility. the platform allows users to set up benchmarks with custom tasks and enables contributions in the form of dataset, code, and meta-data submissions. we cover the following materials design categories: artificial intelligence (ai), electronic structure (es), force-fields (ff \u2026",
+        "author": "Kamal Choudhary and Daniel Wines and Kangming Li and Kevin F Garrity and Vishu Gupta and Aldo H Romero and Jaron T Krogel and Kayahan Saritas and Addis Fuhr and Panchapakesan Ganesh and Paul RC Kent and Keqiang Yan and Yuchao Lin and Shuiwang Ji and Ben Blaiszik and Patrick Reiser and Pascal Friederich and Ankit Agrawal and Pratyush Tiwary and Eric Beyerle and Peter Minch and Trevor David Rhone and Ichiro Takeuchi and Robert B Wexler and Arun Mannodi-Kanakkithodi and Elif Ertekin and Avanish Mishra and Nithin Mathew and Mitchell Wood and Andrew Dale Rohskopf and Jason Hattrick-Simpers and Shih-Han Wang and Luke EK Achenie and Hongliang Xin and Maureen Williams and Adam J Biacchi and Francesca Tavazza",
+        "author_affiliation": {},
+        "topic": ["Software", "Artificial intelligence"],
+        "New materials":"N/A",
+        "AI algorithms":"Includes models like graph neural networks and descriptor-based models for structure-to-property predictions.",
+        "screening algortihms":"Electronic Structure (ES) utilizes density functional theory (DFT) and other ES approaches for material property predictions, Force-fields (FF) compares multiple FF approaches for predicting material properties, and Quantum Computation (QC) benchmarks Hamiltonian simulations using various quantum algorithms and circuits.",
+        "workflow":"They gathered a wide range of materials data, including atomic structures, spectra, images, and text, and developed the JARVIS-Leaderboard platform to benchmark various materials design methods across categories like AI, electronic structure, force fields, quantum computation, and experiments. Emphasizing reproducibility, they provided scripts, metadata, and detailed information for each benchmark to ensure results could be replicated. Additionally, they encouraged community involvement by allowing users to add new benchmarks and contributions, enhancing the platform’s comprehensiveness and utility.",
+        "impact factor":9.4,
+        "methods description":"The JARVIS-Leaderboard Platform is an open-source, community-driven platform for benchmarking materials design methods, supporting contributions in the form of datasets, code, and metadata. It covers categories such as Artificial Intelligence (AI), Electronic Structure (ES), Force-fields (FF), Quantum Computation (QC), and Experiments (EXP), and includes various data types such as atomic structures, spectra, images, and text. Users can add new benchmarks or contribute to existing ones by uploading datasets, models, and scripts to reproduce results. The contribution process involves generating benchmark datasets, running models/experiments, and submitting contributions via GitHub.",
+        "models":"N/A",
+        "year": 2024,
+        "funding":"The National Institute of Standards and Technology (NIST) provides funding, computational, and data-management resources, while the CHIPS Metrology Program, part of CHIPS for America under NIST and the U.S. Department of Commerce, receives support. The U.S. Department of Energy offers support to various contributors through different programs and divisions, and the National Science Foundation (NSF) provides support for computational resources and specific grants.",
+        "other":""
+    },
+
+
+    "A chemical probe to modulate human GID4 Pro/N-degron interactions":
+    {
+        "abstract": "the c-terminal to lish (ctlh) complex is a ubiquitin ligase complex that recognizes substrates with pro/n-degrons via its substrate receptor glucose-induced degradation 4 (gid4), but its function and substrates in humans remain unclear. here, we report pfi-7, a potent, selective and cell-active chemical probe that antagonizes pro/n-degron binding to human gid4. use of pfi-7 in proximity-dependent biotinylation and quantitative proteomics enabled the identification of gid4 interactors and gid4-regulated proteins. gid4 interactors are enriched for nucleolar proteins, including the pro/n-degron-containing rna helicases ddx21 and ddx50. we also identified a distinct subset of proteins whose cellular levels are regulated by gid4 including hmgcs1, a pro/n-degron-containing metabolic enzyme. these data reveal human gid4 pro/n-degron targets regulated through a combination of degradative and \u2026",
+        "author": "Dominic DG Owens and Matthew ER Maitland and Aliakbar Khalili Yazdi and Xiaosheng Song and Viviane Reber and Martin P Schwalm and Raquel AC Machado and Nicolas Bauer and Xu Wang and Magdalena M Szewczyk and Cheng Dong and Aiping Dong and Peter Loppnau and Matthew F Calabrese and Matthew S Dowling and Jisun Lee and Justin I Montgomery and Thomas N O\u2019Connell and Chakrapani Subramanyam and Feng Wang and Ella C Adamson and Matthieu Schapira and Matthias Gstaiger and Stefan Knapp and Masoud Vedadi and Jinrong Min and Gilles A Lajoie and Dalia Barsyte-Lovejoy and Dafydd R Owen and Caroline Schild-Poulter and Cheryl H Arrowsmith",
+        "author_affiliation":  {
+            "Dominic D. G. Owens": ["Structural Genomics Consortium, University of Toronto"],
+            "Cheryl H. Arrowsmith": ["Structural Genomics Consortium, University of Toronto"],
+            "Matthew E. R. Maitland": ["Robarts Research Institute, University of Western Ontario", "Department of Biochemistry, University of Western Ontario"],
+            "Caroline Schild-Poulter": ["Robarts Research Institute, University of Western Ontario", "Department of Biochemistry, University of Western Ontario"],
+            "Matthew F. Calabrese": ["Pfizer Worldwide Research, Groton, CT, USA"],
+            "Dafydd R. Owen": ["Pfizer Worldwide Research, Groton, CT, USA"],
+            "Viviane Reber": ["Institute of Molecular Systems Biology, ETH Zurich"],
+            "Matthias Gstaiger": ["Institute of Molecular Systems Biology, ETH Zurich"]
+        }
+        ,
+        "topic": ["Chemical probe development", "Biology"],
+        "New materials":"PFI-7",
+        "AI algorithms":"N/A",
+        "screening algortihms":"Bioinformatic prediction has been used to identify potential substrates based on the presence of a canonical Pro/N-degron consensus sequence",
+        "workflow":"They developed PFI-7, a chemical probe that selectively binds to the GID4 substrate binding pocket, inhibiting Pro/N-degron interactions. Using BioID2-GID4 and liquid chromatography with tandem mass spectrometry (LC–MS/MS), they identified GID4 interactors and regulated proteins. Various assays, including fluorescence polarization and NanoBRET, were performed to study the binding and interaction effects of PFI-7. Additionally, detailed proteomic experiments were conducted to analyze the impact of PFI-7 on GID4 interactions and protein regulation.",
+        "methods description":"The researchers developed PFI-7, a potent and selective chemical probe that antagonizes Pro/N-degron binding to human GID4. Using BioID2-GID4 and LC-MS/MS, they identified GID4 interactors and GID4-regulated proteins. They employed a fluorescence polarization assay to test compounds for competing with the fluorescein-labeled PGLWKS peptide for binding to GID4. The specificity of PFI-7 was assessed using a biotinylated analog, NB716, to purify proteins interacting with PFI-7.",
+        "models":"Proximity-dependent biotinylation (BioID2) was used to identify GID4 interactors and GID4-regulated proteins. A fluorescence polarization (FP)-based peptide displacement assay tested compounds for competing with the fluorescein-labeled PGLWKS peptide for binding to GID4. Surface Plasmon Resonance (SPR) analysis was conducted to analyze the binding of PFI-7 to GID4. The NanoBRET PPI assay quantified the inhibition of GID4 Pro/N-degron binding by PFI-7 in live cells.",
+        "year": 2024,
+        "funding":"The Mitacs Elevate Postdoctoral Fellowship supported Dominic D. G. Owens. The Canadian Institutes for Health Research provided grants to Cheryl H. Arrowsmith and other researchers. The Natural Sciences and Engineering Research Council of Canada funded Jinrong Min and Dalia Barsyte-Lovejoy, who also received a grant from the Cancer Research Society. Martin P. Schwalm was funded by the Deutsche Forschungsgemeinschaft. Viviane Reber and Matthias Gstaiger were supported by the EU/EFPIA/OICR/McGill/KTH/Diamond Innovative Medicines Initiative 2 Joint Undertaking. The Canada Foundation for Innovation funded mass spectrometry equipment used by Gilles A. Lajoie. The Structural Genomics Consortium received funds from multiple pharmaceutical companies and organizations.",
+        "impact factor":12.9,
+        "other":""
+
+    },    
+
+    "Flipping the script: Understanding riboswitches from an alternative perspective":{
+        "abstract": "riboswitches are broadly distributed regulatory elements most frequently found in the 5\u2032-leader sequence of bacterial mrnas that regulate gene expression in response to the binding of a small molecule effector. the occupancy status of the ligand binding aptamer domain manipulates downstream information in the message that instructs the expression machinery. currently, there are over 55 validated riboswitch classes, where each class is defined based on the identity of the ligand it binds and/or sequence and structure conservation patterns within the aptamer domain. this classification reflects an \u201captamer-centric\u201d perspective that dominates our understanding of riboswitches. in this review, we propose a conceptual framework that groups riboswitches based on the mechanism by which rna manipulates information directly instructing the expression machinery. this scheme does not replace the established \u2026",
+        "author": "Lukasz T Olenginski and Savannah F Spradlin and Robert T Batey",
+        "author_affiliation":{"Lukasz T Olenginski":["Department of Biochemistry, University of Colorado, Boulder, Colorado, USA"],
+                              "Savannah F Spradlin":["Department of Biochemistry, University of Colorado, Boulder, Colorado, USA"],
+                              "Robert T Batey":["Department of Biochemistry, University of Colorado, Boulder, Colorado, USA"]},
+       
+        "topic": ["Biotechnology", "Genetics","Biology"],
+        "New materials":"N/A",
+        "AI algorithms":"N/A",
+        "screening algortihms":"N/A",
+        "workflow":"The paper proposes a new framework for classifying riboswitches based on their regulatory mechanisms rather than just their aptamer domains, identifying three major mechanistic groups: direct occlusion, interdomain docking, and strand exchange, each defined by how RNA manipulates information to regulate gene expression. Various bioinformatic, structural, and biochemical studies, including chemical probing, single-molecule fluorescence resonance energy transfer (smFRET), and X-ray crystallography, are used to understand riboswitch mechanisms. The paper also discusses the limitations of the current framework and suggests future research directions to better understand riboswitch mechanisms and their applications in gene regulation.",
+        "methods description":"Computational tools and databases are used to analyze riboswitch sequences and predict their structures and functions, while techniques like SHAPE (Selective 2’-Hydroxyl Acylation analyzed by Primer Extension) are employed to map riboswitch structures by modifying accessible nucleotides and identifying these modifications through sequencing. Single-molecule fluorescence resonance energy transfer (smFRET) measures distances between fluorescently labeled points on the riboswitch to study its conformational changes in real-time, and X-ray crystallography determines the three-dimensional structure of riboswitches at atomic resolution by analyzing the diffraction patterns of X-rays passing through crystallized riboswitches. Various biochemical assays are also used to study the binding affinity and specificity of riboswitches to their ligands and their regulatory effects on gene expression.",
+        "models":"the paper discusses several models of riboswitch function, including direct occlusion where ligand binding directly blocks the expression machinery from accessing the message, interdomain docking where the aptamer domain binds the ligand independently and then interacts with the expression platform, and strand exchange where a secondary structural switch creates two distinct regulatory states, 'ON' or 'OFF'. These models help explain how riboswitches couple small molecule binding to gene regulation.",
+        "impact factor": 5.486,
+        "funding":"This work was supported by a grant from the National Institutes of Health to R. T. B.",
+        "year": 2024,
+        "other":""
+
+    },
+
+
+    "Correction to: Up-regulation of autophagy is a mechanism of resistance to chemotherapy and can be inhibited by pantoprazole to increase drug sensitivity":{
+
+        "abstract": "pubpeer found an error in fig. 2b of this paper in that there was image duplication for the \u2018control\u2019and \u2018dox\u2019panels in this 32-panel figure. the senior author takes responsibility for this error, and has submitted a corrected version of fig. 2b.the first author of the paper (dr tan) provides assurance that the revised figure is correct, and all authors of the paper (except for m wang, for whom we no longer have contact information) agree with submission of this correction.",
+        "author": "Qian Tan and AM Joshua and M Wang and RG Bristow and BG Wouters and CJ Allen and Ian F Tannock",
+        "author_affiliation":{"Qian Tan":["Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada","Princess Margaret Cancer Center, 9 foor room 417, 610 University Ave, Toronto, ON M5G2M9, Canada"],
+                              "AM Joshua":[" Division of Medical Oncology and Hematology, Princess Margaret Cancer Centre and University Health Network, University of Toronto, Toronto, ON, Canada","Institute of Medical Science, University of Toronto, Toronto, Canada" ],
+                              "M Wang":["Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada"],
+                              "RG Bristow":["Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada","Princess Margaret Cancer Center, 9 foor room 417, 610 University Ave, Toronto, ON M5G2M9, Canada"],
+                              "BG Wouters":["Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada"],
+                              "CJ Allen":[" Leslie Dan Faculty of Pharmacy, University of Toronto, Toronto, Canada"],
+                              "Ian F Tannock":["Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada", "2 Division of Medical Oncology and Hematology, Princess Margaret Cancer Centre and University Health Network, University of Toronto, Toronto, ON, Canada","Princess Margaret Cancer Center, 9 foor room 417, 610 University Ave, Toronto, ON M5G2M9, Canada"]},
+        "topic": ["pharmacology","cancer research","Biology"],
+        "New materials":"N/A",
+        "AI algorithms":"N/A",
+        "screening algortihms":"N/A",
+        "workflow":"N/A",
+        "methods description":"N/A",
+        "models":"N/A",
+        "impact factor": 0,
+        "funding":"N/A",
+        "year": 2024,
+        "other":"Correction of an article"
+
+    },
+
+    "Accelerated chemical science with AI":{
+        "abstract": "in light of the pressing need for practical materials and molecular solutions to renewable energy and health problems, to name just two examples, one wonders how to accelerate research and development in the chemical sciences, so as to address the time it takes to bring materials from initial discovery to commercialization. artificial intelligence (ai)-based techniques, in particular, are having a transformative and accelerating impact on many if not most, technological domains. to shed light on these questions, the authors and participants gathered in person for the aslla symposium on the theme of \u2018accelerated chemical science with ai\u2019 at gangneung, republic of korea. we present the findings, ideas, comments, and often contentious opinions expressed during four panel discussions related to the respective general topics: \u2018data\u2019, \u2018new applications\u2019, \u2018machine learning algorithms\u2019, and \u2018education\u2019. all \u2026",
+        "author": "Seoin Back and Al\u00e1n Aspuru-Guzik and Michele Ceriotti and Ganna Gryn'ova and Bartosz Grzybowski and Geun Ho Gu and Jason Hein and Kedar Hippalgaonkar and Rodrigo Horm\u00e1zabal and Yousung Jung and Seonah Kim and Woo Youn Kim and Seyed Mohamad Moosavi and Juhwan Noh and Changyoung Park and Joshua Schrier and Philippe Schwaller and Koji Tsuda and Tejs Vegge and O Anatole von Lilienfeld and Aron Walsh",
+        "author_affiliation":{},
+        "topic": ["Artificial intelligence","Chemical science"],
+        "New materials":"N/A",
+        "screening algortihms":"N/A",
+        "AI algorithms":"N/A",
+        "workflow":"The paper describes the workflow of an autonomous laboratory with: 1. HPC to identify compounds for target applications using virtual screening. 2. Automated robotics to perform synthesis and characterization of the compounds. 3. AI-driven experimentation which suggests new experiments based on data collected by robotic platforms. 4. integration of data science to enhance the effectiveness of the entire workflow",
+        "methods description":" The ASLLA Symposium on ‘Accelerated Chemical Science with AI’ was held in Gangneung, Republic of Korea, with 45 participants discussing AI’s role in chemical sciences. Panel discussions were recorded and transcribed using Open AI’s Whisper, then summarized using LG AI Research’s EXAONE LLM1. The initial drafts generated by EXAONE were edited and annotated by the authors to ensure clarity and accuracy. Discussions were organized into four main themes: Data, New Applications, Machine Learning Algorithms, and Education.",
+        "models":"N/A",
+        "year": 2024,
+        "impact factor":6.2,
+        "funding": "KIST provided financial support for organizing the symposium / YJ supported by IITP Korea (Grant Nos. 2021-0-01343 and 2021-0-02068) and NRF of Korea funded by the Ministry of Science and ICT (RS-2023-00283902) / PS supported by the NCCR Catalysis (grant number 180544), funded by the Swiss National Science Foundation / A. A.-G. supported by the Acceleration Consortium, a Canada First Research Excellence Fund at the University of Toronto, and Anders G. Frøseth.",
+        "other":"Conference: ASLLA Symposium on the theme of ‘AcceleratedChemical Science with AI’ at Gangneung, Republic of Korea"
+   
+    }, 
+
+    "AGENT-BASED LEARNING OF MATERIALS DATASETS FROM SCIENTIFIC LITERATURE":{
+        "abstract":"Advancements in machine learning and artificial intelligence are transforming materials discovery.
+    Yet, the availability of structured experimental data remains a bottleneck. The vast corpus of scientific
+    literature presents a valuable and rich resource of such data. However, manual dataset creation
+    from these resources is challenging due to issues in maintaining quality and consistency, scalability
+    limitations, and the risk of human error and bias. Therefore, in this work, we develop a chemist AI
+    agent, powered by large language models (LLMs), to overcome these challenges by autonomously
+    creating structured datasets from natural language text, ranging from sentences and paragraphs
+    to extensive scientific research articles. Our chemist AI agent, Eunomia, can plan and execute
+    actions by leveraging the existing knowledge from decades of scientific research articles, scientists,
+    the Internet and other tools altogether. We benchmark the performance of our approach in three
+    different information extraction tasks with various levels of complexity, including solid-state impurity
+    doping, metal-organic framework (MOF) chemical formula, and property relations. Our results
+    demonstrate that our zero-shot agent, with the appropriate tools, is capable of attaining performance
+    that is either superior or comparable to the state-of-the-art fine-tuned materials information extraction
+    methods. This approach simplifies compilation of machine learning-ready datasets for various
+    materials discovery applications, and significantly ease the accessibility of advanced natural language
+    processing tools for novice users in natural language. The methodology in this work is developed as
+    an open-source software on https://github.com/AI4ChemS/Eunomia.",
+        "author":"Mehrad Ansari and Sayed Mohamed Moosavie",
+        "author_affiliation":{
+            "Mehrad Ansari": [
+                "Acceleration Consortium, University of Toronto, Toronto, Ontario M5S 3E5, Canada",
+                "Department of Chemical Engineering & Applied Chemistry, University of Toronto, Toronto, Ontario M5S 3E5, Canada"
+            ],
+            "Seyed Mohamad Moosavi": [
+                "Acceleration Consortium, University of Toronto, Toronto, Ontario M5S 3E5, Canada",
+                "Department of Chemical Engineering & Applied Chemistry, University of Toronto, Toronto, Ontario M5S 3E5, Canada"
+            ]
+        },
+        "topics" : ["AI", "software development", "chemistry", "materials science"],
+
+        "New materials":"N/A",
+        "screening algortihms":"Named Entity Recognition (NER) identifies and classifies specific entities within the text into predefined categories. Co-reference Resolution finds all expressions that refer to the same entity in the text. Relation Extraction extracts semantic relationships from the text. Template Filling extracts and structures complex information from text. Argument Mining identifies and extracts reasoning presented within the text. Entity Linking distinguishes between similarly named entities and links them to databases or literature.",
+        "AI algorithms":"N/A",
+        "workflow":"The authors developed an AI agent named Eunomia, powered by large language models (LLMs) and equipped with chemistry-specific tools to autonomously extract structured datasets from scientific literature. They evaluated Eunomia’s performance on three different information extraction tasks with varying complexity, including solid-state impurity doping, MOF chemical formula, and property relations. To enhance robustness, they implemented a Chain-of-Verification (CoV) tool to iteratively assess and verify the agent’s responses, reducing the likelihood of hallucinations. The methodology and tools developed were made available as open-source software, allowing other researchers to use and adapt them for their own materials discovery applications..",
+        "methods description":"The AI agent, Eunomia, uses various tools such as Doc Search for extracting relevant information from text, Chain-of-Verification (CoV) to enhance robustness against hallucinations, Dataset Search for obtaining chemical structures from public databases, and CSV Generator for storing outputs. Performance is assessed using precision, recall, F1 score, binary accuracy, ternary accuracy, and yield, which help evaluate the agent’s effectiveness in different tasks. The agent’s performance is benchmarked across three case studies with varying complexity, focusing on tasks like Named Entity Recognition, Relation Extraction, and Argument Mining. The agent is developed using OpenAI’s GPT-4 and LangChain, with embeddings generated using OpenAI’s text-ada-002, and the CoV tool iteratively verifies responses to ensure accuracy.",
+        "models":"We use OpenAI’s text-ada-002 embeddings [33] to represent texts as high dimensional vectors, which are stored as a vector database using FAISS",
+        "year": 2023,
+        "impact factor":0,
+        "funding": "Research reported in this work was supported by the Acceleration Consortium at the University of Toronto. SMM acknowledges the support by the Natural Sciences and Engineering Research Council of Canada (NSERC) under grant number RGPIN-2023-04232.",
+        "other":""
+    },
+
+    "Serverless Prediction of Peptide Properties with Recurrent Neural Networks":{
+        "abstract":"We present three deep learning sequence-based prediction models for peptide properties including hemolysis,
+solubility, and resistance to nonspecific interactions that achieve comparable results to the state-of-the-art models. Our sequencebased solubility predictor, MahLooL, outperforms the current state-of-the-art methods for short peptides. These models are
+implemented as a static website without the use of a dedicated server or cloud computing. Web-based models like this allow for
+accessible and effective reproducibility. Most existing approaches rely on third-party servers that typically require upkeep and
+maintenance. Our predictive models do not require servers, require no installation of dependencies, and work across a range of
+devices. The specific architecture is bidirectional recurrent neural networks. This serverless approach is a demonstration of edge
+machine learning that removes the dependence on cloud providers. The code and models are accessible at https://github.com/urwhitelab/peptide-dashboard.",
+        "author":"Mehrad Ansari and Andrew D. White",
+        "author_affiliation":{
+            "Mehrad Ansari": [
+                "Department of Chemical Engineering at the University of Rochester in Rochester, New York, United States",
+            ],
+            "Andrew D. White": [
+                "Department of Chemical Engineering at the University of Rochester in Rochester, New York, United States"
+            ]
+        },
+        "topic": ["Deep Learning", "Peptide Properties", "Serverless Computing", "Cheminformatics"],
+        "New materials":"N/A",
+        "screening algortihms":"N/A",
+        "AI algorithms":"The models use bidirectional Long Short-Term Memory (LSTM) networks to capture long-range sequence correlations in peptides. Implemented as a static website, these serverless models allow predictions to be made on users’ local devices without the need for dedicated servers or cloud computing. They predict peptide properties such as hemolysis, solubility, and resistance to nonspecific interactions, achieving results comparable to state-of-the-art methods.",
+        "workflow":"The authors developed three deep learning models to predict peptide properties such as hemolysis, solubility, and resistance to nonspecific interactions using bidirectional recurrent neural networks (RNNs). These models are implemented as a static website, allowing users to run predictions directly in their web browsers without needing dedicated servers or cloud computing. The models were trained using various datasets, including sequences from the Database of Antimicrobial Activity and Structure of Peptides (DBAASP) and PROSO II, with training involving hyperparameter optimization and techniques like dropout regularization to prevent overfitting. The performance of the models was evaluated and compared with state-of-the-art methods, showing competitive results, especially for short peptides.",
+        "methods description":"The study uses datasets for hemolysis, solubility, and nonfouling properties of peptides, with hemolysis data from the Database of Antimicrobial Activity and Structure of Peptides (DBAASP v3), solubility data from PROSO II, and nonfouling data from previous research. The models are built using recurrent neural networks (RNNs) with bidirectional Long Short-Term Memory (LSTM) networks to capture long-range sequence correlations and are implemented using the Keras framework and TensorFlow backend. The models are trained with the Adam optimizer and binary cross-entropy loss function, with data split into training, validation, and test sets (81%, 9%, and 10%, respectively) and early stopping used to prevent overfitting. Implemented in JavaScript, the models run on users’ local devices without the need for servers or cloud computing, enhancing accessibility and reproducibility through a serverless approach.",
+        "models":"Bidirectional Recurrent Neural Networks (RNNs) are used for predicting hemolysis, solubility, and resistance to nonspecific interactions, while MahLooL, a sequence-based solubility predictor, outperforms current state-of-the-art methods for short peptides. Additionally, Bidirectional Long Short-Term Memory (bi-LSTM) networks are employed to capture long-range sequence correlations in peptides.",
+        "year": 2023,
+        "impact factor":5.6,
+        "funding": "The authors thank Mohammad Madani at the University of Connecticut for providing support on the implementation of DSResSol (1). Research reported in this work was supported by the National Institute of General Medical Sciences of the National Institutes of Health under award number R35GM137966. We thank the Center for Integrated Research Computing (CIRC) at University of Rochester for providing computational resources and technical support",
+        "other":""
+
+
+    },
+
+    "Learning peptide properties with positive examples only":{
+        "abstract":"Deep learning can create accurate predictive models by exploiting existing large-scale experimental data,
+        and guide the design of molecules. However, a major barrier is the requirement of both positive and
+        negative examples in the classical supervised learning frameworks. Notably, most peptide databases
+        come with missing information and low number of observations on negative examples, as such
+        sequences are hard to obtain using high-throughput screening methods. To address this challenge, we
+        solely exploit the limited known positive examples in a semi-supervised setting, and discover peptide
+        sequences that are likely to map to certain antimicrobial properties via positive-unlabeled learning (PU).
+        In particular, we use the two learning strategies of adapting base classifier and reliable negative
+        identification to build deep learning models for inferring solubility, hemolysis, binding against SHP-2, and
+        non-fouling activity of peptides, given their sequence. We evaluate the predictive performance of our PU
+        learning method and show that by only using the positive data, it can achieve competitive performance
+        when compared with the classical positive–negative (PN) classification approach, where there is access
+        to both positive and negative examples.",
+        "author":"Mehrad Ansari and Andrew D. White",
+        "author_affiliation":{},
+        "topic": ["Deep Learning", "Peptide Properties", "Positive-Unlabeled Learning", "Bioinformatics"],
+        "New materials":"N/A",
+        "screening algortihms":"Reliable negative
+        identification adopts two independent algorithms: (1) identify
+        the reliable negatives (RN) within the unlabeled set given the
+        likelihood and (2) train a binary classier to distinguish the
+        labeled positive examples from the identied RN set. This
+        approach is based on two assumptions of smoothness and
+        separability, which simply means that all the positive examples
+        are similar to the labeled examples, and that the negative
+        examples are very different from them, respectively.",
+        "AI algorithms":"Reliable Negative Identification is a strategy that identifies reliable negative examples within the unlabeled data and uses them to train a classifier. Adapting the base classifier involves treating unlabeled data as negative with smaller weights and adapting conventional classifiers to learn from both positive and unlabeled samples. The paper employs Recurrent Neural Networks (RNNs) with Long Short-Term Memory (LSTM) networks to capture long-range dependencies in peptide sequences.",
+        "workflow":"The study focuses on using positive-unlabeled (PU) learning to predict peptide properties by leveraging known positive examples and a large volume of unlabeled data to build predictive models. The workflow involves identifying reliable negative examples from the unlabeled data using the Spy technique, aiding in training a more accurate classifier. The researchers employ recurrent neural networks (RNNs) with bidirectional Long Short-Term Memory (LSTM) layers to capture patterns in peptide sequences. The performance of the PU learning method is compared with classical positive-negative (PN) classification, showing competitive results even with only positive data.",
+        "methods description":"The study used datasets for hemolysis, solubility, non-fouling, and SHP-2 binding, with each dataset containing sequences labeled as positive or negative based on specific criteria. A recurrent neural network (RNN) with bidirectional Long Short-Term Memory (LSTM) layers was used to capture patterns in peptide sequences, and the model was trained using the Keras framework and TensorFlow backend. Positive-unlabeled learning was implemented using two strategies: adapting the base classifier and reliable negative identification. These methods leveraged positive examples and unlabeled data to build classification models. The models were evaluated based on accuracy and the area under the receiver operating characteristic curve (AUROC), comparing the performance of positive-unlabeled learning with classical positive-negative classification.",
+        "models":"the article mentions the use of a recurrent neural network (RNN) to identify patterns in peptide sequences. Specifically, it employs bidirectional Long Short-Term Memory (LSTM) networks to capture long-range correlations between amino acid residues. This model is used to predict various peptide properties such as solubility, hemolysis, binding against SHP-2, and non-fouling activity",
+        "year": 2023,
+        "impact factor":6.2,
+        "funding": "N/A",
+        "other":""
+
+},
+"Data-science-based reconstruction of 3-D membrane pore structure using a single 2-D micrograph":{
+    "abstract":"Conventional 2-D scanning electron microscopy (SEM) is commonly used to rapidly and qualitatively evaluate membrane pore structure. Quantitative 2-D analyses of pore sizes can be extracted from SEM, but without information about 3-D spatial arrangement and connectivity, which are crucial to the understanding of membrane pore structure. Meanwhile, experimental 3-D reconstruction via tomography is complex, expensive, and not easily accessible. Here, we employ data science tools to demonstrate a proof-of-principle reconstruction of the 3-D structure of a membrane using a single 2-D image pulled from a 3-D tomographic data set. The reconstructed and experimental 3-D structures were then directly compared, with important properties such as mean pore radius, mean throat radius, coordination number, and tortuosity differing by less than 15%. The developed algorithm will dramatically improve the ability of the membrane community to characterize membranes, accelerating the design and synthesis of membranes with desired structural and transport properties.",
+    "author":"Hooman Chamani, Arash Rabbani, Kaitlyn P. Russell, Andrew L. Zydney, Enrique D. Gomez, Jason Hattrick-Simpers, and Jay R. Werber.",
+    "author_affiliation":{
+        "Hooman Chamani": [
+            "Department of Chemical Engineering & Applied Chemistry, University of Toronto, Ontario, Canada"
+        ],
+        "Arash Rabbani": [
+            "School of Computing, University of Leeds, Leeds, UK"
+        ],
+        "Kaitlyn P. Russell": [
+            "Department of Chemical Engineering, The Pennsylvania State University, Pennsylvania, USA"
+        ],
+        "Andrew L. Zydney": [
+            "Department of Chemical Engineering, The Pennsylvania State University, Pennsylvania, USA"
+        ],
+        "Enrique D. Gomez": [
+            "Department of Chemical Engineering, The Pennsylvania State University, Pennsylvania, USA",
+            "Department of Materials Science & Engineering, The Pennsylvania State University, Pennsylvania, USA"
+        ],
+        "Jason Hattrick-Simpers": [
+            "Department of Materials Science & Engineering, University of Toronto, Ontario, Canada"
+        ],
+        "Jay R. Werber": [
+            "Department of Chemical Engineering & Applied Chemistry, University of Toronto, Ontario, Canada"
+        ]
+    },
+    "topic": [
+        "Data science",
+        "3-D reconstruction",
+        "Membrane microstructure",
+        "Electron microscopy",
+        "Pore analysis"
+    ]
+    ,
+    "New materials":"N/A",
+    "screening algortihms":"the use of adaptive thresholding as a screening algorithm. This method dynamically changes the threshold value at different parts of the image to improve the segmentation of pore-solid boundaries in the 2-D micrographs. This approach is more robust and precise compared to conventional thresholding methods.",
+    "AI algorithms":"the article discusses the use of a data science algorithm to reconstruct the 3-D structure of a membrane from a single 2-D micrograph1. This algorithm employs adaptive thresholding and Bayesian optimization to generate and optimize the 3-D structure, making it statistically similar to the original 3-D structure obtained from FIB-SEM data. This approach aims to provide a rapid and accessible method for characterizing membrane structures.",
+    "workflow":"The study used a FIB-SEM data set from a virus filter membrane, consisting of 400 cross-sectional SEM images taken at 3-nm increments. Adaptive thresholding was applied to segment the images, distinguishing between pore and solid phases. A combined distance function was created from the segmented images to capture statistical features of the pore structure. A 3-D matrix was then generated and optimized using Bayesian optimization to match the statistical features of the original 2-D images. The reconstructed 3-D structures were compared with the original data to ensure accuracy in properties like pore size distribution and permeability.",
+    "methods description":"The study utilized a previously published FIB-SEM data set of a virus filter membrane, consisting of 400 cross-sectional SEM images taken at 3-nm increments. A 3-D reconstruction algorithm developed in MATLAB generated 3-D structures from single 2-D images using adaptive thresholding and Gaussian smoothing, with Bayesian optimization minimizing errors. Avizo software was employed for spatial analysis in the pore network model, calculating properties like pore size distribution (PSD), throat size distribution (TSD), and tortuosity. GeoDict software was used to simulate water flux and nanoparticle retention through the 3-D structures, comparing results with the original FIB-SEM data. These methods enable rapid and accurate 3-D reconstruction of membrane structures from 2-D images.",
+    "models":"the article mentions the use of a recurrent neural network (RNN) to identify patterns in peptide sequences. Specifically, it employs bidirectional Long Short-Term Memory (LSTM) networks to capture long-range correlations between amino acid residues. This model is used to predict various peptide properties such as solubility, hemolysis, binding against SHP-2, and non-fouling activity",
+    "year": 2023,
+    "impact factor":0,
+    "funding": "the article mentions funding in the Acknowledgments section. It states that the work was supported by the Acceleration Consortium at the University of Toronto and the Natural Sciences and Engineering Research Council of Canada (Alliance Grant ALLRP 570714-2021)1. Additionally, KR, AZ, and EG acknowledge support from the Membrane Science, Engineering, and Technology (MAST) Center, funded by the U.S. NSF IUCRC program",
+    "other":""
+
+
+
+},
+
+"Polymeric Microcapsules as Robust Mimics of Emulsion Liquid Membranes for Selective Ion Separations"{
+    "abstract":"We cast the relation between chemical compositions of solid-state materials and their superconducting critical temperature (Tc) in terms of a statistical learning problem with reduced complexity. Training of query-aware similarity-based ridge regression models on experimental SuperCon data with (implicit) and without (ambient) high pressure entries achieves average Tc prediction errors of ~10 K for unseen out-of-sample materials. Subsequent utilization of the approach to scan ~153k materials in the Materials Project enables the ranking of candidates by Tc while taking into account thermodynamic stability and small band gap. Stable top three high-Tc candidate materials with large band gaps for implicit and ambient pressures are predicted to be Cs2Sn(H2N)6 (324 K), CsH5N2 (315K), Rb2Sn(H2N)6 (305 K), and H15IrBr3N5 (189 K), H12OsN5Cl3O (161 K), B10H13I (151 K), respectively. Stable top three high-Tc candidate materials with small band gaps for implicit and ambient pressures are predicted to be RbLiH12Se3N4 (255 K), CeH14Cl3O7 (246 K), Li(H3N)4 (234 K), and ReH30Ru2(NCl)10 (127 K), AlH18Ru(NF)6 (120 K), Sr(Li2P)2 (117 K), respectively.",
+    "author":"Jay R. Werber, Colin Peterson, Dean F. Stipanic and Marc A. Hillmyer",
+    "author_affiliation":{
+        "Siwoo Lee": [
+            "Department of Chemistry, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Acceleration Consortium, University of Toronto, St. George campus, Toronto, ON, Canada"
+        ],
+        "Jason Hattrick-Simpers": [
+            "Acceleration Consortium, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Department of Materials Science & Engineering, University of Toronto, St. George campus, Toronto, ON, Canada"
+        ],
+        "Young-June Kim": [
+            "Department of Physics, University of Toronto, St. George campus, Toronto, ON, Canada"
+        ],
+        "O. Anatole von Lilienfeld": [
+            "Department of Chemistry, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Acceleration Consortium, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Department of Materials Science & Engineering, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Department of Physics, University of Toronto, St. George campus, Toronto, ON, Canada",
+            "Vector Institute for Artificial Intelligence, Toronto, ON, Canada"
+        ]
+    },
+    "New materials":" Cs2Sn(H2N)6 (324 K), CsH5N2 (315K), Rb2Sn(H2N)6 (305 K), and H15IrBr3N5 (189 K),H12OsN5Cl3O (161 K), B10H13I (151 K)",
+    "screening algortihms":"N/A",
+    "AI algorithms":"The article discusses a similarity-based machine learning (ML) approach used to screen materials for high superconducting critical temperatures (Tc). The approach employs ridge regression models trained on the nearest neighbors from a dataset of known superconductors to predict Tc for new materials. Chemical compositions are used to generate features for training the ML models. This method was applied to approximately 153,000 materials in the Materials Project database to identify potential high-Tc superconductors. The screening process is computationally efficient, taking about 1 second per material on a standard laptop.",
+    "workflow":"The authors used the SuperCon dataset from the Materials Data Repository, which includes chemical compositions and superconducting critical temperatures (Tc) of 13,661 materials. They developed a similarity-based ridge regression model to predict Tc values, training it on the SuperCon dataset using n-nearest neighbors and ridge regression. The model was validated using leave-one-out prediction tests and learning curves, then applied to predict Tc values for approximately 153,000 materials in the Materials Project database. The predicted materials were filtered for thermodynamic stability and band gaps, and then ranked by their predicted Tc values.",
+    "methods description":"Various chemicals and polymers were used, including polystyrene-b-polybutadiene-b-polystyrene (SBS), Lix 84-I, and polyvinyl alcohol (PVA), sourced from suppliers like Kraton and Sigma-Aldrich. Polyisoprene was synthesized and then converted to polyisoprene-b-poly(styrene sulfonic acid) (PI-PSSA) through a series of chemical reactions. Microcapsules were created using a double-emulsion technique, which involved forming a water-in-oil-in-water emulsion, followed by sonication and homogenization. Batch and column experiments were conducted to measure the uptake of ions by the microcapsules, mixing them with ion-containing solutions and analyzing the ion concentrations using colorimetric methods and UV/Vis spectrophotometry.",
+    "models":"the article mentions the use of a facilitated-transport model to analyze the kinetics of ion uptake by the microcapsules. This model is described in detail in the Supporting Information section and is used to fit the experimental data for copper ion uptake. The model assumes diffusion in the membrane is rate-limiting and helps to understand the transport behavior of the system",
+    "year": 2024,
+    "impact factor":0,
+    "funding": "This research was supported by the Natural Sciences and Engineering Research Council of Canada (NSERC), with the funding reference number RGPIN-2023-048531, and the University of Toronto’s Acceleration Consortium received funding from the Canada First Research Excellence Fund, with the grant number CFREF-2022-000422.",
+    "other":""
+},
+    "Probing out-of-distribution generalization in machine learning for materials":{
+        "abstract":"cientific machine learning (ML) endeavors to develop generalizable models with broad applicability. However, the assessment of generalizability is often based on heuristics. Here, we demonstrate in the materials
+        science setting that heuristics based evaluations lead to substantially biased conclusions of ML generalizability
+        and benefits of neural scaling. We evaluate generalization performance in over 700 out-of-distribution tasks that
+        features new chemistry or structural symmetry not present in the training data. Surprisingly, good performance
+        is found in most tasks and across various ML models including simple boosted trees. Analysis of the materials
+        representation space reveals that most tasks contain test data that lie in regions well covered by training data,
+        while poorly-performing tasks contain mainly test data outside the training domain. For the latter case, increasing training set size or training time has marginal or even adverse effects on the generalization performance,
+        contrary to what the neural scaling paradigm assumes. Our findings show that most heuristically-defined out-ofdistribution tests are not genuinely difficult and evaluate only the ability to interpolate. Evaluating on such tasks
+        rather than the truly challenging ones can lead to an overestimation of generalizability and benefits of scaling.",
+        "author":"Kangming Li, Andre Niyongabo Rubungo, Xiangyun Lei, Daniel Persaud, Kamal Choudhary, Brian DeCost, Adji Bousso Dieng, and Jason Hattrick-Simpers",
+        "author_affiliation":{       "Kangming Li": [
+            "Department of Materials Science and Engineering, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada"
+        ],
+        "Andre Niyongabo Rubungo": [
+            "Vertaix, Department of Computer Science, Princeton University, Princeton, NJ, 08544, USA"
+        ],
+        "Xiangyun Lei": [
+            "Toyota Research Institute, 4440 El Camino Real, Los Altos, California 94022, USA"
+        ],
+        "Daniel Persaud": [
+            "Department of Materials Science and Engineering, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada"
+        ],
+        "Kamal Choudhary": [
+            "Material Measurement Laboratory, National Institute of Standards and Technology, 100 Bureau Dr, Gaithersburg, MD, USA"
+        ],
+        "Brian DeCost": [
+            "Material Measurement Laboratory, National Institute of Standards and Technology, 100 Bureau Dr, Gaithersburg, MD, USA"
+        ],
+        "Adji Bousso Dieng": [
+            "Vertaix, Department of Computer Science, Princeton University, Princeton, NJ, 08544, USA"
+        ],
+        "Jason Hattrick-Simpers": [
+            "Department of Materials Science and Engineering, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada",
+            "Acceleration Consortium, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada",
+            "Vector Institute for Artificial Intelligence, 661 University Ave, Toronto, ON, Canada",
+            "Schwartz Reisman Institute for Technology and Society, 101 College St, Toronto, ON, Canada"
+        ]},
+        "New materials":"N/A",
+        "screening algorithms":"N/A",
+        "AI algortihms":"The Random Forest (RF) and XGBoost (XGB) models utilize Matminer descriptors, while the Single Neural Network employs Gaussian multipole (GMP) expansion on electron density. The Atomistic Line Graph Neural Network (ALIGNN) uses crystal graphs, and the Large Language Model (LLM-Prop) is based on crystal text descriptions.",
+        "workflow": "The authors conducted a systematic examination of the performance of various machine learning (ML) methods across over 700 out-of-distribution (OOD) tasks within large materials datasets. They selected three ab initio-derived materials databases: JARVIS, Materials Project (MP), and the Open Quantum Materials Database (OQMD). These databases have different data distributions, ensuring robust and generalized conclusions of OOD performance. The evaluation setup involved defining OOD test data based on six criteria, such as materials containing a specific element or belonging to a particular space group. They trained a representative set of ML models, including random forest (RF), XGBoost (XGB), single neural network with Gaussian multipole (GMP) expansion, atomistic line graph neural network (ALIGNN), and the large language model (LLM) based LLM-Prop with crystal text description.The authors primarily focused on formation energy data and used two complementary performance metrics: mean absolute error (MAE) and coefficient of determination (R²). They analyzed the representation spaces of materials using Uniform Manifold Approximation and Projection (UMAP) to project high-dimensional materials representations to a two-dimensional plane. This helped them evaluate the kernel density estimate of the training data for every test data point in the UMAP embedding space.",
+        "methods description":"The study uses three materials databases—JARVIS, Materials Project (MP), and Open Quantum Materials Database (OQMD)—and evaluates various machine learning models, including random forest, XGBoost, neural networks, and large language models. The models are assessed on over 700 out-of-distribution (OOD) tasks defined by different chemistry and structural criteria, with performance metrics including mean absolute error (MAE) and coefficient of determination (R²). SHapley Additive exPlanations (SHAP) are employed to identify sources of biases in model predictions, distinguishing between compositional and structural contributions. Uniform Manifold Approximation and Projection (UMAP) is used to visualize high-dimensional materials representations and evaluate the representational domain of training data.",
+        "models":"Random Forest (RF) is a tree-based ensemble model, while XGBoost (XGB) is a gradient boosting framework. The Single Neural Network with Gaussian Multipole (GMP) uses Gaussian multipole expansion on electron density. The Atomistic Line Graph Neural Network (ALIGNN) is a graph neural network model, and LLM-Prop is a large language model based on crystal text descriptions.",
+        "year": 2024,
+        "impact factor":0,
+        "funding": "the article mentions that the research was funded in part by the Canada First Research Excellence Fund through the University of Toronto’s Acceleration Consortium. Additionally, computational resources were provided by Calcul Quebec, Westgrid, and Compute Ontario consortia in the Digital Research Alliance of Canada, and the Acceleration Consortium at the University of Toronto",
+        "other":""
+},
+"A data-driven framework to improve the wear resistance of a low-alloy steel fabricated by laser powder bed fusion":{
+    "abstract": "The laser powder bed fusion (LPBF) technique provides an opportunity to precisely control process parameters and produce materials with the desired microstructure, which plays an important role in developing wear-resistant components. However, accurately and efficiently determining the optimal process window for new materials remains a highly sought yet challenging task due to the high experimental cost of trial and error. 
+
+In this study, we demonstrate a physics-informed, data-driven framework to create a 3D process map and optimize printing parameters (i.e., laser power (P), scan speed (v), and hatch distance (h)) for a newly designed low-alloy steel. First, we establish a highly precise P-v process map by thoroughly exploring kernel selection and parameter hyper-tuning in Gaussian process regression (GPR) models. Subsequently, we employ the Bayesian optimization (BO) algorithm with different exploration-exploitation trade-offs to automatically explore all feasible optimized printing recipes within the process map. 
+
+To efficiently incorporate a third printing parameter (h) alongside P and v with limited additional data points, we integrate a physics-informed pre-analysis and an inverse design strategy. We show that the samples fabricated by our optimized parameters exhibit improvement in relative density and retain high hardness, resulting in a superior wear rate compared to those produced using non-optimized parameters. Furthermore, our samples outperform LPBF-fabricated steels and metal matrix composites in the literature, which is attributed to the existence of oxidative and fatigue wear. 
+
+Our study offers a systematic and accurate data-driven approach to design and optimize microstructures and properties of materials made by LPBF.",
+    "author": "Jiahui Zhang, Sagar Patel, Zhiying Liu, Tianyi Lyu, Yuhao Wang, Yujie Hu, Wandong Wang, Jason Hattrick-Simpers, Mihaela Vlasea, Yu Zou.",
+    "author_affiliation":{              "Jiahui Zhang": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Sagar Patel": [
+        "Nikon SLM Solutions"
+    ],
+    "Zhiying Liu": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Tianyi Lyu": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Yunhao Wang": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Yujie Hua": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Wandong Wang": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Jason Hattrick-Simpers": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Mihaela Vlasea": [
+        "Department of Mechanical and Mechatronics Engineering, University of Waterloo, Waterloo, ON, Canada"
+    ],
+    "Yu Zou": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ]
+},
+    "New materials":"the article discusses a newly designed low-alloy steel fabricated using laser powder bed fusion (LPBF). This material was optimized for improved wear resistance through a data-driven framework that precisely controls processing parameters. The study demonstrates that the optimized parameters result in samples with higher relative density and hardness, leading to superior wear resistance compared to non-optimized samples.",
+    "screening algorithms":"N/A",
+    "AI algortihms":"Gaussian Process Regression (GPR) was used to create a precise process map by exploring kernel selection and parameter hyper-tuning. Bayesian Optimization (BO) was employed with different exploration-exploitation trade-offs to automatically explore optimized printing recipes. An inverse design strategy, integrated with physics-informed pre-analysis, was used to efficiently incorporate additional printing parameters.",
+    "workflow": "The authors developed a data-driven framework to enhance the wear resistance of low-alloy steel produced by laser powder bed fusion (LPBF). They began by establishing a precise process map using Gaussian process regression (GPR) models, which involved thorough kernel selection and hyper-parameter tuning. This map was used to optimize printing parameters such as laser power, scan speed, and hatch distance. Bayesian optimization (BO) algorithms were then employed to explore and identify optimal printing recipes. To incorporate a third printing parameter with limited additional data, a physics-informed pre-analysis and inverse design strategy were integrated. The optimized parameters led to samples with improved relative density and hardness, resulting in superior wear resistance compared to non-optimized samples. The study demonstrated a systematic and accurate approach to designing and optimizing the microstructure and properties of materials made by LPBF.",
+    "methods description":"The study used a modified water-atomized low-alloy steel powder with a specific composition and particle size, and the specimens were fabricated using a commercial LPBF system (EOS M290) at room temperature. A combination of Gaussian Process Regression (GPR), Bayesian Optimization (BO), and an inverse design strategy was employed to establish the process map between printing parameters and relative density. Multiple rounds of design of experiments (DOE) were performed using normalized process maps to determine optimal printing recipes, using a combination of E*, v*, and h* terms to select printing parameters. The relative densities of the specimens were calculated using XCT technology, and mechanical properties were assessed through hardness measurements and microstructure analysis.",
+    "models":"N/A",
+    "year": 2024,
+    "impact factor":6.1,
+    "funding": "Natural Sciences and Engineering Research Council of Canada (NSERC)
+Centre for Analytics and Artificial Intelligence Engineering (CARTE) Seed Funding program
+New Frontiers in Research Fund - Exploration (NFRF)
+Data Sciences Institute Catalyst Grant
+NSERC Alliance Grants
+Federal Economic Development Agency for Southern Ontario (FedDev Ontario) Acceleration Consortium. Additionally, computational resources were provided by Calcul Quebec, Westgrid, and Compute Ontario consortia in the Digital Research Alliance of Canada, and the Acceleration Consortium at the University of Toronto",
+    "other":""
+    
+},
+"Efficient first principles based modeling via machine learning: from simple representations to high entropy materials":{
+    "abstract":"High-entropy materials (HEMs) have recently emerged as a significant category of materials, offering highly tunable properties. However, the scarcity of HEM data in existing density functional
+theory (DFT) databases, primarily due to computational expense, hinders the development of effective modeling strategies for computational materials discovery. In this study, we introduce an open
+DFT dataset of alloys and employ machine learning (ML) methods to investigate the material representations needed for HEM modeling. Utilizing high-throughput DFT calculations, we generate a
+comprehensive dataset of 84k structures, encompassing both ordered and disordered alloys across a
+spectrum of up to seven components and the entire compositional range. We apply descriptor-based
+models and graph neural networks to assess how material information is captured across diverse
+chemical-structural representations. We first evaluate the in-distribution performance of ML models to confirm their predictive accuracy. Subsequently, we demonstrate the capability of ML models
+to generalize between ordered and disordered structures, between low-order and high-order alloys,
+and between equimolar and non-equimolar compositions. Our findings suggest that ML models can
+generalize from cost-effective calculations of simpler systems to more complex scenarios. Additionally, we discuss the influence of dataset size and reveal that the information loss associated with the
+use of unrelaxed structures could significantly degrade the generalization performance. Overall, this
+research sheds light on several critical aspects of HEM modeling and offers insights for data-driven
+atomistic modeling of HEMs.",
+"author": "Kangming Li*, Kamal Choudhary*, Brian DeCost*, Michael Greenwood, and Jason Hattrick-Simpers",
+"author_affiliation":{
+    "Kangming Li": [
+        "Department of Materials Science and Engineering, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada",
+        "Acceleration Consortium, University of Toronto, 80 St George St, Toronto, ON, Canada",
+        "Vector Institute for Artificial Intelligence, 661 University Ave, Toronto, ON, Canada",
+        "Schwartz Reisman Institute for Technology and Society, 101 College St, Toronto, ON, Canada"
+    ],
+    "Kamal Choudhary": [
+        "Material Measurement Laboratory, National Institute of Standards and Technology, 100 Bureau Dr, Gaithersburg, MD, USA"
+    ],
+    "Brian DeCost": [
+        "Material Measurement Laboratory, National Institute of Standards and Technology, 100 Bureau Dr, Gaithersburg, MD, USA"
+    ],
+    "Michael Greenwood": [
+        "Canmet MATERIALS, Natural Resources Canada, 183 Longwood Road South, Hamilton, ON, Canada"
+    ],
+    "Jason Hattrick-Simpers": [
+        "Department of Materials Science and Engineering, University of Toronto, 27 King’s College Cir, Toronto, ON, Canada",
+        "Acceleration Consortium, University of Toronto, 80 St George St, Toronto, ON, Canada",
+        "Vector Institute for Artificial Intelligence, 661 University Ave, Toronto, ON, Canada",
+        "Schwartz Reisman Institute for Technology and Society, 101 College St, Toronto, ON, Canada"
+    ]
+
+},
+"New materials":"the article discusses the discovery and modeling of high-entropy materials (HEMs). These materials are notable for their highly tunable properties and potential applications in areas like catalysis, batteries, and hydrogen storage1. The study introduces a comprehensive DFT dataset of alloys and employs machine learning methods to explore material representations needed for HEM modeling2. This research aims to enhance the discovery and development of new HEMs by leveraging data-driven approaches.",
+"screening algorithms":"N/A",
+"AI algortihms":"GaussThe paper discusses the use of several machine learning (ML) algorithms for modeling high-entropy materials (HEMs): XGBoost (XGB), a tree ensemble method that uses compositional and structural descriptors; Random Forest (RF), another tree ensemble method utilizing similar descriptors; and Atomistic Line Graph Neural Network (ALIGNN), a graph neural network that explicitly encodes bond angle information. These models are used to predict formation energies and assess their generalization capabilities across different material structures.",
+"workflow": "The authors of the study followed a structured workflow to model high-entropy materials (HEMs) using machine learning (ML) methods. They began by generating a comprehensive dataset of 84,000 alloy structures using high-throughput density functional theory (DFT) calculations1. These structures included both ordered and disordered alloys with up to seven components.
+
+Next, they applied descriptor-based models and graph neural networks to evaluate how material information is captured across different chemical-structural representations2. The ML models were trained and tested on this dataset to assess their predictive accuracy and generalization capabilities. The authors focused on the formation energy of the alloys, which is crucial for assessing thermodynamic stability3. They also examined the effects of dataset size and the use of unrelaxed structures on model performance4.
+
+Overall, the workflow combined DFT calculations, ML modeling, and extensive data analysis to explore the potential of ML in HEM modeling.",
+"methods description":"
+DFT Calculations: Conducted using the Vienna Ab-initio Simulation Package (VASP) with specific settings for exchange-correlation functional, plane-wave basis cutoff, and k-point sampling1. Structures were fully relaxed to an energy convergence criterion2.
+ML Modeling: Utilized XGBoost, Random Forest, and Atomistic Line Graph Neural Network (ALIGNN) models. These models were trained on both relaxed and unrelaxed structures, with specific hyperparameters and training strategies3.
+Dataset: Included 84k structures of alloys, covering ordered and disordered phases, with a focus on high-entropy materials (HEMs). The dataset was generated using high-throughput DFT calculations4.
+Performance Evaluation: Assessed the predictive accuracy and generalization capabilities of ML models, focusing on in-distribution and out-of-distribution performance5.
+",
+"models":"N/A",
+"year": 2024,
+"impact factor":0,
+"funding": "Canada First Research Excellence Fund: Provided funding to the University of Toronto’s Acceleration Consortium1.
+Natural Resources Canada’s Office of Energy Research and Development (OERD): Provided partial funding2.
+Digital Research Alliance of Canada: Provided computational resources through Calcul Quebec, Westgrid, and Compute Ontario consortia3.",
+"other":""
+
+
+},"Artificial Intelligence-Enabled Optimization of Battery-Grade Lithium Carbonate Production":
+
+{
+    "abstract": "By 2035, the need for battery-grade lithium is expected to quadruple. About half of this lithium is 
+currently sourced from brines and must be converted from a chloride into lithium carbonate 
+(Li2CO3) through a process called softening. Conventional softening methods using sodium or 
+potassium salts contribute to carbon emissions during reagent mining and battery manufacturing, 
+exacerbating global warming. This study introduces an alternative approach using carbon dioxide 
+(CO2(g)) as the carbonating reagent in the lithium softening process, offering a carbon capture 
+solution. We employed an active learning-driven high-throughput method to rapidly capture CO2(g)
+and convert it to lithium carbonate. The model was simplified by focusing on the elemental 
+concentrations of C, Li, and N for practical measurement and tracking, avoiding the complexities 
+of ion speciation equilibria. This approach led to an optimized lithium carbonate process that 
+capitalizes on CO2(g) capture and improves the battery metal supply chain's carbon efficiency.",
+"author": "S. Shayan Mousavi Masouleh, Corey A. Sanz, Ryan P. Jansonius, Samuel Shi, Maria J. Gendron Romero, Jason E. Hein, Jason Hattrick-Simpers",
+"author_affiliation":{        "S. Shayan Mousavi Masouleh": [
+    "Canmet MATERIALS, Natural Resources Canada, 183 Longwood Rd S, Hamilton, ON, Canada",
+    "Department of Materials Science and Engineering, McMaster University, 1280 Main St W, Hamilton, ON, Canada"
+],
+"Corey A. Sanz": [
+    "Telescope Innovations, 301-2386 E Mall, Vancouver, BC, Canada"
+],
+"Ryan P. Jansonius": [
+    "Telescope Innovations, 301-2386 E Mall, Vancouver, BC, Canada"
+],
+"Samuel Shi": [
+    "Department of Materials Science and Engineering, University of Toronto, 184 College St, Toronto, ON, Canada"
+],
+"Maria J. Gendron Romero": [
+    "Department of Materials Science and Engineering, University of Toronto, 184 College St, Toronto, ON, Canada"
+],
+"Jason E. Hein": [
+    "Telescope Innovations, 301-2386 E Mall, Vancouver, BC, Canada"
+],
+"Jason Hattrick-Simpers": [
+    "Canmet MATERIALS, Natural Resources Canada, 183 Longwood Rd S, Hamilton, ON, Canada"
+]
+},
+"New materials":"the article discusses a new method for producing battery-grade lithium carbonate using carbon dioxide (CO2) as a carbonating reagent. This approach not only captures CO2 but also optimizes the lithium carbonate production process, achieving higher yields and reducing the carbon footprint compared to traditional methods1. The study employs AI-enabled high-throughput experimentation to identify optimal reaction conditions, resulting in an impressive 83% yield of lithium carbonate",
+"screening algorithms":"N/A",
+"AI algortihms":"The paper discusses the use of Gaussian Process Regression (GPR) models as the core predictive analytics tool1. These models are employed within an active learning-driven high-throughput experimentation (HTE) workflow to optimize the lithium carbonate production process2. The GPR models help in predicting lithium yields and guiding the data acquisition strategy by segmenting the data pool into different tiers based on yield, uncertainty, and random exploration.",
+"workflow": "The workflow described in the paper involves a Bayesian active learning-driven high-throughput experimentation (HTE) method to optimize the CO2-based lithium brine softening process for producing lithium carbonate1. The process starts with high-throughput experiments conducted at 66°C to maximize lithium carbonate crystallization. The experiments focus on the reaction between ammonium hydroxide, CO2 gas, and lithium chloride. The system’s progress is monitored by tracking the concentrations of lithium, nitrogen, and carbon before and after reactions. A Gaussian Process Regression (GPR) model is used to predict lithium yields within a defined chemical space. The model is trained using experimental data and informs the data acquisition strategy, which segments the data pool into high lithium carbonate yield, large uncertainty in GPR predictions, and random exploration2. The active learning cycle involves conducting experiments, updating the GPR model with new data, and refining the predictions to identify optimal reaction conditions. This iterative process led to an optimized lithium carbonate yield of 83%, surpassing traditional methods3",
+"methods description":"High-Throughput Experimentation (HTE): The study used HTE to conduct multiple small-scale experiments simultaneously1. Each batch consisted of 24 miniature experiments, focusing on the reaction between ammonium hydroxide (NH4OH), carbon dioxide (CO2), and lithium chloride (LiCl)2.
+Active Learning and AI Integration: A Bayesian active learning-driven workflow was employed to optimize the lithium brine softening process3. Gaussian Process Regression (GPR) models were used to predict lithium yields and guide the experimental design4.
+Monitoring and Measurement: The concentrations of lithium (Li), nitrogen (N), and carbon © were monitored using infrared spectroscopy and ion chromatography before and after reactions to calculate lithium carbonate yields.
+Optimization: The AI-enhanced HTE approach identified optimal reaction conditions, achieving an 83% yield of lithium carbonate, which is higher than traditional methods5",
+"models":"N/A",
+"year": 2024,
+"impact factor":0,
+"funding": "Critical Minerals Research, Development, and Demonstration (CMRDD) Program administered by Natural Resources Canada1.
+Standard Lithium for financial support and valuable discussions2.
+Mining Innovation Commercialization Accelerator (MICA) for financial support related to the project",
+"other":""
+
+},
+
+"Accurate predictions of keyhole depths using machine learning-aided simulations":{
+    "abstract": "The keyhole phenomenon is widely observed in laser materials processing, including laser welding, 
+remelting, cladding, drilling, and additive manufacturing. Keyhole-induced defects, primarily 
+pores, dramatically affect the performance of final products, impeding the broad use of these laserbased technologies. The formation of these pores is typically associated with the dynamic behavior 
+of the keyhole. So far, the accurate characterization and prediction of keyhole features, particularly 
+keyhole depth, as a function of time has been a challenging task. In situ characterization of keyhole 
+dynamic behavior using a synchrotron X-ray is complicated and expensive. Current simulations are 
+hindered by their poor accuracies in predicting keyhole depths due to the lack of real-time laser 
+absorptance data. Here, we develop a machine learning-aided simulation method that allows us to 
+accurately predict keyhole depth over a wide range of processing parameters. Based on titanium 
+and aluminum alloys, two commonly used engineering materials as examples, we achieve an
+accuracy with an error margin of 10 %, surpassing those simulated using other existing models
+(with an error margin in a range of 50-200 %). Our machine learning-aided simulation method is
+affordable and readily deployable for a large variety of materials, opening new doors to eliminate 
+or reduce defects for a wide range of laser materials processing techniques.",
+
+"author":"Jiahui Zhang, Runbo Jiang, Kangming Li, Pengyu Chen, Xiao Shang, Zhiying Liu, Jason Hattrick-Simpers, Brian J. Simonds, Qianglong Wei, Hongze Wang, Tao Sun, Anthony D. Rollett, Yu Zou",
+"author_affiliation":{
+    "Jiahui Zhang": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Runbo Jiang": [
+        "Advanced Light Source (ALS) Division, Lawrence Berkeley National Laboratory, Berkeley, CA, USA"
+    ],
+    "Kangming Li": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Pengyu Chen": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Xiao Shang": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Zhiying Liu": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Jason Hattrick-Simpers": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Brian J. Simonds": [
+        "Applied Physics Division, Physical Measurements Laboratory, National Institute of Standards and Technology, Boulder, CO, USA"
+    ],
+    "Qianglong Wei": [
+        "School of Materials Science & Engineering, Shanghai Jiao Tong University, Shanghai, China"
+    ],
+    "Hongze Wang": [
+        "School of Materials Science & Engineering, Shanghai Jiao Tong University, Shanghai, China"
+    ],
+    "Tao Sun": [
+        "Department of Mechanical Engineering, Northwestern University, Evanston, IL, USA"
+    ],
+    "Anthony D. Rollett": [
+        "Department of Materials Science and Engineering, Carnegie Mellon University, Pittsburgh, PA, USA"
+    ],
+    "Yu Zou": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ]
+
+},
+"New materials":"N/A",
+"screening algorithms":"N/A",
+"AI algortihms":"The paper mentions the use of six classic regression models for predicting laser absorptance in their machine learning-based approach1. These models include:
+Linear Regression (LR)
+Support Vector Regression (SVR)
+Decision Tree (DT)
+Random Forest (RF)
+Neural Network (NN)
+Gaussian Process Regression (GPR)
+The performance of these models was evaluated using the mean absolute percentage error (MAPE) metric, and the GPR model was found to be the top-performing model2",
+"workflow": "The authors developed a machine learning-aided simulation method to predict keyhole depths in laser materials processing1. They combined a computational fluid dynamics (CFD) model with a machine learning-based laser absorptance model2. Initially, they validated the CFD model using experimental laser absorptance data3. Then, they generated a large dataset of laser absorptance values from X-ray images. This dataset was used to train a Gaussian Process Regression (GPR) model to predict laser absorptance under new processing parameters4. The predicted absorptance values were incorporated into the simulation model to predict keyhole depths accurately56. This approach was tested on titanium and aluminum alloys, achieving high accuracy and demonstrating the method’s effectiveness in predicting keyhole depths across various processing parameters.",
+"methods description":"Data Processing and Quantification: The keyhole morphologies were quantified from X-ray images using segmentation to isolate the keyhole area1. Keyhole and melt pool depths were evaluated using isotherms corresponding to the material’s saturation and solidus temperatures23.
+Physics-Based Approach: This approach involved iterative calculations using a forward simulation model to predict keyhole depth and a backward analytical model to estimate laser absorptance. The process continued until convergence was achieved.
+Machine Learning Models: Six regression models were evaluated to predict laser absorptance based on processing parameters45. The Gaussian Process Regression (GPR) model was selected for its accuracy and flexibility.
+Experimental Setup: Laser absorptance and X-ray images were captured using a high-speed synchrotron X-ray system. The laser system included a ytterbium fiber laser and a galvo laser scanner, with experiments conducted in an argon environment6.
+",
+"models":"Machine Learning Models: Six regression models were evaluated, with the Gaussian Process Regression (GPR) model selected for its superior performance in predicting laser absorptance",
+"year": 2024,
+"impact factor":0,
+"funding": "Centre for Analytics and Artificial Intelligence Engineering (CARTE) Seed Funding program
+Data Sciences Institute Catalyst Grant
+NSERC Alliance Grants—Missions ALLRP 570708-2021
+Canada First Research Excellence Fund (CFREF) as part of the University of Toronto's Acceleration Consortium1",
+"other":""
+
+},
+
+
+
+"Exploiting redundancy in large materials datasets for efficient machine learning with less data":{
+    "abstract":"Extensive efforts to gather materials data have largely overlooked potential
+data redundancy. In this study, we present evidence of a significant degree of
+redundancy across multiple large datasets for various material properties, by
+revealing that up to 95% of data can be safely removed from machine learning
+training with little impact on in-distribution prediction performance. The
+redundant data is related to over-represented material types and does not
+mitigate the severe performance degradation on out-of-distribution samples.
+In addition, we show that uncertainty-based active learning algorithms can
+construct much smaller but equally informative datasets. We discuss the
+effectiveness of informative data in improving prediction performance and
+robustness and provide insights into efficient data acquisition and machine
+learning training. This work challenges the “bigger is better” mentality and
+calls for attention to the information richness of materials data rather than a
+narrow emphasis on data volume.",
+    "author":"Kangming Li, Daniel Persaud, Kamal Choudhary, Brian DeCost, Michael Greenwood, and Jason Hattrick-Simpers",
+    "author_affiliation":{        "Kangming Li": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Daniel Persaud": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada"
+    ],
+    "Kamal Choudhary": [
+        "Material Measurement Laboratory, National Institute of Standards and Technology, Gaithersburg, MD, USA"
+    ],
+    "Brian DeCost": [
+        "Material Measurement Laboratory, National Institute of Standards and Technology, Gaithersburg, MD, USA"
+    ],
+    "Michael Greenwood": [
+        "Canmet MATERIALS, Natural Resources Canada, Hamilton, ON, Canada"
+    ],
+    "Jason Hattrick-Simpers": [
+        "Department of Materials Science and Engineering, University of Toronto, Toronto, ON, Canada",
+        "Acceleration Consortium, University of Toronto, Toronto, ON, Canada",
+        "Vector Institute for Artificial Intelligence, Toronto, ON, Canada",
+        "Schwartz Reisman Institute for Technology and Society, Toronto, ON, Canada"
+    ]
+},
+
+"New materials":"N/A",
+"screening algorithms":"Pruning Algorithm: This algorithm iteratively reduces the training set size by removing data with the lowest prediction errors",
+"AI algortihms":"Uncertainty-Based Active Learning Algorithms: These include:2
+Random Forest Uncertainty: Uses the width of the 90% prediction intervals of the RF model.
+XGBoost Uncertainty: Uses an instance-based uncertainty estimation for gradient-boosted regression trees3.
+Query by Committee (QBC): Measures uncertainty based on the disagreement between RF and XGB predictions4.",
+
+"workflow": "Data Redundancy Analysis: The study investigates data redundancy in large materials datasets by examining the performance degradation of machine learning (ML) models as the training set size is reduced1.
+Pruning Algorithm: A pruning algorithm is proposed to identify and remove redundant data, allowing ML models to be trained on smaller, more informative datasets without significant performance loss.
+Active Learning: The effectiveness of uncertainty-based active learning algorithms is evaluated, showing that they can construct smaller but equally informative datasets2.
+Model Performance Evaluation: The performance of ML models is tested on in-distribution (ID) data, unused pool data, and out-of-distribution (OOD) data to assess the robustness and efficiency of the proposed methods",
+"methods description":"Materials Datasets: The study utilized various versions of the Materials Project, JARVIS, and OQMD datasets. Data preprocessing involved removing materials with high formation energy and extracting features using Voronoi tessellation.
+Machine Learning Models: Three models were used: XGBoost (XGB), Random Forest (RF), and Atomistic Line Graph Neural Network (ALIGNN)12. Each model had specific hyperparameters and training settings.
+Pruning Algorithm: This algorithm iteratively reduced the training set size by removing data with the lowest prediction errors, ensuring efficient model training3.
+Active Learning Algorithm: Three uncertainty-based active learning strategies were employed to select the most informative data, improving model performance with less data.
+",
+"models":"Random Forest (RF): An ensemble learning method that combines multiple decision trees to improve accuracy and minimize variance1.
+XGBoost (XGB): A gradient-boosted method that builds sequential decision trees to reduce residuals from previous trees2.
+Atomistic Line Graph Neural Network (ALIGNN): A graph neural network that constructs and utilizes graphs of interatomic bonds and bond angles for state-of-the-art performance",
+"year":2023,
+"impact factor":17.7,
+"funding": "the article mentions that the research was funded by Natural Resources Canada’s Office of Energy Research and Development (OERD) and the Canada First Research Excellence Fund (CFREF-2022-00042)1. Additionally, the computations were supported by resources from the Digital Research Alliance of Canada and the Acceleration Consortium at the University of Toronto",
+"other":""
+},
+"Assessment of chemistry knowledge in large language models that generate code":{
+    "abstract":"",
+    "author":"Andrew D. White*, Glen M. Hocky*, Heta A. Gandhi, Mehrad Ansari, Sam Cox, Geemi P. Wellawatte, Subarna Sasmal, Ziyue Yang, Kangxin Liu, Yuvraj Singh, and Willmor J. Peña Ccoa",
+
+    "author_affiliation":{
+        "Andrew D. White": [
+            "Department of Chemical Engineering, University of Rochester, USA",
+            "Vial Health Technology, Inc., USA"
+        ],
+        "Glen M. Hocky": [
+            "Department of Chemistry, New York University, USA",
+            "Simons Center for Computational Physical Chemistry, New York University, USA"
+        ],
+        "Heta A. Gandhi": [
+            "Department of Chemical Engineering, University of Rochester, USA"
+        ],
+        "Mehrad Ansari": [
+            "Department of Chemical Engineering, University of Rochester, USA"
+        ],
+        "Sam Cox": [
+            "Department of Chemical Engineering, University of Rochester, USA"
+        ],
+        "Geemi P. Wellawatte": [
+            "Department of Chemistry, University of Rochester, USA"
+        ],
+        "Subarna Sasmal": [
+            "Department of Chemistry, New York University, USA"
+        ],
+        "Ziyue Yang": [
+            "Department of Chemical Engineering, University of Rochester, USA"
+        ],
+        "Kangxin Liu": [
+            "Department of Chemistry, New York University, USA"
+        ],
+        "Yuvraj Singh": [
+            "Department of Chemistry, New York University, USA"
+        ],
+        "Willmor J. Peña Ccoa": [
+            "Department of Chemistry, New York University, USA"
+        ]
+    },
+    "New materials":"N/A",
+    "screening algorithms":"N/A",
+    "AI algortihms":"N/A",
+    "workflow": "The authors of the paper investigated whether code-generating large language models (LLMs) possess chemistry knowledge. They created a framework to evaluate this by prompting models to solve chemistry problems as coding tasks1. They compiled a benchmark set of problems across various chemistry topics and assessed the models’ performance through automated testing and expert evaluation2. They found that recent LLMs can write correct code for many chemistry topics, with accuracy improved by prompt engineering strategies. The dataset and evaluation tools are open source, allowing future researchers to contribute and build upon this work3. The study also highlights good practices for using LLMs in chemistry, demonstrating their potential impact on chemistry teaching and research",
+    "methods description":"Benchmark Creation: The authors compiled a set of chemistry and chemical engineering problems, categorized into various topics like general chemistry, biochemistry, and quantum mechanics. They aimed to have at least 10 examples in each category.
+Model Evaluation: They evaluated large language models (LLMs) by prompting them to solve these problems as coding tasks. The correctness of the generated code was assessed through automated testing and expert evaluation1.
+Prompt Engineering: Various strategies were employed to improve model performance, such as adding context-specific code snippets and using specific phrases to condition the models.
+Expert Evaluation: Human experts evaluated the outputs for more complex tasks that couldn’t be assessed automatically, providing a detailed analysis of the models’ performance.",
+    "models":"Codex (code-cushman-001): A fine-tuned version of GPT-3, known for generating code.
+Davinci (code-davinci-002): Part of the GPT-3.5 family, used for generating and completing code.
+Incoder: Models trained specifically on code, capable of infilling code.
+Codegen: Another decoder-only model designed for code synthesis with natural language1",
+    "year": 2024,
+    "impact factor":6.2,
+    "funding": "National Institutes of Health (NIH): Award numbers R35GM137966 and R35GM1383121.
+National Science Foundation (NSF): Award numbers 1751471 and 176441523.
+Department of Energy (DOE): Award number DESC0020464.
+Simons Foundation: Grant No. 839534",
+    "other":""
+
+
+},
+
+"A holistic platform for accelerating sorbent-based carbon capture":{
+    "abstract":"Reducing carbon dioxide (CO2) emissions urgently requires the large-scale deployment 
+of carbon-capture technologies. These technologies must separate CO2 from various 
+sources and deliver it to diferent sinks1,2
+. The quest for optimal solutions for specifc 
+source–sink pairs is a complex, multi-objective challenge involving multiple 
+stakeholders and depends on social, economic and regional contexts. Currently, 
+research follows a sequential approach: chemists focus on materials design3
+ and 
+engineers on optimizing processes4,5
+, which are then operated at a scale that impacts 
+the economy and the environment. Assessing these impacts, such as the greenhouse 
+gas emissions over the plant’s lifetime, is typically one of the fnal steps6
+. Here we 
+introduce the PrISMa (Process-Informed design of tailor-made Sorbent Materials) 
+platform, which integrates materials, process design, techno-economics and life-cycle 
+assessment. We compare more than 60 case studies capturing CO2 from various 
+sources in 5 global regions using diferent technologies. The platform simultaneously 
+informs various stakeholders about the cost-efectiveness of technologies, process 
+confgurations and locations, reveals the molecular characteristics of the topperforming sorbents, and provides insights on environmental impacts, co-benefts 
+and trade-ofs. By uniting stakeholders at an early research stage, PrISMa accelerates 
+carbon-capture technology development during this critical period as we aim for a 
+net-zero world.",
+    "author":"Charithea Charalambous, Elias Moubarak, Johannes Schilling, Eva Sanchez Fernandez, Jin-Yu Wang, Laura Herraiz, Fergus Mcilwaine, Shing Bo Peh, Matthew Garvin, Kevin Maik Jablonka, Seyed Mohamad Moosavi, Joren Van Herck, Aysu Yurdusen Ozturk, Alireza Pourghaderi, Ah-Young Song, Georges Mouchaham, Christian Serre, Jeffrey A. Reimer, André Bardow, Berend Smit, and Susana Garcia",
+    "author_affiliation":{},
+    "New materials":"MIP-212",
+    "screening algorithms":"Iterative Screening: The model is trained in steps, starting with an nCAC threshold corresponding to the MEA benchmark and then screening a larger database in multiple rounds2.
+Dimensionality Reduction: The chemical space is visualized through dimensionality reduction techniques like UMAP embedding to identify clusters of top-performing materials",
+    "AI algortihms":"Machine-Learning Feedback Loop: The platform uses a machine-learning model to predict whether a material yields a net Carbon Avoidance Cost (nCAC) above or below a given threshold",
+    "workflow": "optimizing carbon capture processes using a combination of temperature-vacuum swing adsorption (TVSA) and temperature swing adsorption (TSA). The workflow involves several steps:
+
+First, the vacuum step is used to increase the purity of the product stream by rapidly purging weakly adsorbed components from the gas phase12. This step, however, results in lower recovery compared to TSA. After optimization, more materials meet the purity requirement, and the net carbon avoidance cost (nCAC) is reduced3. The process also considers the environmental impact, focusing on maximizing captured CO2 while minimizing associated emissions4.
+
+The workflow includes adjusting process recovery for CO2 emissions associated with building and operating the plant5. The climate change KPI is used to evaluate the environmental impact of different materials. The author also emphasizes the importance of solvent selection and the use of green solvents to minimize environmental hotspots.
+
+Finally, the workflow involves experimental testing to validate the performance of materials identified through in silico screening. This includes studying breakthrough curves and comparing experimental data with predictions to ensure accuracy. The holistic approach aims to bridge fundamental research and large-scale deployment, accelerating the implementation of innovations in carbon capture technology.
+
+
+
+",
+    "methods description":"Vacuum Step: This step increases the purity of the product stream by rapidly purging weakly adsorbed components from the gas phase after adsorption, though it results in lower recovery compared to temperature swing adsorption (TSA)1.
+Optimization: The process optimization lowers the net carbon avoidance cost (nCAC) and improves the ranking of top-performing materials without significantly impacting their performance.
+Environmental Impact: The effective recovery adjusts for CO2e emissions associated with building and operating the carbon-capture plant, considering the climate change key performance indicator (KPI)2.
+Machine Learning: A machine-learning model is used to predict material performance, allowing for the screening of a larger chemical design space and identifying top-performing materials.",
+    "models":"Optimization Models: These models help in optimizing the carbon capture process, improving the purity and reducing costs.
+Machine-Learning Models: Used to predict material performance and screen a larger chemical design space.
+Life-Cycle Assessment (LCA) Models: Evaluate the environmental impacts of the carbon capture process, including greenhouse gas emissions.
+Techno-Economic Analysis (TEA) Models: Assess the economic feasibility and cost-effectiveness of different carbon capture technologies.",
+
+    "impact factor":0,
+    "funding": "ACT Programme: Funded through Horizon 2020 Project 2947661.
+UK Research Councils: Including NERC and EPSRC.
+Research Council of Norway (RCN).
+Swiss Federal Office of Energy (SFOE).
+US Department of Energy.
+Private Companies: TOTAL and Equinor.
+Grantham Foundation: For the Protection of the Environment.",
+    "other":""
+}, 
+
+
+"Inverse design of porous materials: a diffusion model approach":
+{
+ "abstract":"The success of diffusion models in the field of image processing has propelled the creation of software such
+as Dall-E, Midjourney and Stable Diffusion, which are tools used for text-to-image generation. Mapping this
+workflow onto material discovery, a new diffusion model was developed for the generation of pure silica
+zeolite, marking one of the first applications of diffusion models to porous materials. Our model
+demonstrates the ability to generate novel crystalline porous materials that are not present in the training
+dataset, while exhibiting exceptional performance in inverse design tasks targeted on various chemical
+properties including the void fraction, Henry coefficient and heat of adsorption. Comparing our model
+with a Generative Adversarial Network (GAN) revealed that the diffusion model outperforms the GAN in
+terms of structure validity, exhibiting an over 2000-fold improvement in performance. We firmly believe
+that diffusion models (along with other deep generative models) hold immense potential in
+revolutionizing the design of new materials, and anticipate the wide extension of our model to other
+classes of porous materials",
+"author":"Junkil Park, Aseem Partag Singh Gill, Seyed Mohamad Moosavi and Jihan Kim",
+"author_affiliation":{},
+"topic": [[
+    "Diffusion Models",
+    "Porous Materials",
+    "Comparative Analysis",
+    "Inverse Design"
+]],
+"New materials":"new zeolite structures",
+"screening algortihms":"N/A",
+"AI algorithms":"N/A",
+"workflow":"The authors developed a new diffusion model named ZeoDiff for generating pure silica zeolites. The workflow begins with the noising process, where noise is gradually introduced to a given data point, resulting in its perturbation1. Conversely, in the denoising process, the model is trained to remove the introduced noise, allowing for the generation of new samples from random noises. The model uses three-dimensional grids composed of energy, silicon, and oxygen channels, similar to RGB channels in images2. These grids are prepared using methane as a probe gas and Gaussian functions centered at the positions of zeolite atoms34. The combined grids serve as the input representation for ZeoDiff, which is trained to generate new realistic zeolites through the denoising process5. An additional network predicts the lattice parameters based on the correlation between the lattice constants and grid representation. The training data includes structures from the International Zeolite Association and the Predicted Crystallography Open Database",
+"methods description":"ZeoDiff Algorithm: The ZeoDiff model is based on the Denoising Diffusion Probabilistic Model (DDPM)1. It involves a noising process that adds Gaussian noise to zeolite grids and a denoising process that removes the noise to generate new zeolite grids2.
+Zeolite Databases: The model was trained using zeolite structures from the International Zeolite Association (IZA) and Predicted Crystallography Open Database (PCOD)3. Structures with sufficient methane accessibility were selected for training.
+Molecular Simulations and Data Preparation: Classical molecular simulations were used to prepare methane energy grids45. The Henry coefficient and isosteric heat of adsorption were calculated from these grids6. Silicon and oxygen grids were represented using Gaussian functions.",
+"models":"Deep learning model",
+"year": 2024,
+"funding": "N/A",
+"impact factor":0,
+"other":""
+
+},
+
+"A ligand discovery toolbox for the WWE domain family of human E3 ligases":{
+    "abstract": "The WWE domain is a relatively under-researched domain found in twelve human proteins and
+characterized by a conserved tryptophan-tryptophan-glutamate (WWE) sequence motif. Six of these
+WWE domain-containing proteins also contain domains with E3 ubiquitin ligase activity. The general
+recognition of poly-ADP-ribosylated substrates by WWE domains suggests a potential avenue for
+development of Proteolysis-Targeting Chimeras (PROTACs). Here, we present novel crystal
+structures of the HUWE1, TRIP12, and DTX1 WWE domains in complex with PAR building blocks and
+their analogs, thus enabling a comprehensive analysis of the PAR binding site structural diversity.
+Furthermore, we introduce a versatile toolbox of biophysical and biochemical assays for the discovery
+and characterization of novel WWE domain binders, including fluorescence polarization-based PAR
+binding and displacement assays, 15N-NMR-based binding affinity assays and 19F-NMR-based
+competition assays. Through these assays, we have characterized the binding of monomeric isoADP-ribose (iso-ADPr) and its nucleotide analogs with the aforementioned WWE proteins. Finally, we
+have utilized the assay toolbox to screen a small molecule fragment library leading to the successful
+discovery of novel ligands targeting the HUWE1 WWE domain",
+    "author": "Lena Münzker, Serah W. Kimani, Milan M. Fowkes, Aiping Dong, Hong Zheng, Yanjun Li, Morgan Dasovich, Krzysztof M. Zak, Anthony K. L. Leung, Jonathan M. Elkins, Dirk Kessler, Cheryl H. Arrowsmith, Levon Halabelian, and Jark Böttcher",
+    "author_affiliation":{
+        "Lena Münzker": [
+            "Boehringer Ingelheim RCV GmbH & Co KG, Vienna, Austria"
+        ],
+        "Serah W. Kimani": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada",
+            "Princess Margaret Cancer Centre, Toronto, ON, Canada"
+        ],
+        "Milan M. Fowkes": [
+            "Centre for Medicines Discovery, Nuffield Department of Medicine, University of Oxford, Oxford, UK"
+        ],
+        "Aiping Dong": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada"
+        ],
+        "Hong Zheng": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada"
+        ],
+        "Yanjun Li": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada"
+        ],
+        "Morgan Dasovich": [
+            "Johns Hopkins University, Baltimore, MD, USA"
+        ],
+        "Krzysztof M. Zak": [
+            "Boehringer Ingelheim RCV GmbH & Co KG, Vienna, Austria"
+        ],
+        "Anthony K. L. Leung": [
+            "Johns Hopkins University, Baltimore, MD, USA"
+        ],
+        "Jonathan M. Elkins": [
+            "Centre for Medicines Discovery, Nuffield Department of Medicine, University of Oxford, Oxford, UK"
+        ],
+        "Dirk Kessler": [
+            "Boehringer Ingelheim RCV GmbH & Co KG, Vienna, Austria"
+        ],
+        "Cheryl H. Arrowsmith": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada",
+            "Princess Margaret Cancer Centre, Toronto, ON, Canada",
+            "Department of Medical Biophysics, University of Toronto, Toronto, ON, Canada"
+        ],
+        "Levon Halabelian": [
+            "Structural Genomics Consortium, University of Toronto, Toronto, ON, Canada",
+            "Department of Pharmacology and Toxicology, University of Toronto, Toronto, ON, Canada"
+        ],
+        "Jark Böttcher": [
+            "Boehringer Ingelheim RCV GmbH & Co KG, Vienna, Austria"
+        ]    },
+    "topic": [   "Ligand Discovery",
+    "Protein Structures",
+    "Biophysical Assays"
+],
+    "New materials":" the article mentions the discovery of novel ligands targeting the HUWE1 WWE domain1. This was achieved through a fragment-based screen using a small molecule library, leading to the identification of new compounds that bind to the WWE domain. These discoveries are part of the study’s broader goal to develop a toolbox for the discovery and characterization of WWE domain binders.",
+    "screening algortihms":"The paper discusses several screening algorithms used for ligand discovery targeting WWE domains: Fluorescence Polarization (FP) Assay: Used to measure the binding affinity of WWE domains to PAR substrates. 15N-HSQC NMR Assay: Employed for fragment-based screening to identify and validate binders for WWE domain proteins1. 19F-NMR Competition Assay: Utilized to determine the displacement of fluorinated ATP analogs by potential ligands.",
+    "AI algorithms":"N/A",
+    "workflow":"The authors designed, cloned, expressed, and purified WWE domains from several proteins, including HUWE1, TRIP12, RNF146, DTX1, and DTX2. They used the published WWE domain structure of RNF146 as a basis for designing constructs1. For TRIP12, they initially expressed several constructs but found instability and lack of binding to PAR polymers2. They then generated constructs from TRIP12 isoform 2, which showed better stability and binding. For DTX proteins, they conducted sequence alignment and designed constructs based on conserved residues and predicted structures. They used various assays, including fluorescence polarization, NMR-based binding affinity, and competition assays, to study the molecular interactions of the WWE domains with different ligands. They also employed a fragment-based screen to identify novel ligands targeting the HUWE1 WWE domain34. The workflow included protein production, structural analysis, and ligand screening to characterize WWE domain interactions and identify potential binders.",
+    "methods description":"Crystallography: Novel crystal structures of HUWE1, TRIP12, and DTX1 WWE domains were generated in complex with PAR building blocks and their analogs1.
+Biophysical and Biochemical Assays: A toolbox including fluorescence polarization-based PAR binding and displacement assays, 15N-NMR-based binding affinity assays, and 19F-NMR-based competition assays was developed2.
+Fragment-Based Screening: A small molecule fragment library was screened to discover novel ligands targeting the HUWE1 WWE domain.
+NMR Studies: 15N-labeled proteins were used for 15N-HSQC NMR studies to determine binding affinities of various ligands.",
+    "models":"Crystallography: Novel crystal structures of HUWE1, TRIP12, and DTX1 WWE domains were generated in complex with PAR building blocks and their analogs1.
+Biophysical and Biochemical Assays: A toolbox including fluorescence polarization-based PAR binding and displacement assays, 15N-NMR-based binding affinity assays, and 19F-NMR-based competition assays was developed2.
+Fragment-Based Screening: A small molecule fragment library was screened to discover novel ligands targeting the HUWE1 WWE domain.
+NMR Studies: 15N-labeled proteins were used for 15N-HSQC NMR studies to determine binding affinities of various ligands.",
+    "year": 2024,
+    "funding": "N/A",
+    "impact factor":0,
+    "other":""
+    },
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+
