@@ -2,47 +2,47 @@
     "10.1007_s12598-020-01402-8.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " None of the sentences in the provided text explicitly state the discovery of new materials.\n\nHowever, it does mention the introduction of HPA (HPA was introduced into Sn precursor) as a strategy to prevent oxidation and improve film quality. This could be considered an innovation or improvement in material processing rather than the discovery of entirely new materials."
+            "sentence": " Recently in Advanced Science, Liang and colleagues reported the successful realization of ultra-pure red emission with Sn-based perovskites."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": ""
         },
         "experimental methodology": {
             "Yes/No": "No",
-            "sentence": " To avoid oxidation, the authors investigated the oxidation pathway of Sn-based perovskite film and determined that the formation of SnI was the crucial step. With this knowledge, preventing the formation of SnI was proposed as an effective strategy to retard the oxidation of Sn."
+            "sentence": " Therefore, the HPO (HPA) was introduced into Sn precursors as a mild reducing agent with good coordinating ability with Sn intermediates."
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " There are no sentences in the document that mention the development of any new machine learning and deep learning algorithm or AI model"
+            "sentence": " None"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " Benefitting from the strong confinement effect of the bulky organic ligands, the LEDs show emission centered at 633 nm with a FWHM of only 24 nm (Fig. 1b)."
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission, and also evaluated the color stability under changing temperatures, power and applied potential."
         },
         "funding": {
             "Yes/No": "No",
-            "sentence": " There is no mention of funding, award or financial support in the provided text snippet."
+            "sentence": ""
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": ""
+            "sentence": " Not mentioned in the document"
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": " (There is no mention of exploring drug formulations in the provided text snippet.)"
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " (There is no mention of novel drug formulations in the provided text snippet.)"
+            "sentence": " [There is no mention of novel drug formulations in the provided text. The text appears to be about light-emitting diodes (LEDs) and perovskites, with no reference to pharmaceuticals or drug formulations.]"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " None of the sentences in the provided document mention developing lead small-molecule drug candidates. The text primarily focuses on perovskite light-emitting diodes and their properties."
+            "sentence": " There is no mention of identifying new lead small-molecule drug candidates in the provided text snippet. The text appears to be discussing the development of ultra-pure red emission with Sn-based lead-free perovskites for use in light-emitting diodes (LEDs)."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " None."
+            "sentence": " \n\n(There is no mention of clinical trials in the document.)"
         }
     }
 }

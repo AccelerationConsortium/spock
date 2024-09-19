@@ -2,15 +2,15 @@
     "10.1002_adhm.201800296.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " Many novel nanoparticulate photothermal therapies have already been developed."
+            "sentence": " DSPE-PEG2000 -DBCO (1,2-distearoyl-sn-glycero-3-phosphoethanolamine-N-[dibenzocyclooctyl(polyethylene glycol)-2000] (ammonium salt)) was purchased from Avanti Polar Lipids, Inc."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": ""
         },
         "experimental methodology": {
             "Yes/No": "Yes",
-            "sentence": " A promising strategy to address the limitations of these conventional tumor-targeting approaches is through strain-promoted click reaction, MNPs"
+            "sentence": " The current study developed a novel MNPs"
         },
         "ML algorithms": {
             "Yes/No": "No",
@@ -18,31 +18,31 @@
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " Through strain-promoted click reaction,[13] MNPs"
+            "sentence": " We developed a novel magnetic nanoprobe (MNP) surface functionalized with Zn2+-dipicolylamine (ZnDPA), which could selectively target phosphatidylserine (PS) on apoptotic cells and then amplify apoptosis-targeted T2-weighted magnetic resonance (MR) imaging in vivo."
         },
         "funding": {
-            "Yes/No": "Yes",
-            "sentence": " (Nos. 21571130 and 21671135), the Ministry of Education of China, International Joint Laboratory on Resource Chemistry of Ministry of Education (IJLRC)."
+            "Yes/No": "No",
+            "sentence": " Not mentioned"
         },
         "material datasets": {
             "Yes/No": "No",
             "sentence": " None"
         },
         "drug formulations explored": {
-            "Yes/No": "Yes",
-            "sentence": " Following DOX exposure, DMEM media was removed and replaced with fresh media for further experiments.\n\nNote: The document mentions using doxorubicin (DOX) in an experiment, which suggests exploring a drug formulation."
+            "Yes/No": "No",
+            "sentence": " None"
         },
         "novel drug formulations": {
             "Yes/No": "Yes",
-            "sentence": " None of the example sentences match, but the document discusses the development of nanoparticles for cancer therapy and mentions specific formulations such as MNPs"
+            "sentence": " MNPs"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " There is no mention of identifying and developing lead small-molecule drug candidates in the provided text snippet. The text appears to be focused on nanomaterials, cancer theranostics, and MR imaging."
+            "sentence": " No sentence in the document mentions identifying to developing lead small-molecule drug candidates."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " No specific sentences mentioning clinical trials are found in the document."
+            "sentence": "None"
         }
     }
 }

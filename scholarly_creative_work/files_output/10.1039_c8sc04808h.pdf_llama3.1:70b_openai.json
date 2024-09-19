@@ -1,32 +1,32 @@
 {
     "10.1039_c8sc04808h.pdf": {
         "new materials": {
-            "Yes/No": "Yes",
-            "sentence": " We therefore synthesized the asymmetric monomer 2-bromo-3-(2-ethylhexyl)-5-iodotellurophene, (Scheme S2, ESI\u2020)."
+            "Yes/No": "No",
+            "sentence": " In contrast, XMg-Th-I has vastly slower polymerization kinetics.The DP increases linearly with monomer consumption (Fig. S6, ESI\u2020), consistent with chain-growth character."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " There is no mention of high-throughput or large-scale screening algorithm, methods, or workflow in the provided text. The text appears to be a scientific paper discussing catalyst transfer polycondensation for conjugated polymers, and it does not mention any screening algorithms or workflows."
+            "sentence": " None"
         },
         "experimental methodology": {
-            "Yes/No": "No",
-            "sentence": " Not mentioned directly, but it mentions \"in situ 31P NMR studies\" and \"DFT calculations\", which might be considered novel experimental methodology in the context of catalyst transfer polycondensation for p-conjugated polymers."
+            "Yes/No": "Yes",
+            "sentence": " KCTP involves two principal synthetic manipulations: (1) generation of the active monomer by a Grignard metathesis step;12 and (2) initiation and polymerization by application of the catalyst."
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " There are no sentences in the document that mention the development of new machine learning and deep learning algorithms or AI models"
+            "sentence": " Not available in this snippet"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " We demonstratehowthesenewinsightscanbeusedtoguidefuturemonomerdesignforobtaininghigherqualityandmoreprecisep-conjugatedpolymers."
+            "sentence": " In contrast, XMg-Th-I has vastly slower polymerization kinetics.The DP increases linearly with monomer consumption (Fig. S6, ESI\u2020), consistent with chain-growth character."
         },
         "funding": {
-            "Yes/No": "Yes",
-            "sentence": " D.S.S.isgratefulfromsupportfromtheNSERCofCanada,TheCanadianfoundationforInnovation,theOntarioresearchfund2011,133,9700\u20139703."
+            "Yes/No": "No",
+            "sentence": ""
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " There is no mention of developing new material-related datasets or databases in the provided text snippet."
+            "sentence": " None"
         },
         "drug formulations explored": {
             "Yes/No": "No",
@@ -34,15 +34,15 @@
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " There is no mention of novel drug formulations in this text. The text appears to be discussing research on catalyst transfer polycondensation for p-conjugated polymers, and does not relate to drug formulations."
+            "sentence": " Not applicable"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " No relevant sentence found in the document."
+            "sentence": " There is no mention of identifying or developing lead small-molecule drug candidates in the provided text snippet. The text appears to be discussing polymerization reactions and the synthesis of thiophene derivatives, but it does not mention anything related to drug discovery or small-molecule drug candidates."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There are no sentences mentioning clinical trials in the provided text. The text appears to be discussing chemistry and materials science, specifically the synthesis of conjugated polymers using catalyst transfer polycondensation (CTP)."
+            "sentence": " There are no sentences mentioning clinical trials."
         }
     }
 }
