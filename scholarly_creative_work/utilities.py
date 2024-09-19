@@ -1,3 +1,5 @@
+
+from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
 import faiss
@@ -216,7 +218,7 @@ class Bot_LLM:
         data = []
         if isinstance(document, str) and os.path.isfile(document):
             try:
-                pages = PyPDFLoader(paper_file).load_and_split()
+                pages = PyPDFLoader(document).load_and_split()
                 data = text_splitter.split_documents(pages)                
                 print(data)
                 #chunk_size = 500
