@@ -2,43 +2,43 @@
     "10.1002_qute.202000069.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " None of the provided sentences match the format of announcing new materials discovery and are instead focused on discussing quantum computing, machine learning algorithms, and their applications."
+            "sentence": " None"
         },
         "screening algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " In this study, we leverage the high-throughput protocol for calculating expectation values and gradients of parameterized quantum circuits using PyQuil."
+            "Yes/No": "No",
+            "sentence": " Not mentioned"
         },
         "experimental methodology": {
             "Yes/No": "No",
-            "sentence": " The current protocol for practical tasks, such as image, speech, and text generation."
+            "sentence": " We discuss the results of the simulations in detail in the next sub-section."
         },
         "ML algorithms": {
-            "Yes/No": "Yes",
-            "sentence": " The authors\u2019 results pave the way for experimental exploration of different quantum machine learning algorithms on noisy intermediate-scale quantum devices."
+            "Yes/No": "No",
+            "sentence": " None"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " In this paper, a hybrid architecture for quantum generative adversarial networks (QGANs) is presented."
+            "sentence": " We used different directivestatements (pragmas) available in the Forest platform to modify our noiseless circuit."
         },
         "funding": {
-            "Yes/No": "Yes",
-            "sentence": " FocusedAward.A.A.G.isgratefulforthefundingfromtheVannevarBush W.-K.Mok,S.Sim,L.-C.Kwek,A.Aspuru-Guzik,arXiv:2101.08448,\nFacultyFellowshipProgram,andtheCanadaResearchChairsProgram."
-        },
-        "material datasets": {
-            "Yes/No": "No",
-            "sentence": " Thedatathatsupportthefindingsofthisstudyareavailablefromthecor-"
-        },
-        "drug formulations explored": {
             "Yes/No": "No",
             "sentence": ""
         },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " (There is no mention of novel drug formulations in the provided text.)"
+            "sentence": " None"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": " The provided text does not mention identifying new lead small-molecule drug candidates. It appears to be discussing quantum computing and simulations, unrelated to drug discovery."
         },
         "clinical trials": {
             "Yes/No": "No",
