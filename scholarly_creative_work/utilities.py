@@ -212,12 +212,13 @@ class Bot_LLM:
         #from langchain_experimental.text_splitter import SemanticChunker, RecursiveCharacterTextSplitter
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=7000, chunk_overlap=250)        
+            chunk_size=2000, chunk_overlap=95)        
         data = []
         if isinstance(document, str) and os.path.isfile(document):
             try:
                 loader = PDFPlumberLoader(document)
                 data = loader.load()
+                print(data)
                 #chunk_size = 500
                 #chunk_overlap = 20
                 sliced_pages = text_splitter.split_documents(data)

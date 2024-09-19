@@ -1,16 +1,16 @@
 {
     "10.1007_s12598-020-01402-8.pdf": {
         "new materials": {
-            "Yes/No": "No",
+            "Yes/No": "Yes",
             "sentence": " Recently in Advanced Science, Liang and colleagues reported the successful realization of ultra-pure red emission with Sn-based perovskites."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": ""
+            "sentence": " N"
         },
         "experimental methodology": {
             "Yes/No": "No",
-            "sentence": " Therefore, the HPO (HPA) was introduced into Sn precursors as a mild reducing agent with good coordinating ability with Sn intermediates."
+            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission."
         },
         "ML algorithms": {
             "Yes/No": "No",
@@ -18,7 +18,7 @@
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " The authors chose the Sn-based perovskites with natural quantum well structure as active layers for light emission, and also evaluated the color stability under changing temperatures, power and applied potential."
+            "sentence": " Therefore, the HPO (HPA) was introduced into Sn precursors as a mild reducing agent with good coordinating ability with Sn intermediates."
         },
         "funding": {
             "Yes/No": "No",
@@ -26,23 +26,23 @@
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": " Not mentioned in the document"
+            "sentence": " None"
         },
         "drug formulations explored": {
             "Yes/No": "No",
-            "sentence": " (There is no mention of exploring drug formulations in the provided text snippet.)"
+            "sentence": " N"
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " [There is no mention of novel drug formulations in the provided text. The text appears to be about light-emitting diodes (LEDs) and perovskites, with no reference to pharmaceuticals or drug formulations.]"
+            "sentence": " None of the example sentences mentioned above were found in the document. The document does not mention anything about novel drug formulations, but rather discusses research on lead-free perovskite light-emitting diodes for ultra-high-definition displays."
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " There is no mention of identifying new lead small-molecule drug candidates in the provided text snippet. The text appears to be discussing the development of ultra-pure red emission with Sn-based lead-free perovskites for use in light-emitting diodes (LEDs)."
+            "sentence": " [None of the provided text mentions developing lead small-molecule drug candidates.]"
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " \n\n(There is no mention of clinical trials in the document.)"
+            "sentence": ""
         }
     }
 }

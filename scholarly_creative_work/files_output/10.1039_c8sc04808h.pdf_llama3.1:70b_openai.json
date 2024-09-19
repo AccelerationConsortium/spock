@@ -2,11 +2,11 @@
     "10.1039_c8sc04808h.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " In contrast, XMg-Th-I has vastly slower polymerization kinetics.The DP increases linearly with monomer consumption (Fig. S6, ESI\u2020), consistent with chain-growth character."
+            "sentence": " Electrophilic substitution reactions with the corresponding N-halosuccinimides were used to synthesize all dihalogenated thiophene derivatives (Scheme S1, ESI\u2020)."
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": " Not mentioned"
         },
         "experimental methodology": {
             "Yes/No": "Yes",
@@ -14,15 +14,15 @@
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " Not available in this snippet"
+            "sentence": " None"
         },
         "models": {
-            "Yes/No": "Yes",
-            "sentence": " In contrast, XMg-Th-I has vastly slower polymerization kinetics.The DP increases linearly with monomer consumption (Fig. S6, ESI\u2020), consistent with chain-growth character."
+            "Yes/No": "No",
+            "sentence": " Electrophilic substitution reactions with the corresponding N-halosuccinimides were used to synthesize all dihalogenated thiophene derivatives (Scheme S1, ESI\u2020)."
         },
         "funding": {
             "Yes/No": "No",
-            "sentence": ""
+            "sentence": " There is no mention of funding, award, or financial support in the acknowledgements."
         },
         "material datasets": {
             "Yes/No": "No",
@@ -34,15 +34,15 @@
         },
         "novel drug formulations": {
             "Yes/No": "No",
-            "sentence": " Not applicable"
+            "sentence": " None"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " There is no mention of identifying or developing lead small-molecule drug candidates in the provided text snippet. The text appears to be discussing polymerization reactions and the synthesis of thiophene derivatives, but it does not mention anything related to drug discovery or small-molecule drug candidates."
+            "sentence": " No relevant information is present in this text snippet."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " There are no sentences mentioning clinical trials."
+            "sentence": " None"
         }
     }
 }
