@@ -7,6 +7,8 @@
 ####################################################
 
 module load BalamEnv
+cd /home/m/mehrad/brikiyou/scratch/
+source to_run.sh
 cd /home/m/mehrad/brikiyou/scratch/spock_package
 source bin/activate
 cd spock/scholarly_creative_work

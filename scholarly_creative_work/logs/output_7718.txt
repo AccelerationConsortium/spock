@@ -1,0 +1,39 @@
+  File "/gpfs/fs0/scratch/m/mehrad/brikiyou/spock_package/spock/scholarly_creative_work/run.py", line 182
+    continue
+    ^^^^^^^^
+SyntaxError: 'continue' not properly in loop
+
+scontrol show job 7718
+JobId=7718 JobName=executable.sh
+   UserId=brikiyou(3138790) GroupId=mehrad(6093091) MCS_label=N/A
+   Priority=50447 Nice=12000 Account=(null) QOS=(null)
+   JobState=COMPLETED Reason=None Dependency=(null)
+   Requeue=0 Restarts=0 BatchFlag=1 Reboot=0 ExitCode=0:0
+   RunTime=00:00:04 TimeLimit=12:00:00 TimeMin=N/A
+   SubmitTime=2024-09-18T23:40:01 EligibleTime=2024-09-18T23:40:01
+   AccrueTime=2024-09-18T23:40:01
+   StartTime=2024-09-18T23:40:58 EndTime=2024-09-18T23:41:02 Deadline=N/A
+   SuspendTime=None SecsPreSuspend=0 LastSchedEval=2024-09-18T23:40:58 Scheduler=Main
+   Partition=compute AllocNode:Sid=balam-login01:2794836
+   ReqNodeList=(null) ExcNodeList=(null)
+   NodeList=balam009
+   BatchHost=balam009
+   NumNodes=1 NumCPUs=32 NumTasks=1 CPUs/Task=1 ReqB:S:C:T=0:0:*:*
+   ReqTRES=cpu=1,mem=253750M,node=1
+   AllocTRES=cpu=32,mem=253750M,node=1
+   Socks/Node=* NtasksPerN:B:S:C=0:0:*:* CoreSpec=*
+   MinCPUsNode=1 MinMemoryNode=253750M MinTmpDiskNode=0
+   Features=(null) DelayBoot=00:00:00
+   OverSubscribe=OK Contiguous=0 Licenses=(null) Network=(null)
+   Command=/gpfs/fs0/scratch/m/mehrad/brikiyou/spock_package/spock/scholarly_creative_work/executable.sh
+   WorkDir=/gpfs/fs0/scratch/m/mehrad/brikiyou/spock_package/spock/scholarly_creative_work
+   Comment=/opt/slurm/bin/sbatch --export=NONE --export=pdf_name=10.1021_acsami.0c06110.pdf --output=logs/output_%j.txt --nice=12000 executable.sh 
+   StdErr=/gpfs/fs0/scratch/m/mehrad/brikiyou/spock_package/spock/scholarly_creative_work/logs/output_7718.txt
+   StdIn=/dev/null
+   StdOut=/gpfs/fs0/scratch/m/mehrad/brikiyou/spock_package/spock/scholarly_creative_work/logs/output_7718.txt
+   Power=
+   CpusPerTres=gpu:32
+   TresPerNode=gres:gpu:1
+   
+
+sacct -j 7718

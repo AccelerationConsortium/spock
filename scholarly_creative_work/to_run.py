@@ -13,7 +13,7 @@ pdf_list = os.listdir("papers/papers")
 #response = {}
 format_instruction = "Answer  either 'Yes' or 'No' followed by a '/' then an exact sentence from the document that\
       justifies your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
-for i in range(10):
+for i in range(5):
     #name = pdf_list[i].split('.')[-1].split('/')[-1].replace("_","/")
     
     name = pdf_list[i]

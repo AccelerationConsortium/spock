@@ -6,11 +6,11 @@
         },
         "screening algorithms": {
             "Yes/No": "No",
-            "sentence": " None of the mentioned examples are present in this text."
+            "sentence": " None"
         },
         "experimental methodology": {
             "Yes/No": "Yes",
-            "sentence": " Through strain-promoted click reaction,[13] MNPs"
+            "sentence": " A promising strategy to address the limitations of these conventional tumor-targeting approaches is through strain-promoted click reaction, MNPs"
         },
         "ML algorithms": {
             "Yes/No": "No",
@@ -22,7 +22,7 @@
         },
         "funding": {
             "Yes/No": "Yes",
-            "sentence": " Nos. 21571130 and 21671135), the Ministry of Education of China (IRT_16R49), and International Joint Laboratory on Resource Chemistry of Ministry of Education (IJLRC)."
+            "sentence": " (Nos. 21571130 and 21671135), the Ministry of Education of China, International Joint Laboratory on Resource Chemistry of Ministry of Education (IJLRC)."
         },
         "material datasets": {
             "Yes/No": "No",
@@ -30,19 +30,19 @@
         },
         "drug formulations explored": {
             "Yes/No": "Yes",
-            "sentence": " Saline (a) or 10 mg kg\u22121 DOX was initiated through tail vein administration, once 2 d (b) or every 3 d for a total of two (c) times."
+            "sentence": " Following DOX exposure, DMEM media was removed and replaced with fresh media for further experiments.\n\nNote: The document mentions using doxorubicin (DOX) in an experiment, which suggests exploring a drug formulation."
         },
         "novel drug formulations": {
-            "Yes/No": "No",
-            "sentence": " None"
+            "Yes/No": "Yes",
+            "sentence": " None of the example sentences match, but the document discusses the development of nanoparticles for cancer therapy and mentions specific formulations such as MNPs"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " None of the provided text mentions identifying or developing lead small-molecule drug candidates."
+            "sentence": " There is no mention of identifying and developing lead small-molecule drug candidates in the provided text snippet. The text appears to be focused on nanomaterials, cancer theranostics, and MR imaging."
         },
         "clinical trials": {
             "Yes/No": "No",
-            "sentence": " Our work provided a revolutionary approach to be an effective theranostic agent for the clinical transformation of Fe@Fe O nanoparticles in the future."
+            "sentence": " No specific sentences mentioning clinical trials are found in the document."
         }
     }
 }

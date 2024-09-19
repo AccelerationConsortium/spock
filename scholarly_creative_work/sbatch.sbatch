@@ -30,6 +30,6 @@ do
     done
 
     # Submit the job, exporting the PDF name
-    sbatch --export=pdf_name="$pdf_name" --output=logs/output_%j.txt --nice=12000 run.sh
+    sbatch --export=pdf_name="$pdf_name" --output=logs/output_%j.txt --nice=12000 executable.sh
 done
 
