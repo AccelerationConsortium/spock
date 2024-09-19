@@ -216,8 +216,8 @@ class Bot_LLM:
         data = []
         if isinstance(document, str) and os.path.isfile(document):
             try:
-                loader = PDFPlumberLoader(document)
-                data = loader.load()
+                pages = PyPDFLoader(paper_file).load_and_split()
+                data = text_splitter.split_documents(pages)                
                 print(data)
                 #chunk_size = 500
                 #chunk_overlap = 20
