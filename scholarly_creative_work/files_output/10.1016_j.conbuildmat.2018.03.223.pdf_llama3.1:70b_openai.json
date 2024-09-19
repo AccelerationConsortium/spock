@@ -1,0 +1,48 @@
+{
+    "10.1016_j.conbuildmat.2018.03.223.pdf": {
+        "new materials": {
+            "Yes/No": "No",
+            "sentence": " None of the provided context mentions discovering new materials, it rather discusses experimental studies on existing materials such as concrete and their properties under various conditions."
+        },
+        "screening algorithms": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "experimental methodology": {
+            "Yes/No": "The document does not mention any new or novel experimental methodology used for screening algorithms. However, it describes an existing method based on the precipitation of white silver chloride and brownish silver oxide to visualize the carbonation front and Cl- migration in concrete samples.\n\nNo",
+            "sentence": " None"
+        },
+        "ML algorithms": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "models": {
+            "Yes/No": "Yes",
+            "sentence": " 3.2.Chemicalcomposition (XRD)analysis.XRDanalysiswithCuKa radiation(k=1.5418\u00c5),2hrangingfrom5(cid:3)to65(cid:3),andastepsizeof0.02(cid:3)wasusedtoiden-tifythecrystallinephasesinthecarbonatedsamples."
+        },
+        "funding": {
+            "Yes/No": "Yes",
+            "sentence": " This research was supported by the Early Researcher Award from the Ministry of Economic Development and Innovation of Ontario and the China Scholarship Council."
+        },
+        "material datasets": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "drug formulations explored": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "novel drug formulations": {
+            "Yes/No": "No",
+            "sentence": " None"
+        },
+        "lead small-molecule drug candidates": {
+            "Yes/No": "No",
+            "sentence": " No relevant text found in the provided context."
+        },
+        "clinical trials": {
+            "Yes/No": "No",
+            "sentence": " There are no clinical trials mentioned in this document."
+        }
+    }
+}
