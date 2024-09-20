@@ -161,6 +161,7 @@ from langchain_community.document_loaders.pdf import PDFPlumberLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
 from langchain_community.vectorstores import Chroma
+from langchain.chains.combine_documents import create_stuff_documents_chain
 
 
 class Bot_LLM:
@@ -256,7 +257,7 @@ class Bot_LLM:
                 )
 
             from langchain.chains import RetrievalQA
-            qachain=RetrievalQA.from_chain_type(self.llm, retriever=self.retriever, verbose=False)
+            qachain=RetrievalQA.from_chain_type(self.llm,chain_type="stuff", retriever=self.retriever, verbose=False)
             res = qachain.invoke({"query": question})
             print(res['result'])
             return res['result']

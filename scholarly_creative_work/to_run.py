@@ -54,7 +54,7 @@ for i in range(1):
                     found to have exceptional low-temperature performance at substantially lower weight loadings of Ru.
                 4. We applied a workflow of combined in silico methods (virtual drug screening, molecular docking and supervised machine learning algorithms)\
                                         to identify novel drug candidates against COVID-19.\
-                Answer either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer.""")
+                Answer either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'""")
             response[name]['new materials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -72,7 +72,7 @@ for i in range(1):
                                         to construct a large-scale database of MOF quantum mechanical properties.\
                                         If there are any, what are the screening algorithms used in the document? Answer either\
                                         'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                        from the document that supports your answer.")
+                                        from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['screening algorithms'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -88,7 +88,7 @@ for i in range(1):
                                        3. This study revealed the therapeutic potency of a novel hybrid peptide, \
                                        and supports the use of rational design in development of new antibacterial agents\
                                        'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                        from the document that supports your answer.")
+                                        from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['experimental methodology'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -101,7 +101,7 @@ for i in range(1):
                                        2. We here therefore introduce ionbot, a novel open modification search engine that is the first\
                                         to fully merge machine learning with peptide identification.\
                                      Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from\
-                                        the document that supports your answer.""")
+                                        the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'""")
             response[name]['ML algorithms'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -111,7 +111,7 @@ for i in range(1):
                                        1. We developed a novel synthesis method for hydrothermal reactions under a phosphoric acid medium\
                                         and obtained a series of metal polyiodates with strong SHG effects.\
                                        Answer either 'Yes' or 'No' followed by a '/' then\
-                                        the exact sentence without any changes from the document that supports your answer.")
+                                        the exact sentence without any changes from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['models'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -121,7 +121,7 @@ for i in range(1):
                                        Examples sentences for funding or financial support:\
                                        1. This work is supported in part by the National Science Foundation under Award No. OIA-1946391.\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence\
-                                        without any changes from the document that supports your answer.")
+                                        without any changes from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['funding'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -136,7 +136,7 @@ for i in range(1):
                                        3. In this work, to build the predictive tool, a dataset was constructed\
                                         and models were trained and tested at a ratio of 75:25.\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from the document\
-                                        that supports your answer.")
+                                        that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['material datasets'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -149,7 +149,7 @@ for i in range(1):
                                        2. Notably, they can be incorporated in pharmaceutical formulations to enhance drug solubility,\
                                         absorption, and bioavailability due to the formulation itself and the P-gp inhibitory effects of the excipients.\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from the document\
-                                        that supports your answer.")
+                                        that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['drug formulations explored'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -162,7 +162,7 @@ for i in range(1):
                                        2. Therefore, we designed a novel formulation KK-46 based on peptide dendrimers (PD) to achieve safe\
                                         and efficient siRNA delivery into the lung \
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                        from the document that supports your answer.")
+                                        from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['novel drug formulations'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -173,7 +173,7 @@ for i in range(1):
                                        2. We have setup a drug discovery program of small-molecule compounds that act as chaperones enhancing\
                                         TTR/Amyloid-beta peptide (Aβ) interactions.\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from\
-                                        the document that supports your answer.")
+                                        the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['lead small-molecule drug candidates'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
 
@@ -186,7 +186,7 @@ for i in range(1):
                                         online banner advertisements from March through August 2015.\
                                        3. Efficacy of hydroxychloroquine in patients with COVID-19: results of a randomized clinical trial\
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                        from the document that supports your answer.")
+                                        from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'")
             response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
             print("-----")
              
