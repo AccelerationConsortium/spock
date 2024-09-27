@@ -243,7 +243,7 @@ class Bot_LLM:
                 raise RuntimeError(f"Error processing text: {e}")
 
             
-        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed)
+        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed, )
 
         #all_splits = text_splitter.split_documents(data)
         #self.vectorstore = Chroma.from_documents(documents=all_splits, embedding=self.oembed, persist_directory=self.folder_path)
