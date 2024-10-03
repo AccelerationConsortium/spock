@@ -20,7 +20,7 @@ import requests
 from scholarly import scholarly
 
 class Publication:
-    def __init__(self,publication_filled, llm_use:bool=True, is_from_scholarly:bool=True, **kwargs) -> None: # Turn this to kzqrgs qnd ,qke it ,ore usqble 
+    def __init__(self,publication_filled, llm_use:bool=True, is_from_scholarly:bool=True, **kwargs) -> None:
         """
         
 
