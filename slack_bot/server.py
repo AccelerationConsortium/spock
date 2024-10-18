@@ -1,108 +1,143 @@
 import os
-from slack_sdk import WebClient
-from slack_sdk.errors import SlackApiError
-from bot import Bot
-import concurrent.futures
-from slack_sdk import WebClient
-from slack_sdk.socket_mode import SocketModeClient
-from slack_sdk.socket_mode.request import SocketModeRequest
-from slack_sdk.socket_mode.response import SocketModeResponse
-from slack_bolt.adapter.socket_mode import SocketModeHandler
-
+import requests
 from slack_bolt import App
-
-# Your Slack bot token
-slack_token = 'xoxb-1089129130001-7130503874147-1eJXyg9HdahYaxOHANd8iyc0'
-
-# Initialize a Web API client
-client = WebClient(token=slack_token)
-
-# The channel ID of the private channel you want to send the message to
-# The message you want to send
-message = 'File was changed'
-
-bot = Bot('test.txt')
-socket_mode_client = SocketModeClient(app_token="xapp-1-A074H63F6EL-7837148342518-b5be6962fadd66118e88e8aa2c1cdca5f393404870ef5d49ee25d944fc6fc02b", web_client=client)
-app = App(token=slack_token)
+from slack_bolt.adapter.socket_mode import SocketModeHandler
+#from  ../spock_
+from langchain_community.llms import Ollama
 
 
-@app.event("file_shared")
-def file_func(payload, client, ack):
-    print("okay")
+
+BOT_TOKEN = "xoxb-1089129130001-7130503874147-1eJXyg9HdahYaxOHANd8iyc0"
+APP_TOKEN = "xapp-1-A074H63F6EL-7837148342518-b5be6962fadd66118e88e8aa2c1cdca5f393404870ef5d49ee25d944fc6fc02b"
+
+app = App(token=BOT_TOKEN)
+waiting_for_file = {}
+
+
+@app.command("/help")
+def help(ack, body, client):
     ack()
-
-    #get the file id every time someone uploads a pdf
-    my_file = payload.get('file').get('id')
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    client.chat_postMessage(
+        channel=channel_id,
+        text="I am a bot that can process PDF files. To get started, type `/processpdf`."
+    )
     
-    #get the json using files_info
-    url = client.files_info(file = my_file).get('file').get('url_private')
-    file_name = client.files_info(file = my_file).get('file').get('title')
+    
 
-    # save file
-    resp = requests.get(url, headers={'Authorization': 'Bearer %s' % token})
-    save_file = Path(file_name)
-    save_file.write_bytes(resp.content)
+    
+@app.command("/get_authors_list")
+def get_authors_list(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    
+    with open("authors.txt", "r") as f: # To add file
+        authors = f.read()
+    
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"Here's the authos list: {authors}"
+    )
+    
+
+@app.command("/processpdf")
+def handle_processpdf(ack, body, client):
+
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+
+    waiting_for_file[user_id] = channel_id
+    client.chat_postMessage(
+        channel=channel_id,
+        text="Please upload the PDF file you'd like to process."
+    )
+    
 @app.command("/hello")
 def hello_command(ack, body):
     print("hello")
     user_id = body["user_id"]
     ack(f"Hi, <@{user_id}>!")
 
+@app.event("app_mention")
+def handle_app_mention(event, say):
+    user = event["user"]
+    user_text = event["text"]
+    
+    llm = Ollama(model="llama3.1")
 
-def process_slash_command(payload):
-    global bot
-    command = payload['command']
-    user_id = payload['user_id']
-    text = payload['text']
-    channel_id = payload['channel_id']
+    prompt = PromptTemplate(
+        template="You are a text assistant, and here is someone asking you a question. Please provide a response. {question}",
+        input_variables=["format_instructions"]
+    )
 
-    if command == '/lastmodified':
-        response_message = f"Hello <@{user_id}>! You invoked the command with text: {text} and the latest modified time is {bot.last_modified()}"
+    chain = prompt | llm
+    response = chain.invoke({"format_instructions": user_text})
+    say(f"Hi there, <@{user}>! {response}")
 
+    # Add LLM
+    
+
+
+@app.event("file_shared")
+def handle_file_shared(event, client, logger):
+    user_id = event.get("user_id")
+    file_id = event.get("file_id")
+
+    # Check if the user is in the waiting list
+    if user_id in waiting_for_file:
+        channel_id = waiting_for_file[user_id]
+
+        # Remove the user from the waiting list
+        del waiting_for_file[user_id]
+
+        # Get file info
         try:
-            # Post the message
+            file_info_response = client.files_info(file=file_id)
+            file_info = file_info_response["file"]
+            if file_info["filetype"] == "pdf":
+                url_private = file_info["url_private_download"]
+                file_name = file_info["name"]
+
+                # Download the file using the bot token for authentication
+                response = requests.get(url_private, headers={'Authorization': f'Bearer {BOT_TOKEN}'})
+                with open(file_name, "wb") as f:
+                    f.write(response.content)
+
+                # Process the PDF file as needed
+                # For example, extract text, analyze content, etc.
+                # ...
+                
+                
+
+                # Notify the user
+                
+                
+                
+                
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text=f"Your file `{file_name}` has been processed."
+                )
+            else:
+                # Not a PDF file
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text="The uploaded file is not a PDF. Please try again."
+                )
+        except Exception as e:
+            logger.error(f"Error processing file: {e}")
             client.chat_postMessage(
                 channel=channel_id,
-                text=response_message
+                text=f"An error occurred while processing your file. Please try again. {e}"
             )
-            print("/lastdate was successfully posted")
-        except SlackApiError as e:
-            print(f"Error posting message: {e.response['error']}")
-            
-    elif command == '/stop':
-        response_message = f"Hello <@{user_id}>! You invoked the command with text: {text} and it's stopping the bot"
-        bot.stop()
-        try:
-            # Post the message
-            client.chat_postMessage(
-                channel=channel_id,
-                text=response_message
-            )
-            print("/stop was successfully posted")
-        except SlackApiError as e:
-            print(f"Error posting message: {e.response['error']}")
-    elif command == '/start':
-        bot.running = True
-        response_message = f"Hello <@{user_id}>! You invoked the command with text: {text} and it's starting the bot"
-        try:
-            # Post the message
-            client.chat_postMessage(
-                channel=channel_id,
-                text=response_message
-            )
-            print("/start was successfully posted")
-        except SlackApiError as e:
-            print(f"Error posting message: {e.response['error']}")
-
-
-# Function to handle incoming Socket Mode requests
-def handle_socket_mode_request(client: SocketModeClient, req: SocketModeRequest):
-    if req.type == "slash_commands":
-        process_slash_command(req.payload)
-        client.send_socket_mode_response(SocketModeResponse(envelope_id=req.envelope_id))
-
-# Register the handler to the client
-#socket_mode_client.socket_mode_request_listeners.append(handle_socket_mode_request)
+    else:
+        # User is not expecting to upload a file
+        pass  # Optionally handle unexpected file uploads
 
 if __name__ == "__main__":
-    SocketModeHandler(app, "xapp-1-A074H63F6EL-7133121371428-665e0a091a6bbdab0068fdfa9a939f66e538a35faa9cbd6db6667cf6d21c6d52" ).start()
+    # Initialize Socket Mode handler
+    handler = SocketModeHandler(app, APP_TOKEN)
+    handler.start()

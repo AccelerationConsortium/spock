@@ -34,7 +34,7 @@ class Author:
         first_publication_filled = scholarly.fill(first_publication)
         return first_publication_filled
 
-    def setup_author(self, output_file,publication:Publication=None):
+    def __call__(self, output_file,publication:Publication=None):
         """
         Setup the author by adding their last publication to a JSON file.
 
