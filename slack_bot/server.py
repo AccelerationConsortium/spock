@@ -4,7 +4,7 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 #from  ../spock_
 from langchain_community.llms import Ollama
-
+from langchain_core.prompts import PromptTemplate
 
 
 BOT_TOKEN = "xoxb-1089129130001-7130503874147-1eJXyg9HdahYaxOHANd8iyc0"
@@ -70,11 +70,11 @@ def handle_app_mention(event, say):
 
     prompt = PromptTemplate(
         template="You are a text assistant, and here is someone asking you a question. Please provide a response. {question}",
-        input_variables=["format_instructions"]
+        input_variables=["question"]
     )
 
     chain = prompt | llm
-    response = chain.invoke({"format_instructions": user_text})
+    response = chain.invoke({"question": user_text})
     say(f"Hi there, <@{user}>! {response}")
 
     # Add LLM
