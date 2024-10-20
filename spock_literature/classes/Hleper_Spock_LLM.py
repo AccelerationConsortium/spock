@@ -1,20 +1,15 @@
-"""The common module contains common functions and classes used by the other modules.
-"""
-                    
-            
-        
-
 from operator import itemgetter
 import os
 from langchain_community.document_loaders.pdf import PDFPlumberLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
-from langchain_community.vectorstores import Chroma
 from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.vectorstores import FAISS
+import faiss
 
 
-class Bot_LLM:
-    def __init__(self,model='llama3',embed_model='mxbai-embed-large'):
+class Helper_LLM:
+    def __init__(self,model='llama3',embed_model='mxbai-embed-large', folder_path='db2'):
         import getpass
         import os
         from dotenv import load_dotenv
@@ -28,32 +23,6 @@ class Bot_LLM:
         self.oembed = OpenAIEmbeddings(model="text-embedding-3-large")
         self.folder_path = folder_path
         self.vectorstore = None
-
-    
-            
-        
-        
-
-    def get_topic_publication(self, text): # Add the abstarct (overwite it maybe)
-        parser = JsonOutputParser()
-        
-        new_text = """
-        {
-            "topic": {
-                "Machine Learning": ["Keyword1", "Keyword2", "Keyword3"],
-                "Batteries": ["Keyword1", "Keyword2", "Keyword3"]
-            }
-        }
-        """
-
-        prompt = PromptTemplate(
-            template="Please identify the topics from the following list the text given to you. Note: A single text can belong to multiple topics, so please list all relevant topics. {format_instructions}",
-            input_variables=["format_instructions"]
-        )
-
-        chain = prompt | self.llm | parser
-        topics = chain.invoke({"format_instructions": new_text})
-        return topics['topic']
 
     
     def chunk_indexing(self, document:str):
@@ -111,5 +80,6 @@ class Bot_LLM:
 
         else:
             raise Exception("No documents loaded")
+
 
 
