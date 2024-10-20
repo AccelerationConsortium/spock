@@ -1,3 +1,7 @@
+from langchain_community.vectorstores import FAISS
+import faiss
+
+
 import os
 import requests
 from slack_bolt import App
@@ -6,13 +10,13 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 from langchain_community.llms import Ollama
 from langchain_core.prompts import PromptTemplate
 def to_run():
-    from LLM import LLM
+    #from LLM import LLM
     import os
     import json
     from utilities import Bot_LLM
-
-    with open("llm_ouput.json", "r") as f:
-        response = json.load(f)
+    response = {}
+    #with open("llm_ouput.json", "r") as f:
+        #response = json.load(f)
         
         
         
@@ -198,8 +202,8 @@ def to_run():
                 response[name]['clinical trials'] = {'Yes/No': output_llm.split('/')[0].strip(), 'sentence': output_llm.split('/')[1]}
                 print("-----")
                 
-                with open(f"files_output/{name}_llama3.1:70b_openai.json", "w") as f:
-                    json.dump(response, f, indent=4)
+                #with open(f"files_output/{name}_llama3.1:70b_openai.json", "w") as f:
+                    #json.dump(response, f, indent=4)
             except Exception as e:
                 print(e)
                 continue
