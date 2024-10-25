@@ -1,7 +1,7 @@
 include LICENSE
 include README.md
 include requirements.txt
-include spock_literature/*.py
+include spock_literature/*
 include *.py
 
 recursive-exclude * __pycache__

@@ -1,3 +1,6 @@
+from scholarly import scholarly
+from spock_literature.classes.Publication_scholarly import Publication_scholarly as Publication
+import json
 class Author:
     def __init__(self, author):
         """
@@ -17,24 +20,30 @@ class Author:
         """
         return self.author_name
 
-    def get_last_publication(self):
+    def get_last_publication(self, count) -> dict:
         """
         Get the last publication of the author.
 
         Returns:
             dict: A dict containing information about the last publication.
         """
-        search_query = scholarly.search_author(self.author_name)
-        first_author_result = next(search_query)
-        author = scholarly.fill(first_author_result)
-        first_publication = sorted(author['publications'], 
-                                   key=lambda x: int(x['bib']['pub_year'])
-                                   if 'pub_year' in x['bib'] else 0, 
-                                   reverse=True)[0]
-        first_publication_filled = scholarly.fill(first_publication)
-        return first_publication_filled
+        try:
+            publications_filled = []
+            search_query = scholarly.search_author(self.author_name)
+            first_author_result = next(search_query)
+            author = scholarly.fill(first_author_result)
+            publications = sorted(author['publications'], 
+                                    key=lambda x: int(x['bib']['pub_year'])
+                                    if 'pub_year' in x['bib'] else 0, 
+                                    reverse=True)[0:count]
+            for publication in publications:
+                publications_filled.append(scholarly.fill(publication))
+            #print(publications_filled)
+            return publications_filled
+        except Exception as e:
+            print(f"An error occurred, couldnt get the latest publications: {e}")
 
-    def __call__(self, output_file,publication:Publication=None):
+    def __call__(self,count:int=1):
         """
         Setup the author by adding their last publication to a JSON file.
 
@@ -42,23 +51,28 @@ class Author:
             output_file (str): The path to the JSON file.
 
         Returns:
-            None
+            data (dict): A dict containing the author's last publication.
         """
-        with open(output_file, 'r') as file:
-            data = json.load(file)
-        author_last_publication = Publication(self.get_last_publication()) if publication != None else publication
         
-
-        
-        data[self.author_name] = {
-            "title": author_last_publication.title,
-            "abstract": author_last_publication.abstract,
-            "author": author_last_publication.author, 
-            "year": author_last_publication.year,
-            "url": author_last_publication.url,
-            "pdf": author_last_publication.pdf,
-        }
-        
-        
-        with open(output_file, 'w') as file:
-            json.dump(data, file)
+        data = {}
+        author_publications = self.get_last_publication(count)
+        for publication in author_publications:
+            publication = Publication(publication)
+            #print(publication.title)
+            publication_data = {
+                "title": publication.title,
+                "abstract": publication.abstract,
+                "author": publication.author, 
+                "year": publication.year,
+                "url": publication.url,
+            }
+            if self.author_name in data:
+                data[self.author_name].append(publication_data)
+            else:
+                data[self.author_name] = [publication_data]
+        return data
+    
+    
+if __name__ == "__main__":
+    author = Author("Mehrad Ansari")
+    print(author(2))
