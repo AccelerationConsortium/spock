@@ -1,4 +1,3 @@
-from Publication import Publication
 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_openai import OpenAIEmbeddings
@@ -19,7 +18,7 @@ from scholarly import scholarly
 
 
 
-class Publication:
+class Publication_scholarly(): # Give it Publication as inheritance
     def __init__(self,publication_filled, llm_use:bool=True, is_from_scholarly:bool=True, **kwargs) -> None:
         """
         Args:
@@ -34,21 +33,9 @@ class Publication:
         self.year = self.get_year()
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
-        self.pdf = self.get_pdf()
-        self.topic = None
+        self.topic = self.get_topic()
     
       
-      
-    '''  
-    def get_topic(self,output_file="json/ouput.json", # à voir cette histoire avec get_topic et __get_topic
-                  input_file="json/response.json") -> list[str]:
-        try:
-            with open(output_file,'r') as file:
-                data = json.load(file)
-            return data[self.author]['topic']
-        except Exception as e:
-            return self.__get_topic(input_file)
-     '''   
     def get_publication_url(self) -> str:
         return self.publication_filled['pub_url']
     
@@ -67,34 +54,15 @@ class Publication:
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
     
-    def get_topic(self,llm):
-        self.topic: dict = llm.get_topic_publication()
-        return self.topic
+    def get_topic(self) -> str:
+        prompt = PromptTemplate(
+            template="You are an AI assistant, and here is a document. get the topic of the document. Here it is: \n {document}",
+            input_variables=["document"]
+        )
+        temp_llm = Ollama(model="llama3.1", temperature=0.05)
+        chain = prompt | temp_llm
+        return chain.invoke({"document": self.abstract})
     
-    def get_pdf(self):
-        query = self.title.lower().replace(" ", "+")
-        url = f"https://scholar.google.com/scholar?q={query}"
-        response = requests.get(url)
-        if response.status_code == 200:
-            html_content = response.text
-            try:
-                return self.__parse_google_scholar(html_content)
-            except Exception as e:
-                print(f"An error occurred while fetching the PDF link: {e}")
-        else:
-            print(f"Failed to fetch the page. Status code: {response.status_code}")
-            return None
-
-    def __repr__(self) -> str:
-        self.available_attributes = {'title': self.title if self.title is not None else 'N/A',
-                                     'abstract' : self.abstract if self.abstract is not None else 'N/A',
-                                        'author': self.author if self.author is not None else 'N/A',
-                                        'year': self.year if self.year is not None else 'N/A',
-                                        'url': self.url if self.url is not None else 'N/A',
-                                        'citation': self.citation if self.citation is not None else 'N/A',
-                                        'pdf': self.pdf if self.pdf is not None else 'N/A',
-                                        'topic': self.topic if self.topic is not None else 'N/A'}
-        return str(self.available_attributes)
 
 
         
@@ -146,5 +114,3 @@ class Publication:
                 except:
                     print("Couldn't download the PDF")
            
-
-        

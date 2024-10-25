@@ -2,7 +2,31 @@
 import json
 import time
 import concurrent.futures
-from classes.Helper_LLM import Helper_LLM
+from spock_literature.classes.Helper_LLM import Helper_LLM
+from operator import itemgetter
+import os
+from langchain_community.document_loaders.pdf import PDFPlumberLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain_community.vectorstores import FAISS
+import faiss
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
+import faiss
+import os
+from bs4 import BeautifulSoup
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
+from langchain.embeddings import OllamaEmbeddings
+from langchain_community.vectorstores import Chroma
+from langchain_community.llms import Ollama
+import json
+from langchain_core.output_parsers import JsonOutputParser
+from langchain_core.prompts import PromptTemplate
+import requests
+from scholarly import scholarly
 
 
 class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
@@ -10,6 +34,8 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     def __init__(self, paper, custom_questions:list=[]):
         """Initialize Spock."""
         super().__init__()
+        self.paper =  paper # To edit later
+        self.paper_summary = ""
         self.custom_questions = custom_questions
         self.questions = {
             "new materials":{"question":""""Does the document mention any new or novel materials discovered?\
@@ -135,8 +161,13 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     
     def scan_pdf(self):
         """Scan the PDF of a publication."""
+        
+        self.chunk_indexing(self.paper)
         for question in self.questions:
-            temp_response = self.query_rag(self.questions[question]['question']).split("/")
+            try:
+                temp_response = self.query_rag(self.questions[question]['question']).split("/")
+            except:
+                temp_response = ["NA","None"]
             self.questions[question]['output']['response'] = temp_response[0]
             self.questions[question]['output']['sentence'] = temp_response[1]
         
@@ -144,17 +175,57 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         
         
         
-          
+    def summarize(self):
+        """Return the summary of the publication."""
+        temp_llm = Ollama(model="llama3.1", temperature=0.05)
+        prompt = PromptTemplate(
+            template="You are an AI assistant that is going to help me summarize documents. Here is one page of the document, can you summarize the page please. Output only the summary {document}",
+            input_variables=["document"]
+        )
+        # Summarizing each page then merging everything
+        pages = PyPDFLoader(self.paper).load()
+        print(len(pages))
+        summaries = ""
+        for i,page in enumerate(pages):
+            chain = prompt | temp_llm
+            summaries += f"Summary of page {i+1} {chain.invoke({'document': page})}"
+            
+        prompt = PromptTemplate(
+            template="You are an AI assistant that is going to help me summarize documents. Since the document is really long, we summerized each and every page, and your task is to merge all of these summaries to give me a new global summary. Here are summaries {document} \n \n Output only the summary.", # Maybe allow user to choose the length of the summary
+            input_variables=["document"]
+        )
+        chain = prompt | temp_llm
+        self.paper_summary = chain.invoke({"document": summaries})
+
+            
+    def get_topics(self):
+        if self.paper_summary == "":
+            self.summarize()
+        prompt = PromptTemplate(
+            template="You are an AI assistant, and here is a document. get the topic of the document. Here is it's summary: \n {summary} \n Get the scientific topics that are related to the abstarct above. Ouput only the keywords separated by a '/'. Example: Machine Learning/New Materials", # Work on the prompt/output of LLM
+            input_variables=["summary"]
+        )
+        chain = prompt | self.llm
+        
+        #TODO: Continue from here/Add topics
+        return chain.invoke({"summary": self.paper_summary})
+        
+        
+        
     
     def __call__(self):
         """Run Spock."""
         self.download_pdf()
-        self.add_custom_questions()
+        print("Downloaded the PDF")
+        #self.add_custom_questions()
         self.scan_pdf()
-        
+        print("Scanned the PDF")
+        self.summarize()
+        print("Summarized the PDF")
+        topics = self.get_topics()
+        print("Got the topics")
         # Format the output text
-        
-        output_text = ""
+        output_text = f"Here is a summary of the publication: \n {self.paper_summary}\n  ---- \nHere are the topics of the publication: {topics}\n ---"
         for question in self.questions:
             output_text += f"Question: {question}\n"
             output_text += f"Answer: {self.questions[question]['output']['response']}\n"
@@ -164,7 +235,7 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         return output_text
         
         
-            
+    
     def add_custom_questions(self):
         """Add custom questions to the questions dictionary."""
         
@@ -217,7 +288,8 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
             
             
             
-if __name__ == "__main__":
-    spock = Spock(paper="test")
-    #spock()
-    
+
+
+if __name__ == "__main__": # That would be the script to submit for the job
+    import sys
+    #spock = Spock(paper=sys.argv[1], custom_questions=sys.argv[2:]) # Update - to see layer how to fix it 

@@ -2,47 +2,47 @@
     "10.1002_adhm.201800296.pdf": {
         "new materials": {
             "Yes/No": "No",
-            "sentence": " Hydrodynamic diameter was carried out on a Malvern Zetasizer Nano ZS model ZEN3600."
+            "sentence": "None"
         },
         "screening algorithms": {
-            "Yes/No": "No",
-            "sentence": " None"
+            "Yes/No": "Yes",
+            "sentence": " Upregulating the number of existing targets or producing the expression of novel targets is a promising strategy to address the limitations of these conventional tumor-targeting approaches."
         },
         "experimental methodology": {
-            "Yes/No": "No",
-            "sentence": " In addition to providing insights into the molecular mechanisms underlying the therapeutic effects of the hybrid peptide, this study revealed the therapeutic potency of a novel hybrid peptide, and supports the use of rational design in development of new antibacterial agents."
+            "Yes/No": "Yes",
+            "sentence": " The therapeutic potency of MNPs"
         },
         "ML algorithms": {
             "Yes/No": "No",
-            "sentence": " No sentence supporting this claim as it is not mentioned in the text snippet."
+            "sentence": "None"
         },
         "models": {
             "Yes/No": "Yes",
-            "sentence": " This nanoplatform provides a promising strategy to improve the targeting efficiency of nanoparticles and the enhancement of tumor-targeting theranostics."
+            "sentence": " We developed a novel synthesis method for hydrothermal reactions under a phosphoric acid medium and obtained a series of metal polyiodates with strong SHG effects."
         },
         "funding": {
             "Yes/No": "No",
-            "sentence": " The authors declare no conflict of interest."
+            "sentence": "NA"
         },
         "material datasets": {
             "Yes/No": "No",
-            "sentence": ""
+            "sentence": "None"
         },
         "drug formulations explored": {
-            "Yes/No": "No",
-            "sentence": " Bioconjugate Chem. 2006, 17, 865; c) G. A. van Tilborg, W. J. Mulder, N. Deckers, G. Storm, C. P. Reutelingsperger, G. J. Strijkers, K. Nicolay, Bioconjugate Chem. 2006, 17, 741;"
+            "Yes/No": "Yes",
+            "sentence": " DSPE-PEG 2000 (8 mg) and DSPE-PEG 2000-DBCO (2 mg) were added to a glass vial, and then sonicated to dissolve in chloroform (2 mL)."
         },
         "novel drug formulations": {
-            "Yes/No": "Yes",
-            "sentence": " MNPs"
+            "Yes/No": "NA",
+            "sentence": "None"
         },
         "lead small-molecule drug candidates": {
             "Yes/No": "No",
-            "sentence": " None"
+            "sentence": "None"
         },
         "clinical trials": {
-            "Yes/No": "No",
-            "sentence": ""
+            "Yes/No": "No specific clinical trials are mentioned in this document. However, there are references to various research studies and experiments conducted on mice models.\n\nHere's an example of a sentence that supports my answer:\n\n\"Apoptotic Tumor Model: Specific pathogen-free \u22484 weeks old BALB",
+            "sentence": "c mice were purchased from Shanghai SLAC Laboratory Animal Co., Ltd.\"\n\nThis sentence describes an animal model used in the study, but it does not mention any clinical trials."
         }
     }
 }
