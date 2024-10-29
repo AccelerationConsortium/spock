@@ -1,6 +1,5 @@
 from scholarly import scholarly
 from spock_literature.classes.Publication_scholarly import Publication_scholarly as Publication
-import json
 class Author:
     def __init__(self, author):
         """
@@ -38,7 +37,6 @@ class Author:
                                     reverse=True)[0:count]
             for publication in publications:
                 publications_filled.append(scholarly.fill(publication))
-            #print(publications_filled)
             return publications_filled
         except Exception as e:
             print(f"An error occurred, couldnt get the latest publications: {e}")
@@ -58,7 +56,6 @@ class Author:
         author_publications = self.get_last_publication(count)
         for publication in author_publications:
             publication = Publication(publication)
-            #print(publication.title)
             publication_data = {
                 "title": publication.title,
                 "abstract": publication.abstract,
