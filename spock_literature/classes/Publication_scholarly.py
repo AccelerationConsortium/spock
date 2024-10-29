@@ -1,13 +1,9 @@
 
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
-import faiss
 import os
 from bs4 import BeautifulSoup
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
-from langchain.embeddings import OllamaEmbeddings
+from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 import json
@@ -62,55 +58,4 @@ class Publication_scholarly(): # Give it Publication as inheritance
         temp_llm = Ollama(model="llama3.1", temperature=0.05)
         chain = prompt | temp_llm
         return chain.invoke({"document": self.abstract})
-    
-
-
         
-    def __parse_google_scholar(self,html_content):
-
-        soup = BeautifulSoup(html_content, 'html.parser')
-
-        a_tags = soup.find_all('a')
-        if __name__ == "__main__": print(a_tags)
-        try:
-            pdf_link = [a['href'] for a in a_tags if 'href' in a.attrs and '.pdf' in a['href']][0]
-            print(f"PDF link found: {pdf_link}")
-            self.download_pdf(link=pdf_link)
-            return pdf_link
-        except Exception as e:
-            print(f"An error occurred while parsing the PDF link: {e}")
-        
-        
-    def download_pdf(self,path=os.getcwd()+"/pdfs/",link=""):
-        
-        # Verifier si le path exist sinon le creer
-        
-        import os
-        import requests
-                
-        
-        path = path + self.title + ".pdf"
-        if link != "":
-            try:
-                response = requests.get(link)
-                if response.status_code == 200:
-                    with open(path, 'wb') as file:
-                        file.write(response.content)
-                    print(f"PDF successfully downloaded and saved to {path}")
-                else:
-                    print(f"Failed to download the PDF. HTTP Status Code: {response.status_code}")
-
-            except requests.exceptions.RequestException as e:
-                print(f"An error occurred while downloading the PDF: {e}")
-        else:
-            from scidownl import scihub_download
-            #  scidownl by title
-            try:
-                scihub_download(self.title, paper_type="title", out=path)
-            except:
-                try:
-                    # By URL
-                    scihub_download(self.pdf, out=path)
-                except:
-                    print("Couldn't download the PDF")
-           

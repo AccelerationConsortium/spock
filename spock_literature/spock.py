@@ -1,29 +1,14 @@
 """Main module."""
-import json
-import time
-import concurrent.futures
 from spock_literature.classes.Helper_LLM import Helper_LLM
 from operator import itemgetter
 import os
-from langchain_community.document_loaders.pdf import PDFPlumberLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema import Document
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from langchain_community.vectorstores import FAISS
 import faiss
 from langchain_community.document_loaders import PyPDFLoader
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import FAISS
 import faiss
 import os
-from bs4 import BeautifulSoup
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
-from langchain.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
 from langchain_community.llms import Ollama
 import json
-from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 import requests
 from scholarly import scholarly
@@ -31,12 +16,23 @@ from scholarly import scholarly
 
 class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     """Spock class."""
-    def __init__(self, paper, custom_questions:list=[]):
-        """Initialize Spock."""
+    def __init__(self, paper=None, custom_questions:list=[], publication_doi=None, publication_title=None):
+        """
+        Initialize a Spock object.
+
+        Args:
+            paper: Path to pdf file locally stored. Defaults to None.
+            custom_questions (list, optional): List of custom questions. Defaults to [].
+            publication_doi (_type_, optional): DOI of paper we want to analyze. Defaults to None.
+            publication_title (_type_, optional): Title of paper we want to analyze. Defaults to None.
+        """        
+
         super().__init__()
         self.paper =  paper # To edit later
         self.paper_summary = ""
         self.custom_questions = custom_questions
+        self.publication_doi = publication_doi
+        self.publication_title = publication_title
         self.questions = {
             "new materials":{"question":""""Does the document mention any new or novel materials discovered?\
                                             Examples sentences for new materials discovery:
@@ -149,68 +145,30 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     def download_pdf(self):
         """Download the PDF of a publication."""
     
-        import csv
-        from tqdm import tqdm
-        import os
-        import pandas as pd
-        import json
-        import subprocess
-
-        not_downloadable = []
-        Invalid_DOIs = []
-        downloaded_papers = []
-
-        mirrors = [
-            "https://sci-hub.ee",
-            "https://sci-hub.ren",
-            "https://sci-hub.wf"
-        ]
-
-
-        df = pd.read_csv('filtered_AC_publications.csv', encoding='ISO-8859-1', low_memory=False, delimiter=',')
-
-        for i, row in tqdm(df.iterrows(), total=len(df)):
-            if i > 1600: # 1100 - 1500 
-                doi_url = f"https://doi.org/{row['DOI']}"
-                if not pd.isna(row['DOI']) and "(" not in doi_url and  ")" not in doi_url:
-                    output_path = f"papers/{row['DOI'].replace('/', '_')}.pdf"  
-                    if not os.path.exists(output_path):
-                        command = f'scidownl download --doi {row["DOI"]} --out {output_path}'
-                        # command = f'python -m PyPaperBot --doi {doi_url} --dwn-dir papers/'
-                        try:
-                            print(row["DOI"])
-                            subprocess.run(command, shell=True, check=True, timeout=20)
-                        except Exception as e:
-                            print(e)
-                            pass
-                        # !scidownl download --doi {row['DOI']} --out doi_url
-
-                        if not os.path.exists(output_path):
-                            print(f"\nDownload failed for PaperID {row['ID']} with DOI: {row['DOI']}.")
-                            not_downloadable.append((row['ID'], row['DOI']))
-                        else: 
-                            downloaded_papers.append((row['ID'], row['DOI']))
-                    output_path = f"papers/{row['DOI'].replace('/', '_')}.pdf"
-                else:
-                    print(f"\nPaper ID {row['ID']} doesn't have the DOI.")
-                    Invalid_DOIs.append(row['ID'])
-
-            # if i == 50:
-            #     break
-
-        stats = {'Downloaded': downloaded_papers,
-                'Non-downloaded': not_downloadable,
-                'Invalid_DOIs': Invalid_DOIs}
-
-        with open('stats.json', 'w') as f:
-            json.dump(stats, f, indent=4)
-
-        print(stats)    
-            #if self.paper isinstance Publication_doi: # A voir/ Travailler sur la condition et OOP
-                #self.pdf = self.paper.get_pdf()
-            
-            # We assume that the variable paper is a Publication object that contains the DOI of the publication
+        from scidownl import scihub_download
         
+        if self.publication_doi:
+
+            paper = "https://doi.org/" + self.publication_doi
+            paper_type = "doi"
+            out = f"/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/{self.publication_doi.replace('/','_')}.pdf"
+            scihub_download(paper, paper_type=paper_type, out=out)
+            
+            if not os.path.exists(out):
+                raise RuntimeError(f"Failed to download the PDF for the publication with DOI: {self.publication_doi}")
+            else:
+                self.paper = out
+            
+        elif self.publication_title:
+            
+            paper = self.publication_title
+            paper_type = "title"
+            out = f"/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/{self.publication_title.replace(' ','_')}.pdf"
+            scihub_download(paper, paper_type=paper_type, out=out)
+            if not os.path.exists(out):
+                raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
+            else:
+                self.paper = out
         
     
     def scan_pdf(self):
@@ -220,7 +178,8 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         for question in self.questions:
             try:
                 temp_response = self.query_rag(self.questions[question]['question']).split("/")
-            except:
+            except Exception as e:
+                print("An error occured while scanning the PDF for the question: ", question)
                 temp_response = ["NA","None"]
             self.questions[question]['output']['response'] = temp_response[0]
             self.questions[question]['output']['sentence'] = temp_response[1]
@@ -271,7 +230,9 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         """Run Spock."""
         self.download_pdf()
         print("Downloaded the PDF")
-        #self.add_custom_questions()
+        self.add_custom_questions()
+        print("Added custom questions")
+        #print(self.questions)
         self.scan_pdf()
         print("Scanned the PDF")
         self.summarize()
@@ -279,12 +240,40 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         topics = self.get_topics()
         print("Got the topics")
         # Format the output text
-        output_text = f"Here is a summary of the publication: \n {self.paper_summary}\n  ---- \nHere are the topics of the publication: {topics}\n ---"
+        
+        
+        
+        output_lines = [
+            "📄 **Summary of the Publication**",
+            f"{self.paper_summary}",
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+            "📝 **Topics Covered in the Publication**"
+        ]
+
+        # Check if 'topics' is a list and format accordingly
+        if isinstance(topics, list):
+            for topic in topics:
+                output_lines.append(f"• {topic}")
+        else:
+            output_lines.append(f"{topics}")
+
+        output_lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+        # Iterate over the questions and append formatted strings to the list
         for question in self.questions:
-            output_text += f"Question: {question}\n"
-            output_text += f"Answer: {self.questions[question]['output']['response']}\n"
-            output_text += f"Supporting sentence: {self.questions[question]['output']['sentence']}\n"
-            output_text += "\n --- \n"
+            output_lines.extend([
+                f"❓ **Question**: {question}",
+                f"💡 **Answer**: {self.questions[question]['output']['response']}",
+                f"🔎 **Supporting Sentence**: {self.questions[question]['output']['sentence']}",
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            ])
+
+        # Join all lines into a single string with newline characters
+        output_text = '\n'.join(output_lines)
+        
+        
+        #if __name__ == "__main__":
+            #print(output_text)
             
         return output_text
         
@@ -293,51 +282,33 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     def add_custom_questions(self):
         """Add custom questions to the questions dictionary."""
         
-        
+        print(self.custom_questions)
         for question in self.custom_questions:
-            temp_llm = Ollama(model="llama3.1", temperature=0.05)
             prompt = PromptTemplate(
-                template="""Here is a question, I want you to give me to what topic it is related the most {question}. \
+                template="""Here is a question, I want you to give me to what topic it is related the most. \ Here is the question you are going to work on: {question}. 
+                The output should only contain the topic of the question.\ \
+                
                 Here are some examples to help you: \
                 
-                Question: Does the document mention any new or novel materials discovered?\
-                                        Examples sentences for new materials discovery:
-                1. Here we report the in vitro validation of eight novel GPCR peptide activators.
-                2. The result revealed that novel peptides accumulated only in adenocarcinoma lung cancer cell-derived xenograft tissue.
-                3. This led to the discovery of several novel catalyst compositions for ammonia decomposition, which were experimentally\
-                    validated against "state-of-the-art" ammonia decomposition catalysts and were\
-                    found to have exceptional low-temperature performance at substantially lower weight loadings of Ru.
-                4. We applied a workflow of combined in silico methods (virtual drug screening, molecular docking and supervised machine learning algorithms)\
-                                        to identify novel drug candidates against COVID-19.\
-                Output: new materials\
+                Example input 1: Does the document mention any new or novel materials discovered?\
+                Output Example 1: 'new materials'\
                     
                 -- \
-                Does the document mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow?\
-                                        Examples sentences for new high-throughput screening algorithms:\
-                                       1. In this study, we propose a large-scale (drug–target interactions) DTI prediction system,\
-                                        DEEPScreen, for early stage drug discovery,\
-                                        using deep convolutional neural network.\
-                                       2. We performed a large-scale screening of fast-growing strains with 180 strains isolated\
-                                        from 22 ponds located in a wide\
-                                        geographic range from the tropics to cool-temperate.\
-                                       3. In the present study, we leverage a recently developed high-throughput periodic\
-                                        DFT workflow tailored for MOF structures\
-                                        to construct a large-scale database of MOF quantum mechanical properties.\
-                                        If there are any, what are the screening algorithms used in the document? Answer either\
-                                        'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                            
-                Output: screening algorithms\
+                Example input 2: Does the document mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow?\                                            
+                Output Example 2: 'screening algorithms'\
                     
-                Youe output should only contain the topic of the question.\
                 
+                The output should only contain the topic of the question.
                 
                 """,
                 input_variables=["question"]
             )
             
-            chain = prompt | temp_llm
+            chain = prompt | self.llm
             question_topic = chain.invoke({"question":question})
-            self.questions.update({question_topic:{"question":question , "output":{'response':"","sentence":""}}})
+            print(f"Custom question: {question_topic}")
+            self.questions.update({question_topic:{"question":question+"Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
+                                                from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'" , "output":{'response':"","sentence":""}}})
             
             
             
@@ -346,4 +317,4 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
 
 if __name__ == "__main__": # That would be the script to submit for the job
     import sys
-    #spock = Spock(paper=sys.argv[1], custom_questions=sys.argv[2:]) # Update - to see layer how to fix it 
+    #spock = Spock(paper=sys.argv[1], custom_questions=sys.argv[2:]) # To edit later
