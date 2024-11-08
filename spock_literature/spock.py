@@ -7,16 +7,18 @@ import faiss
 from langchain_community.document_loaders import PyPDFLoader
 import faiss
 import os
-from langchain_community.llms import Ollama
 import json
 from langchain_core.prompts import PromptTemplate
 import requests
 from scholarly import scholarly
+from spock_literature.classes.docs import LoadDoc
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 
+from langchain_ollama import OllamaLLM
 
 class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     """Spock class."""
-    def __init__(self, paper=None, custom_questions:list=[], publication_doi=None, publication_title=None):
+    def __init__(self, path="",model:str="llama3.1", paper=None, custom_questions:list=[], publication_doi=None, publication_title=None):
         """
         Initialize a Spock object.
 
@@ -26,13 +28,14 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
             publication_doi (_type_, optional): DOI of paper we want to analyze. Defaults to None.
             publication_title (_type_, optional): Title of paper we want to analyze. Defaults to None.
         """        
-
-        super().__init__()
+        super().__init__(model=model)
+        self.path = path
         self.paper =  paper # To edit later
         self.paper_summary = ""
         self.custom_questions = custom_questions
         self.publication_doi = publication_doi
         self.publication_title = publication_title
+        self.topics = ""
         self.questions = {
             "new materials":{"question":""""Does the document mention any new or novel materials discovered?\
                                             Examples sentences for new materials discovery:
@@ -85,7 +88,7 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
                                         Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from\
                                             the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
             
-            "models":{"question":"DoAre specific new or novel methods, models and workflows used in the document?\
+            "models":{"question":"Are there specific new or novel methods, models and workflows used in the document?\
                                         Examples sentences for new methods and workflows :\
                                         1. We developed a novel synthesis method for hydrothermal reactions under a phosphoric acid medium\
                                             and obtained a series of metal polyiodates with strong SHG effects.\
@@ -151,7 +154,7 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
 
             paper = "https://doi.org/" + self.publication_doi
             paper_type = "doi"
-            out = f"/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/{self.publication_doi.replace('/','_')}.pdf"
+            out = f"{self.path}{self.publication_doi.replace('/','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             
             if not os.path.exists(out):
@@ -163,7 +166,7 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
             
             paper = self.publication_title
             paper_type = "title"
-            out = f"/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/{self.publication_title.replace(' ','_')}.pdf"
+            out = f"{self.path}{self.publication_title.replace(' ','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             if not os.path.exists(out):
                 raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
@@ -177,10 +180,12 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         self.chunk_indexing(self.paper)
         for question in self.questions:
             try:
-                temp_response = self.query_rag(self.questions[question]['question']).split("/")
+                temp_response = self.query_rag(self.questions[question]['question'])
             except Exception as e:
                 print("An error occured while scanning the PDF for the question: ", question)
-                temp_response = ["NA","None"]
+                temp_response = "NA/None"
+            print(temp_response)
+            temp_response = temp_response.split('/')
             self.questions[question]['output']['response'] = temp_response[0]
             self.questions[question]['output']['sentence'] = temp_response[1]
         
@@ -189,33 +194,74 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         
         
     def summarize(self):
+        from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
+        from langchain.chains.llm import LLMChain
+        from langchain.chains.combine_documents.stuff import StuffDocumentsChain
+        from langchain_openai import ChatOpenAI
+
         """Return the summary of the publication."""
-        temp_llm = Ollama(model="llama3.1", temperature=0.05)
-        prompt = PromptTemplate(
-            template="You are an AI assistant that is going to help me summarize documents. Here is one page of the document, can you summarize the page please. Output only the summary {document}",
-            input_variables=["document"]
+        loader = PyPDFLoader(self.paper)
+        docs = loader.load_and_split()
+
+        map_template = """The following is a set of documents
+        {docs}
+        Based on this list of docs, please identify the main themes 
+        Helpful Answer:"""
+        map_prompt = PromptTemplate.from_template(map_template)
+        
+        if isinstance(self.llm, OllamaLLM):
+            llm = OllamaLLM(model="llama3.1", temperature=0.2)
+        
+        else: llm = self.llm
+        map_chain = LLMChain(llm=llm, prompt=map_prompt)
+
+        reduce_template = """The following is set of summaries:
+        {docs}
+        Take these and distill it into a final, consolidated summary of the main themes. 
+        Helpful Answer:"""
+        reduce_prompt = PromptTemplate.from_template(reduce_template)
+
+        reduce_chain = LLMChain(llm=llm, prompt=reduce_prompt)
+
+        combine_documents_chain = StuffDocumentsChain(
+            llm_chain=reduce_chain, document_variable_name="docs"
         )
-        # Summarizing each page then merging everything
-        pages = PyPDFLoader(self.paper).load()
-        print(len(pages))
-        summaries = ""
-        for i,page in enumerate(pages):
-            chain = prompt | temp_llm
-            summaries += f"Summary of page {i+1} {chain.invoke({'document': page})}"
-            
-        prompt = PromptTemplate(
-            template="You are an AI assistant that is going to help me summarize documents. Since the document is really long, we summerized each and every page, and your task is to merge all of these summaries to give me a new global summary. Here are summaries {document} \n \n Output only the summary.", # Maybe allow user to choose the length of the summary
-            input_variables=["document"]
+
+        reduce_documents_chain = ReduceDocumentsChain(
+            combine_documents_chain=combine_documents_chain,
+            collapse_documents_chain=combine_documents_chain,
+            token_max=4000,
         )
-        chain = prompt | temp_llm
-        self.paper_summary = chain.invoke({"document": summaries})
+
+        map_reduce_chain = MapReduceDocumentsChain(
+            llm_chain=map_chain,
+            reduce_documents_chain=reduce_documents_chain,
+            document_variable_name="docs",
+            return_intermediate_steps=False,
+        )
+
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1750, chunk_overlap=20
+        )
+        split_docs = text_splitter.split_documents(docs)
+
+        # Invoke the chain and extract the summary
+        result = map_reduce_chain.invoke(split_docs)
+        self.paper_summary = result['output_text']
+        print(self.paper_summary)
+
+
+
+
+
+
 
             
     def get_topics(self):
         if self.paper_summary == "":
             self.summarize()
         prompt = PromptTemplate(
-            template="You are an AI assistant, and here is a document. get the topic of the document. Here is it's summary: \n {summary} \n Get the scientific topics that are related to the abstarct above. Ouput only the keywords separated by a '/'. Example: Machine Learning/New Materials", # Work on the prompt/output of LLM
+            template="""Here is it's summary: \n {summary} \n Get the scientific topics that are related to the abstarct above. Ouput only the keywords separated by a '/'. Desired format: Machine Learning/New Materials/NLP""", # Work on the prompt/output of LLM
             input_variables=["summary"]
         )
         chain = prompt | self.llm
@@ -229,53 +275,11 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
     def __call__(self):
         """Run Spock."""
         self.download_pdf()
-        print("Downloaded the PDF")
         self.add_custom_questions()
-        print("Added custom questions")
-        #print(self.questions)
         self.scan_pdf()
-        print("Scanned the PDF")
+        #print(self.questions)
         self.summarize()
-        print("Summarized the PDF")
-        topics = self.get_topics()
-        print("Got the topics")
-        # Format the output text
-        
-        
-        
-        output_lines = [
-            "📄 **Summary of the Publication**",
-            f"{self.paper_summary}",
-            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-            "📝 **Topics Covered in the Publication**"
-        ]
-
-        # Check if 'topics' is a list and format accordingly
-        if isinstance(topics, list):
-            for topic in topics:
-                output_lines.append(f"• {topic}")
-        else:
-            output_lines.append(f"{topics}")
-
-        output_lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
-
-        # Iterate over the questions and append formatted strings to the list
-        for question in self.questions:
-            output_lines.extend([
-                f"❓ **Question**: {question}",
-                f"💡 **Answer**: {self.questions[question]['output']['response']}",
-                f"🔎 **Supporting Sentence**: {self.questions[question]['output']['sentence']}",
-                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            ])
-
-        # Join all lines into a single string with newline characters
-        output_text = '\n'.join(output_lines)
-        
-        
-        #if __name__ == "__main__":
-            #print(output_text)
-            
-        return output_text
+        self.topics = self.get_topics()        
         
         
     
@@ -313,8 +317,46 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
             
             
             
+    def format_output(self) -> str:
+        """Format the output of the Spock class."""
+        output_lines = [
+            "📄 **Summary of the Publication**",
+            f"{self.paper_summary}",
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
+            "📝 **Topics Covered in the Publication**"
+        ]
+
+        if isinstance(self.topics, list):
+            for topic in self.topics:
+                output_lines.append(f"• {topic}")
+        else:
+            output_lines.append(f"{self.topics}")
+
+        output_lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+        # Iterate over the questions and append formatted strings to the list
+        for question in self.questions:
+            output_lines.extend([
+                f"❓ **Question**: {question}",
+                f"💡 **Answer**: {self.questions[question]['output']['response']}",
+                f"🔎 **Supporting Sentence**: {self.questions[question]['output']['sentence']}",
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            ])
+
+        # Join all lines into a single string with newline characters
+        output_text = '\n'.join(output_lines)
+        
+        
+        #if __name__ == "__main__":
+            #print(output_text)
+            
+        return output_text
+
+    
+    
 
 
 if __name__ == "__main__": # That would be the script to submit for the job
     import sys
-    #spock = Spock(paper=sys.argv[1], custom_questions=sys.argv[2:]) # To edit later
+    spock = Spock()
+    print(len(spock.questions))

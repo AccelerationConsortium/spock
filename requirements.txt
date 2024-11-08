@@ -24,7 +24,7 @@ blinker==1.8.2
 bracex==2.4
 build==1.2.1
 bump-my-version==0.22.0
-
+langchain-anthropic
 cachetools==5.3.3
 certifi==2024.6.2
 cffi==1.16.0
@@ -309,3 +309,4 @@ wrapt==1.12.1
 wsproto==1.2.0
 yarl==1.9.4
 zipp==3.19.2
+langchain_ollama
