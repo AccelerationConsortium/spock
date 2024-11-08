@@ -10,7 +10,7 @@ from langchain_core.prompts import PromptTemplate
 from spock_literature import Spock
 from spock_literature.classes.Author import Author
 import json
-
+from User import User
 
 
 
@@ -29,6 +29,7 @@ def help(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
+    text = body["text"] # Add LLM here to help
     client.chat_postMessage(
         channel=channel_id,
         text="""👋 Welcome! I'm Spock 🖖, a bot designed to process PDF files and assist you in extracting valuable information from publications. To get started, simply type `/processpdf`.
@@ -49,6 +50,8 @@ Commands:
 
 - 📝 process_publication_title: Process a publication by its title. Simply enter the title after the command.
   Example: /process_publication_title The Future of AI in 2024
+  
+- 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
 
 Feel free to ask me questions or share your files for processing!
 
@@ -56,10 +59,14 @@ Feel free to ask me questions or share your files for processing!
     )
     
 #TODO
-# - deleting pdfs after some time if unuesed
-# - Maybe addind PDF files that were done and their responses in a database
+# - deleting pdfs after some time if unuesed - to implement
 # - Storing all the pdfs chunks in one single vectorestore and haveing the user query that vectorstore through the @app_mention
-
+# - Choose the LLM with a /command  | LLama | Claude 3.5 Sonnet | OpenAI gpt 4-o (High priority - fixed (need claud key))
+# - https://www.nvidia.com/en-us/ai/
+# - OpenAI CallBack for trqcking tokens - To implement
+# - Add github actions and testing 
+# - Storage - To upgrade
+# - Upgrading quality of the summaries - fixed
 
 
 @app.command("/process_publication_title")
@@ -72,7 +79,7 @@ def handle_process_publication_name(ack, body, client):
     print(title)
     
     
-    spock = Spock(publication_title=title)
+    spock = Spock(publication_title=title, path="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/")
     try: 
         response = f" Hi there, <@{user}>! Here is the summary of the publication with the title {title}: {spock()}"
     except Exception as e:
@@ -100,7 +107,7 @@ def handle_process_publication_doi(ack, body, client):
     print(doi)
     
     
-    spock = Spock(publication_doi=doi)
+    spock = Spock(publication_doi=doi, path="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/")
     try: 
         response = f" Hi there, <@{user}>! Here is the summary of the publication with the DOI {doi}: {spock()}"
     except Exception as e:
@@ -165,8 +172,69 @@ def get_author_publications(ack, body, client):
     
         
         
+        
+@app.command("/get_user_settings")
+def get_user_settings(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    
+    
+    
+
+@app.command("/choose_llm")
+def handle_choose_llm(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    model = body["text"].strip().lower()
+    print(model)
+    
+    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "r") as f:
+        users = json.load(f)
+    
+    if user_id not in users:
+        user = User(user_id, model)
+        users[user_id] = user.__dict__()[user.user_id]
+    else:
+        users[user_id]["user_model"] = model
+        
+    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "w") as f:
+        json.dump(users, f)
+    
+    
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"Hi there, <@{user_id}>! You've chosen the {model} model. I'll use this model for future responses."
+    )
 
 
+
+@app.command("/get_history") # To edit
+def handle_get_history(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    
+    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json", "r") as f:
+        analyzed_papers = json.load(f)
+    
+    user_files = list(filter(lambda x: x["user_id"]==user_id, analyzed_papers))
+    
+    if not user_files:
+        client.chat_postMessage(
+            channel=channel_id,
+            text="You haven't processed any files yet."
+        )
+        return
+    
+    output = ""
+    for file in user_files:
+        output += f"\n📄 Title: {file['title']}"    
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"Here are the files you've processed: {output}"
+    )
 @app.command("/process_pdf")
 def handle_processpdf(ack, body, client):
 
@@ -181,7 +249,9 @@ def handle_processpdf(ack, body, client):
     waiting_for_file[user_id] = channel_id
     client.chat_postMessage(
         channel=channel_id,
-        text="Please upload the PDF file you'd like to process."
+        text="Please upload the PDF file you'd like to process.",
+        mrkdwn=True
+
     )
     
 @app.event("app_mention")
@@ -191,6 +261,8 @@ def handle_app_mention(event, say):
     
     llm = Ollama(model="llama3.1")
 
+
+    # Customize it 
     prompt = PromptTemplate(
         template="You are a text assistant, and here is someone asking you a question. Please provide a response. {question}",
         input_variables=["question"]
@@ -223,6 +295,11 @@ def handle_file_shared(event, client, logger):
                 print(f"Writing {file_name} to disk")
                 with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/"+file_name, "wb") as f:
                     f.write(response.content)
+                    
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text=f"Your file `{file_name}` has been uploaded. Processing it now..."
+                )
 
                 print(f"passing {file_name} to Spock")
                 
@@ -238,19 +315,35 @@ def handle_file_shared(event, client, logger):
                     return
                 
                 
-                spock = Spock(paper="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/"+file_name,custom_questions=user_questions)
-                response = spock()
+                # Checking if the user is in the database
+                with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "r") as f:
+                    users = json.load(f)
+                    
+                
+                if user_id not in users:
+                    user = User(user_id, "llama3.1")
+                    users[user_id] = user.__dict__()[user.user_id]
+                    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "w") as f:
+                        json.dump(users, f)
+                
+                
+                # Choosing the model for the user
+                model = users[user_id]["user_model"]
+                spock = Spock(model=model,paper="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/"+file_name,custom_questions=user_questions)
+                spock()
+                response_output = spock.format_output()
                 
                 
                 with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json", "w") as f: # TODO: Change this to match custom questions
-                    analyzed_papers[file_name] = response
+                    analyzed_papers[file_name] = response_output
                     json.dump(analyzed_papers, f)
                 
                 
                 # Sending the response to the user
                 client.chat_postMessage(
                     channel=channel_id,
-                    text=f"Your file `{file_name}` has been processed. \ {response}"
+                    text=f"Your file `{file_name}` has been processed. \n {response_output}",
+                    mrkdwn=True
                 )
             else:
                 # Not a PDF file
