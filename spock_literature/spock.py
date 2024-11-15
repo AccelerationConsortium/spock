@@ -2,7 +2,6 @@
 from spock_literature.classes.Helper_LLM import Helper_LLM
 from operator import itemgetter
 import os
-from langchain.chains.combine_documents import create_stuff_documents_chain
 import faiss
 from langchain_community.document_loaders import PyPDFLoader
 import faiss

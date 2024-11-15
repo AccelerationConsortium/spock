@@ -5,9 +5,8 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 import json
-from langchain_core.output_parsers import JsonOutputParser
 from langchain_core.prompts import PromptTemplate
 import requests
 from scholarly import scholarly
@@ -55,7 +54,7 @@ class Publication_scholarly(): # Give it Publication as inheritance
             template="You are an AI assistant, and here is a document. get the topic of the document. Here it is: \n {document}",
             input_variables=["document"]
         )
-        temp_llm = Ollama(model="llama3.1", temperature=0.05)
+        temp_llm = OllamaLLM(model="llama3.1", temperature=0.05) # Change the model to the one you want to useq
         chain = prompt | temp_llm
         return chain.invoke({"document": self.abstract})
         
