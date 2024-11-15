@@ -2,7 +2,7 @@ from operator import itemgetter
 import os
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.schema import Document
-from langchain.chains.combine_documents import create_stuff_documents_chain
+#from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_community.vectorstores import FAISS
 import faiss
 from langchain_community.document_loaders import PyPDFLoader

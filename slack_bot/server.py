@@ -5,12 +5,13 @@ import os
 import requests
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from langchain_community.llms import Ollama
+from langchain_ollama import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 from spock_literature import Spock
 from spock_literature.classes.Author import Author
 import json
 from User import User
+from scripts.generate_podcast import generate_audio
 
 
 
@@ -18,9 +19,15 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
+PAPERS_PATH = "/home/youssef/clone/spock/slack_bot/papers/"
+USER_JSON_PATH = "/home/youssef/clone/spock/slack_bot/users.json"
+ANALYZED_PAPERS_JSON_PATH = "/home/youssef/clone/spock/slack_bot/analyzed_publications.json"
+
+
 
 app = App(token=BOT_TOKEN)
 waiting_for_file = {}
+waiting_for_podcast = {}
 questions = {}
 
 
@@ -71,41 +78,32 @@ Feel free to ask me questions or share your files for processing!
 
 
 def upload_audio_file(channel_id, file_path, initial_comment):
-    with open(file_path, 'rb') as file_content:
-        response = requests.post(
-            'https://slack.com/api/files.upload',
-            params={
-                'channels': channel_id,
-                'initial_comment': initial_comment
-            },
-            files={'file': file_content},
-            headers={'Authorization': f'Bearer {BOT_TOKEN}'}
+    try:
+        response = app.client.files_upload_v2(
+            channel=channel_id,
+            initial_comment=initial_comment,
+            file=file_path,
         )
-        response_data = response.json()
-        if response.status_code == 200 and response_data.get('ok'):
+        if response.get('ok'):
             print('File uploaded successfully!')
         else:
-            print(f"Failed to upload file: {response_data.get('error')}")
-
+            print(f"Failed to upload file: {response.get('error')}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        
 # Slack event handler
-@app.command("generate_podcast")
-def handle_app_mention(event, say):
-    channel_id = event['channel']
-    user_id = event['user']
+@app.command("/generate_podcast")
+def handle_app_mention(ack, body, client):
+    ack()
+    channel_id = body['channel_id']
+    user_id = body['user_id']
+    waiting_for_podcast[user_id] = channel_id
+    client.chat_postMessage(
+        channel=channel_id,
+        text="Please upload the PDF file you'd like to convert to a podcast."
+    )
+    
 
-    # Generate content
-    generated_text = generate_content() # To call the sbatch script
-
-    # Convert text to audio (implement this function)
-    audio_file_path = 'output_audio.mp3'
-    text_to_audio(generated_text, audio_file_path)
-
-    # Upload audio file to Slack
-    initial_comment = f"<@{user_id}> Here's the audio file you requested!"
-    upload_audio_file(channel_id, audio_file_path, initial_comment)
-
-    # Send a confirmation message
-    say(f"<@{user_id}> I've uploaded the audio file for you!")
 
 
 @app.command("/process_publication_title")
@@ -118,7 +116,7 @@ def handle_process_publication_name(ack, body, client):
     print(title)
     
     
-    spock = Spock(publication_title=title, path="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/")
+    spock = Spock(publication_title=title, path=PAPERS_PATH)
     try: 
         response = f" Hi there, <@{user}>! Here is the summary of the publication with the title {title}: {spock()}"
     except Exception as e:
@@ -146,7 +144,7 @@ def handle_process_publication_doi(ack, body, client):
     print(doi)
     
     
-    spock = Spock(publication_doi=doi, path="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/")
+    spock = Spock(publication_doi=doi, path=PAPERS_PATH)
     try: 
         response = f" Hi there, <@{user}>! Here is the summary of the publication with the DOI {doi}: {spock()}"
     except Exception as e:
@@ -229,7 +227,7 @@ def handle_choose_llm(ack, body, client):
     model = body["text"].strip().lower()
     print(model)
     
-    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "r") as f:
+    with open(USER_JSON_PATH, "r") as f:
         users = json.load(f)
     
     if user_id not in users:
@@ -238,7 +236,7 @@ def handle_choose_llm(ack, body, client):
     else:
         users[user_id]["user_model"] = model
         
-    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "w") as f:
+    with open(USER_JSON_PATH, "w") as f:
         json.dump(users, f)
     
     
@@ -255,7 +253,7 @@ def handle_get_history(ack, body, client):
     user_id = body["user_id"]
     channel_id = body["channel_id"]
     
-    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json", "r") as f:
+    with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
         analyzed_papers = json.load(f)
     
     user_files = list(filter(lambda x: x["user_id"]==user_id, analyzed_papers))
@@ -319,7 +317,56 @@ def handle_file_shared(event, client, logger):
     user_id = event.get("user_id")
     file_id = event.get("file_id")
     
-    if user_id in waiting_for_file:
+    if user_id in waiting_for_podcast:
+        channel_id = waiting_for_podcast[user_id]
+        try: user_questions = questions[user_id]
+        except: user_questions = []
+        del waiting_for_podcast[user_id]
+        try:
+
+            file_info_response = client.files_info(file=file_id)
+            file_info = file_info_response["file"]
+            if file_info["filetype"] == "pdf":
+                url_private = file_info["url_private_download"]
+                file_name = file_info["name"]
+                response = requests.get(url_private, headers={'Authorization': f'Bearer {BOT_TOKEN}'})
+                print(f"Writing {file_name} to disk")
+                with open(PAPERS_PATH+file_name, "wb") as f:
+                    f.write(response.content)
+                    
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text=f"Your file `{file_name}` has been uploaded. Processing it now..."
+                )
+
+                audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
+
+                # Upload audio file to Slack
+                initial_comment = f"<@{user_id}> Here's the audio file you requested!"
+                upload_audio_file(channel_id, audio_file_path, initial_comment)
+
+                # Send a confirmation message
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text=f"<@{user_id}> I've uploaded the audio file for you!")
+            else:
+                # Not a PDF file
+                client.chat_postMessage(
+                    channel=channel_id,
+                    text="The uploaded file is not a PDF. Please try again."
+                )
+        except Exception as e:
+            logger.error(f"Error processing file: {e}")
+            client.chat_postMessage(
+                channel=channel_id,
+                text=f"An error occurred while processing your file. Please try again. {e}"
+            )
+        
+        
+
+
+    
+    elif user_id in waiting_for_file:
         channel_id = waiting_for_file[user_id]
         try: user_questions = questions[user_id]
         except: user_questions = []
@@ -332,7 +379,7 @@ def handle_file_shared(event, client, logger):
                 file_name = file_info["name"]
                 response = requests.get(url_private, headers={'Authorization': f'Bearer {BOT_TOKEN}'})
                 print(f"Writing {file_name} to disk")
-                with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/"+file_name, "wb") as f:
+                with open(PAPERS_PATH+file_name, "wb") as f:
                     f.write(response.content)
                     
                 client.chat_postMessage(
@@ -343,7 +390,7 @@ def handle_file_shared(event, client, logger):
                 print(f"passing {file_name} to Spock")
                 
                 # Analyzing the paper
-                with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json", "r") as f:
+                with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
                     analyzed_papers = json.load(f)
                     
                 if file_name in analyzed_papers:
@@ -355,25 +402,25 @@ def handle_file_shared(event, client, logger):
                 
                 
                 # Checking if the user is in the database
-                with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "r") as f:
+                with open(USER_JSON_PATH, "r") as f:
                     users = json.load(f)
                     
                 
                 if user_id not in users:
                     user = User(user_id, "llama3.1")
                     users[user_id] = user.__dict__()[user.user_id]
-                    with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/users.json", "w") as f:
+                    with open(USER_JSON_PATH, "w") as f:
                         json.dump(users, f)
                 
                 
                 # Choosing the model for the user
                 model = users[user_id]["user_model"]
-                spock = Spock(model=model,paper="/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/papers/"+file_name,custom_questions=user_questions)
+                spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)
                 spock()
                 response_output = spock.format_output()
                 
                 
-                with open("/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json", "w") as f: # TODO: Change this to match custom questions
+                with open(ANALYZED_PAPERS_JSON_PATH, "w") as f: # TODO: Change this to match custom questions
                     analyzed_papers[file_name] = response_output
                     json.dump(analyzed_papers, f)
                 
