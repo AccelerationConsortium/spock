@@ -1,17 +1,10 @@
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --gpus-per-node=0
-#SBATCH --time=00:25:00
+#SBATCH --time=24:00:00
 
 
 module load BalamEnv
-
-
-source /home/m/mehrad/brikiyou/scratch/to_run.sh
-
-source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
-
-ollama serve > ollama.log 2>&1 &
 
 python3 /home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/server.py
 
