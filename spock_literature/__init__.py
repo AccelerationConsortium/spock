@@ -6,4 +6,5 @@ __version__ = "0.0.8"
 
 
 from .spock import Spock
-from .classes import Author, Helper_LLM, Publication_scholarly
+from .utils import *
+from texts import *

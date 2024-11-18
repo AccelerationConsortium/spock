@@ -8,11 +8,11 @@ from slack_bolt.adapter.socket_mode import SocketModeHandler
 from langchain_ollama import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 from spock_literature import Spock
-from spock_literature.classes.Author import Author
+from spock_literature.utils.Author import Author
 import json
 from User import User
-from scripts.generate_podcast import generate_audio
-
+from spock_literature.utils.generate_podcast import generate_audio
+import logging
 
 
 load_dotenv()
@@ -60,6 +60,7 @@ Commands:
   
 - 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
 
+- 🎙️ generate_podcast: Generate a podcast from a text input. This command is currently disabled.
 Feel free to ask me questions or share your files for processing!
 
         """
@@ -342,13 +343,9 @@ def handle_file_shared(event, client, logger):
                 audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
 
                 # Upload audio file to Slack
-                initial_comment = f"<@{user_id}> Here's the audio file you requested!"
+                initial_comment = f"<@{user_id}> Here's the audio podcast for your pdf!"
                 upload_audio_file(channel_id, audio_file_path, initial_comment)
 
-                # Send a confirmation message
-                client.chat_postMessage(
-                    channel=channel_id,
-                    text=f"<@{user_id}> I've uploaded the audio file for you!")
             else:
                 # Not a PDF file
                 client.chat_postMessage(
