@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='spock-literature',  
-    version='0.0.2',
+    version='0.0.8',
     author='Youssef Briki',
     author_email='youssef.briki05@gmail.com',
     description='A description of your package',

@@ -1,3 +1,10 @@
+to_run.py
+example/
+scholarly_creative_work/
+#scholarly_creative_work/
+spock_literature/json/*
+tmp/*
+papers/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 private/
@@ -84,6 +91,7 @@ celerybeat-schedule
 
 # dotenv
 .env
+*.env
 
 # virtualenv
 .venv
@@ -105,6 +113,6 @@ ENV/
 
 # IDE settings
 .vscode/
-spock_literature/main.py
 spock_literature/__pycache__/
 spock_literature/rag.py
+scholarly_creative_work/papers/*
