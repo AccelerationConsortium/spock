@@ -10,31 +10,45 @@ import json
 from langchain_core.prompts import PromptTemplate
 import requests
 from scholarly import scholarly
-from spock_literature.utils.docs import LoadDoc
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from texts import *
 from langchain_ollama import OllamaLLM
+from spock_literature.utils.generate_podcast import generate_audio
+from pathlib import Path
+from typing import List, Optional, Union
 
-class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
+class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
     """Spock class."""
-    def __init__(self, path="",model:str="llama3.1", paper=None, custom_questions:list=[], publication_doi=None, publication_title=None):
+    
+    def __init__(
+        self,
+        model: str = "llama3.1",
+        paper: Optional[Union[Path, str]] = None,
+        custom_questions: Optional[List[str]] = None,
+        publication_doi: Optional[str] = None,
+        publication_title: Optional[str] = None,
+    ):
         """
         Initialize a Spock object.
 
         Args:
-            paper: Path to pdf file locally stored. Defaults to None.
-            custom_questions (list, optional): List of custom questions. Defaults to [].
-            publication_doi (_type_, optional): DOI of paper we want to analyze. Defaults to None.
-            publication_title (_type_, optional): Title of paper we want to analyze. Defaults to None.
-        """        
+            model (str): Model name. Defaults to "llama3.1".
+            paper (Path | str | None): Path to the PDF file locally stored. Defaults to None.
+            custom_questions (list[str] | None): List of custom questions. Defaults to None.
+            publication_doi (str | None): DOI of the paper to analyze. Defaults to None.
+            publication_title (str | None): Title of the paper to analyze. Defaults to None.
+        """
         super().__init__(model=model)
-        self.path = path
-        self.paper =  paper # To edit later
-        self.paper_summary = ""
-        self.custom_questions = custom_questions
-        self.publication_doi = publication_doi
-        self.publication_title = publication_title
-        self.topics = ""
+
+        # Convert `paper` to a `Path` if it's not already or handle None
+        self.paper: Optional[Path] = Path(paper) if paper else None
+        
+        # Assign attributes
+        self.paper_summary: str = ""
+        self.custom_questions: List[str] = custom_questions or []
+        self.publication_doi: Optional[str] = publication_doi
+        self.publication_title: Optional[str] = publication_title
+        self.topics: str = ""
         self.questions = QUESTIONS
 
         
@@ -49,24 +63,24 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
 
             paper = "https://doi.org/" + self.publication_doi
             paper_type = "doi"
-            out = f"{self.path}{self.publication_doi.replace('/','_')}.pdf"
+            out = f"{PAPERS_PATH}{self.publication_doi.replace('/','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             
             if not os.path.exists(out):
                 raise RuntimeError(f"Failed to download the PDF for the publication with DOI: {self.publication_doi}")
             else:
-                self.paper = out
+                self.paper = Path(out)
             
         elif self.publication_title:
             
             paper = self.publication_title
             paper_type = "title"
-            out = f"{self.path}{self.publication_title.replace(' ','_')}.pdf"
+            out = f"{PAPERS_PATH}{self.publication_title.replace(' ','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             if not os.path.exists(out):
                 raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
             else:
-                self.paper = out
+                self.paper = Path(out)
         
     
     def scan_pdf(self):
@@ -87,8 +101,15 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         
         
         
-        
     def summarize(self):
+        pass
+    
+    
+    
+    
+    
+    
+    def summarize_reduce_chaine(self):
         from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
         from langchain.chains.llm import LLMChain
         from langchain.chains.combine_documents.stuff import StuffDocumentsChain
@@ -171,7 +192,6 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
         self.download_pdf()
         self.add_custom_questions()
         self.scan_pdf()
-        #print(self.questions)
         self.summarize()
         self.topics = self.get_topics()        
         
@@ -210,20 +230,23 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
             
             
             
-    def generate_podcast(self):
+    def generate_podcast(self, transcript:bool=False):
         """
         Generate a podcast from the publication.
         """
-        pass
+        audio_file_path, transcript = generate_audio(self.paper)
+        if transcript:
+            return f"Your audio podcast was stored in {audio_file_path} and the transcript is: {transcript}"
+        return f"Your audio podcast was stored in {audio_file_path}"    
     
     
     def format_output(self) -> str:
         """Format the output of the Spock class."""
         output_lines = [
-            "📄 **Summary of the Publication**",
+            "📄 Summary of the Publication",
             f"{self.paper_summary}",
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-            "📝 **Topics Covered in the Publication**"
+            "📝 Topics Covered in the Publication"
         ]
 
         if isinstance(self.topics, list):
@@ -234,29 +257,18 @@ class Spock(Helper_LLM): # Heritage a voir plus tard - maybe bot_llm
 
         output_lines.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
 
-        # Iterate over the questions and append formatted strings to the list
         for question in self.questions:
             output_lines.extend([
-                f"❓ **Question**: {question}",
-                f"💡 **Answer**: {self.questions[question]['output']['response']}",
-                f"🔎 **Supporting Sentence**: {self.questions[question]['output']['sentence']}",
+                f"❓ Question: {question}",
+                f"💡 Answer: {self.questions[question]['output']['response']}",
+                f"🔎 Supporting Sentence: {self.questions[question]['output']['sentence']}",
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             ])
 
-        # Join all lines into a single string with newline characters
-        output_text = '\n'.join(output_lines)
-        
-        
-        #if __name__ == "__main__":
-            #print(output_text)
-            
+        output_text = '\n'.join(output_lines)     
         return output_text
 
     
     
 
 
-if __name__ == "__main__": # That would be the script to submit for the job
-    import sys
-    spock = Spock()
-    print(len(spock.questions))

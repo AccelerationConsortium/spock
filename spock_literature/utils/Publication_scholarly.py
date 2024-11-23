@@ -14,21 +14,16 @@ from scholarly import scholarly
 
 
 class Publication_scholarly(): # Give it Publication as inheritance
-    def __init__(self,publication_filled, llm_use:bool=True, is_from_scholarly:bool=True, **kwargs) -> None:
-        """
-        Args:
-            publication_filled (_type_): _description_
-            llm_use (bool, optional): _description_. Defaults to True.
-            is_from_scholarly (bool, optional): _description_. Defaults to True.
-        """
-        if is_from_scholarly: self.publication_filled = publication_filled
+    def __init__(self,publication_filled, get_topic:bool=False) -> None:
+        """Initialize a Publication object."""
+        self.publication_filled = publication_filled
         self.title = self.get_publication_title()
         self.abstract = self.get_publication_abstract().lower()
         self.author = self.get_author_name()
         self.year = self.get_year()
         self.url = self.get_publication_url()
         self.citation = self.get_citation()
-        self.topic = self.get_topic()
+        self.topic = self.get_topic() if get_topic else None
     
       
     def get_publication_url(self) -> str:

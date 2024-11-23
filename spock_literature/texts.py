@@ -103,3 +103,6 @@ QUESTIONS = {
                                         3. Efficacy of hydroxychloroquine in patients with COVID-19: results of a randomized clinical trial\
                                             Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
                                                 from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}}}
+
+
+PAPERS_PATH = "TODO"

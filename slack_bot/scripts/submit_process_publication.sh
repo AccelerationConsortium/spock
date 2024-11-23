@@ -21,7 +21,6 @@ module load BalamEnv
 module load python/3.8
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 
-source 
 if [[ "$MODEL" == "llama" ]]; then
     source /home/m/mehrad/brikiyou/scratch/to_run.sh
     ollama serve > ollama.log 2>&1 &
