@@ -13,6 +13,7 @@ import json
 from User import User
 from spock_literature.utils.generate_podcast import generate_audio
 import logging
+import subprocess
 
 
 load_dotenv()
@@ -78,20 +79,6 @@ Feel free to ask me questions or share your files for processing!
 
 
 
-def upload_audio_file(channel_id, file_path, initial_comment):
-    try:
-        response = app.client.files_upload_v2(
-            channel=channel_id,
-            initial_comment=initial_comment,
-            file=file_path,
-        )
-        if response.get('ok'):
-            print('File uploaded successfully!')
-        else:
-            print(f"Failed to upload file: {response.get('error')}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        
 # Slack event handler
 @app.command("/generate_podcast")
 def handle_app_mention(ack, body, client):
@@ -160,7 +147,8 @@ def handle_process_publication_doi(ack, body, client):
         text=f"{response}"
     )
     
-    
+
+# TODO: Better formatting
 @app.command("/get_authors_list")
 def get_authors_list(ack, body, client):
     ack()
@@ -172,7 +160,7 @@ def get_authors_list(ack, body, client):
     
     client.chat_postMessage(
         channel=channel_id,
-        text=f"Here's the authos list: {authors}"
+        text=f"Here's the authors list: {authors}"
     )
     
 @app.command("/get_author_publication")
@@ -413,6 +401,20 @@ def handle_file_shared(event, client, logger):
                 # Choosing the model for the user
                 model = users[user_id]["user_model"]
                 spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)
+                
+                try:
+                    # Launch the script
+                    result = subprocess.run([script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                    
+                    # Print the script's output
+                    print("Script output:")
+                    print(result.stdout)
+
+                except subprocess.CalledProcessError as e:
+                    # Handle errors from the script execution
+                    print("Error occurred while executing the script:")
+                    print(e.stderr)
+                """
                 spock()
                 response_output = spock.format_output()
                 
@@ -428,6 +430,8 @@ def handle_file_shared(event, client, logger):
                     text=f"Your file `{file_name}` has been processed. \n {response_output}",
                     mrkdwn=True
                 )
+                
+                """
             else:
                 # Not a PDF file
                 client.chat_postMessage(
