@@ -20,9 +20,9 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
-PAPERS_PATH = "/home/youssef/clone/spock/slack_bot/papers/"
-USER_JSON_PATH = "/home/youssef/clone/spock/slack_bot/users.json"
-ANALYZED_PAPERS_JSON_PATH = "/home/youssef/clone/spock/slack_bot/analyzed_publications.json"
+PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
+USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
+ANALYZED_PAPERS_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/analyzed_publications.json"
 
 
 
@@ -402,6 +402,8 @@ def handle_file_shared(event, client, logger):
                 model = users[user_id]["user_model"]
                 spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)
                 
+                
+                """
                 try:
                     # Launch the script
                     result = subprocess.run([script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
@@ -430,6 +432,7 @@ def handle_file_shared(event, client, logger):
                     text=f"Your file `{file_name}` has been processed. \n {response_output}",
                     mrkdwn=True
                 )
+                """
                 
                 """
             else:

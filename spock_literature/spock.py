@@ -1,4 +1,5 @@
 """Main module."""
+from langchain_openai import ChatOpenAI
 from spock_literature.utils.Helper_LLM import Helper_LLM
 from operator import itemgetter
 import os
@@ -11,7 +12,7 @@ from langchain_core.prompts import PromptTemplate
 import requests
 from scholarly import scholarly
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from texts import *
+from .texts import *
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
@@ -102,14 +103,44 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         
         
     def summarize(self):
-        pass
+        from langchain.chains.summarize import load_summarize_chain
+        from langchain.document_loaders import PyPDFLoader
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
+        from langchain.llms import OpenAI  # or your specific LLM class
+
+        """Return the summary of the publication."""
+
+        # Load and split the document
+        loader = PyPDFLoader(self.paper)
+        docs = loader.load()
+
+        # Optimize chunk size and overlap
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1000,
+            chunk_overlap=200
+        )
+        split_docs = text_splitter.split_documents(docs)
+
+        # Choose an appropriate LLM
+        if isinstance(self.llm, OllamaLLM):
+            llm = OllamaLLM(model="llama3.2:latest", temperature=0.2)
+        else:
+            llm = self.llm
+
+        # Use the built-in summarization chain
+        chain = load_summarize_chain(llm, chain_type="map_reduce")
+
+        # Run the chain
+        summary = chain.invoke(split_docs)
+        self.paper_summary = summary
+        print(self.paper_summary)
     
     
     
     
     
     
-    def summarize_reduce_chaine(self):
+    def summarize_llama(self):
         from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
         from langchain.chains.llm import LLMChain
         from langchain.chains.combine_documents.stuff import StuffDocumentsChain
@@ -125,10 +156,9 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         Helpful Answer:"""
         map_prompt = PromptTemplate.from_template(map_template)
         
-        if isinstance(self.llm, OllamaLLM):
-            llm = OllamaLLM(model="llama3.1", temperature=0.2)
+        llm = OllamaLLM(model="llama3.2:latest", temperature=0.2)
         
-        else: llm = self.llm
+        
         map_chain = LLMChain(llm=llm, prompt=map_prompt)
 
         reduce_template = """The following is set of summaries:
@@ -156,7 +186,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         )
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=2500, chunk_overlap=20
+            chunk_size=2500
         )
         split_docs = text_splitter.split_documents(docs)
 
@@ -164,12 +194,6 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         result = map_reduce_chain.invoke(split_docs)
         self.paper_summary = result['output_text']
         print(self.paper_summary)
-
-
-
-
-
-
 
             
     def get_topics(self):
@@ -182,7 +206,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         chain = prompt | self.llm
         
         #TODO: Continue from here/Add topics
-        return chain.invoke({"summary": self.paper_summary})
+        return chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
         
         
         
@@ -192,7 +216,10 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         self.download_pdf()
         self.add_custom_questions()
         self.scan_pdf()
-        self.summarize()
+        if isinstance(self.llm, OllamaLLM):
+            self.summarize_llama()
+        else:
+            self.summarize()
         self.topics = self.get_topics()        
         
         
