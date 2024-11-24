@@ -47,13 +47,12 @@ class Helper_LLM:
         self.folder_path = folder_path
         self.vectorstore = None
 
-    
-    def chunk_indexing(self, document:str):
-        
+    def chunk_indexing(self, document):
+        print("Indexing documents... \n " + str(document))
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
         data = []
-        if isinstance(document, str) and os.path.isfile(document):
+        if os.path.isfile(document):
             try:
                 pages = PyPDFLoader(document).load_and_split()
                 sliced_pages = text_splitter.split_documents(pages)
