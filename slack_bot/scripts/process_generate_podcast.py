@@ -27,7 +27,6 @@ def upload_audio_file(channel_id, file_path, initial_comment):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--paper', required=True)
-    parser.add_argument('--audio_file_path', required=True)
     parser.add_argument('--user_id', required=False)
     parser.add_argument('--channel_id', required=True)
     parser.add_argument('--initial_comment', default="")
