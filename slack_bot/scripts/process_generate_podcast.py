@@ -5,6 +5,8 @@ from slack_sdk import WebClient
 from spock_literature import Spock
 import re
 from spock_literature.utils.Author import Author
+from langchain_community.callbacks import get_openai_callback
+
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')
 client = WebClient(token=BOT_TOKEN)
@@ -27,7 +29,6 @@ def upload_audio_file(channel_id, file_path, initial_comment):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--paper', required=True)
-    parser.add_argument('--audio_file_path', required=True)
     parser.add_argument('--user_id', required=False)
     parser.add_argument('--channel_id', required=True)
     parser.add_argument('--initial_comment', default="")
@@ -40,9 +41,12 @@ def main():
     initial_comment = args.initial_comment
     add_transcript = args.add_transcript
     
-    spock = Spock(paper=paper)
-    audio_file_path, transcript = spock.generate_podcast()
-    upload_audio_file(channel_id, audio_file_path, initial_comment)
+    
+    with get_openai_callback() as cb:
+        spock = Spock(paper=paper)
+        audio_file_path, transcript = spock.generate_podcast()
+        cost = cb.total_cost
+    upload_audio_file(channel_id, audio_file_path, initial_comment + f"\n\nCost (USD): {cost}")
     if add_transcript:
         client.chat_postMessage(
             channel=channel_id,

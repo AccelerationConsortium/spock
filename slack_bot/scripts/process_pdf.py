@@ -3,6 +3,8 @@ import os
 import json
 from slack_sdk import WebClient
 from spock_literature import Spock
+from langchain_community.callbacks import get_openai_callback
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -27,24 +29,20 @@ def main():
         user_questions = []
 
     # Perform the processing
-    spock = Spock(model=model, paper=paper_path, custom_questions=user_questions)
-    spock()
-    response_output = spock.format_output()
+    
+    with get_openai_callback() as cb:
+        spock = Spock(model=model, paper=paper_path, custom_questions=user_questions)
+        spock()
+        response_output = spock.format_output()
+        cost = cb.total_cost
 
-    # Save the analyzed paper
-    analyzed_papers_path = "/home/m/mehrad/brikiyou/scratch/spock_package/spock/slack_bot/analyzed_publications.json"
-    with open(analyzed_papers_path, "r") as f:
-        analyzed_papers = json.load(f)
-    analyzed_papers[os.path.basename(paper_path)] = response_output
-    with open(analyzed_papers_path, "w") as f:
-        json.dump(analyzed_papers, f)
 
     # Send the response back to the user via Slack
     BOT_TOKEN = os.getenv('BOT_TOKEN')
     client = WebClient(token=BOT_TOKEN)
     client.chat_postMessage(
         channel=channel_id,
-        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output}",
+        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output} \n Cost (USD): {cost}",
         mrkdwn=True
     )
 
