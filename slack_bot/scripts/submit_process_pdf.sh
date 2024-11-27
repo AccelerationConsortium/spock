@@ -7,14 +7,14 @@ USER_ID=$4
 CHANNEL_ID=$5
 
 # Create a temporary job script
-JOB_SCRIPT=$(mktemp)
+JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
 
 # Generate the Slurm job script dynamically based on the model
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --time=1:00:00
-$(if [[ "$MODEL" == "llama" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=1"; fi)
+#SBATCH --time=00:05:00
+$(if [[ "$MODEL" == "llama" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=0"; fi)
 
 
 module load BalamEnv
@@ -33,8 +33,6 @@ python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_pdf.py \
     --user_id "$USER_ID" \\
     --channel_id "$CHANNEL_ID"
 EOT
-cd 
-cd scratch/
 
-# Submit the job script
-sbatch $JOB_SCRIPT
+
+tmux new-session -d -s temp_session "ssh -4 balam-login01 'sbatch $JOB_SCRIPT'"

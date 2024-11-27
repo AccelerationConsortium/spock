@@ -1,7 +1,6 @@
 """Main module."""
 from langchain_openai import ChatOpenAI
 from spock_literature.utils.Helper_LLM import Helper_LLM
-from operator import itemgetter
 import os
 import faiss
 from langchain_community.document_loaders import PyPDFLoader
@@ -9,14 +8,13 @@ import faiss
 import os
 import json
 from langchain_core.prompts import PromptTemplate
-import requests
-from scholarly import scholarly
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from .texts import *
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
+
 
 class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
     """Spock class."""
@@ -123,7 +121,10 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         Helpful Answer:"""
         map_prompt = PromptTemplate.from_template(map_template)
         
-        llm = OllamaLLM(model="llama3.2:latest", temperature=0.2)
+        if isinstance(self.llm, ChatOpenAI):
+            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+        else:
+            llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
         
         map_chain = LLMChain(llm=llm, prompt=map_prompt)
@@ -229,8 +230,8 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         """
         audio_file_path, transcript = generate_audio(self.paper)
         if transcript:
-            return f"Your audio podcast was stored in {audio_file_path} and the transcript is: {transcript}"
-        return f"Your audio podcast was stored in {audio_file_path}"    
+            return audio_file_path, transcript  
+        return audio_file_path  
     
     
     def format_output(self) -> str:

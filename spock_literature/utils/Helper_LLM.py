@@ -28,7 +28,7 @@ def get_api_key(env_var, prompt):
 class Helper_LLM:
     def __init__(self,model, temperature:int=0.2, embed_model=OpenAIEmbeddings(model="text-embedding-3-large"), folder_path='db2'):
 
-        if model == "gpt-4":
+        if model == "gpt-4o":
             get_api_key("OPENAI_API_KEY", "Enter your OpenAI API key: ")
             self.llm = ChatOpenAI(model="gpt-4o", temperature=temperature)
 
@@ -42,7 +42,7 @@ class Helper_LLM:
         else:
             raise ValueError("Model not supported")
             
-
+            
         self.oembed = embed_model
         self.folder_path = folder_path
         self.vectorstore = None
