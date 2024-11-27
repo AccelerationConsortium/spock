@@ -12,7 +12,7 @@ JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --time=01:00:00
+#SBATCH --time=00:02:00
 #SBATCH --gpus-per-node=0
 #SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
 #SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
@@ -30,16 +30,4 @@ python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_generate
     --initial_comment "$INITIAL_COMMENT"
 EOT
 
-# Ensure the job script is executable
-chmod +x $JOB_SCRIPT
-
-# Submit the job script on the login node via SSH
-ssh -4 balam-login01 "sbatch $JOB_SCRIPT"
-
-# Check if the ssh command was successful
-if [ $? -ne 0 ]; then
-    echo "Error: Failed to submit the job script on the login node."
-    exit 1
-else
-    echo "Job script submitted successfully on the login node."
-fi
+tmux new-session -d -s temp_session "ssh -4 balam-login01 'sbatch $JOB_SCRIPT'"

@@ -3,7 +3,7 @@ example/
 scholarly_creative_work/
 #scholarly_creative_work/
 spock_literature/json/*
-tmp/*
+tmp
 slack_bot/papers/
 # Byte-compiled / optimized / DLL files
 __pycache__/

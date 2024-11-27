@@ -5,12 +5,13 @@ COUNT=$2
 USER_ID=$3
 CHANNEL_ID=$4
 
-JOB_SCRIPT=$(mktemp)
+JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
+
 
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --time=1:00:00
+#SBATCH --time=00:02:00
 #SBATCH --gpus-per-node=0
 
 
@@ -28,4 +29,4 @@ cd
 cd scratch/
 
 # Submit the job script
-sbatch $JOB_SCRIPT
+tmux new-session -d -s temp_session "ssh -4 balam-login01 'sbatch $JOB_SCRIPT'"

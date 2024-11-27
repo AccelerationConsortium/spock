@@ -15,6 +15,7 @@ from User import User
 from spock_literature.utils.generate_podcast import generate_audio
 import logging
 import subprocess
+from langchain_community.callbacks import get_openai_callback
 
 
 load_dotenv()
@@ -409,25 +410,13 @@ def handle_file_shared(event, client, logger):
                 
                 # Choosing the model for the user
                 model = users[user_id]["user_model"]
-                spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)
                 
-                
-                """
-                try:
-                    # Launch the script
-                    result = subprocess.run([script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                with get_openai_callback() as cb:
+                    spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
+                    spock()
+                    response_output = spock.format_output()
+                    cost = cb.total_cost
                     
-                    # Print the script's output
-                    print("Script output:")
-                    print(result.stdout)
-
-                except subprocess.CalledProcessError as e:
-                    # Handle errors from the script execution
-                    print("Error occurred while executing the script:")
-                    print(e.stderr)
-                """
-                spock()
-                response_output = spock.format_output()
                 
                 
                 with open(ANALYZED_PAPERS_JSON_PATH, "w") as f: # TODO: Change this to match custom questions
@@ -438,7 +427,7 @@ def handle_file_shared(event, client, logger):
                 # Sending the response to the user
                 client.chat_postMessage(
                     channel=channel_id,
-                    text=f"Your file `{file_name}` has been processed. \n {response_output}",
+                    text=f"Your file `{file_name}` has been processed. \n {response_output} \n Cost (USD): {cost}",
                     mrkdwn=True
                 )
                 """
