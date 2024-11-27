@@ -2,6 +2,7 @@ from langchain_community.vectorstores import FAISS
 import faiss
 from dotenv import load_dotenv
 import os
+from langchain_openai import ChatOpenAI
 import requests
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
@@ -14,15 +15,16 @@ from User import User
 from spock_literature.utils.generate_podcast import generate_audio
 import logging
 import subprocess
+from langchain_community.callbacks import get_openai_callback
 
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
-PAPERS_PATH = "/home/youssef/clone/spock/slack_bot/papers/"
-USER_JSON_PATH = "/home/youssef/clone/spock/slack_bot/users.json"
-ANALYZED_PAPERS_JSON_PATH = "/home/youssef/clone/spock/slack_bot/analyzed_publications.json"
+PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
+USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
+ANALYZED_PAPERS_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/analyzed_publications.json"
 
 
 
@@ -269,8 +271,6 @@ def handle_processpdf(ack, body, client):
     channel_id = body["channel_id"]
     questions[user_id] = list(filter(lambda x:x, body["text"].split("/")))
     
-    print(questions[user_id])
-    print(questions)
 
     waiting_for_file[user_id] = channel_id
     client.chat_postMessage(
@@ -285,7 +285,7 @@ def handle_app_mention(event, say):
     user = event["user"]
     user_text = event["text"]
     
-    llm = Ollama(model="llama3.1")
+    llm = ChatOpenAI(model="gpt-4o", temperature=0.4)
 
 
     # Customize it 
@@ -312,7 +312,6 @@ def handle_file_shared(event, client, logger):
         except: user_questions = []
         del waiting_for_podcast[user_id]
         try:
-
             file_info_response = client.files_info(file=file_id)
             file_info = file_info_response["file"]
             if file_info["filetype"] == "pdf":
@@ -327,12 +326,24 @@ def handle_file_shared(event, client, logger):
                     channel=channel_id,
                     text=f"Your file `{file_name}` has been uploaded. Processing it now..."
                 )
-
-                audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
+                #audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
 
                 # Upload audio file to Slack
-                initial_comment = f"<@{user_id}> Here's the audio podcast for your pdf!"
-                upload_audio_file(channel_id, audio_file_path, initial_comment)
+                script_path = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/submit_generate_podcast.sh"
+
+                # Prepare the arguments for subprocess.run()
+                args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!"]
+
+                try:
+                    # Execute the shell script
+                    subprocess.run(args, check=True)
+                    print("Script executed successfully!")
+                except subprocess.CalledProcessError as e:
+                    print(f"An error occurred while executing the script: {e}")
+                    print(f"stderr: {e.stderr}")
+                    print(f"stdout: {e.stdout}")
+
+                
 
             else:
                 # Not a PDF file
@@ -346,7 +357,6 @@ def handle_file_shared(event, client, logger):
                 channel=channel_id,
                 text=f"An error occurred while processing your file. Please try again. {e}"
             )
-        
         
 
 
@@ -400,23 +410,13 @@ def handle_file_shared(event, client, logger):
                 
                 # Choosing the model for the user
                 model = users[user_id]["user_model"]
-                spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)
                 
-                try:
-                    # Launch the script
-                    result = subprocess.run([script_path], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+                with get_openai_callback() as cb:
+                    spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
+                    spock()
+                    response_output = spock.format_output()
+                    cost = cb.total_cost
                     
-                    # Print the script's output
-                    print("Script output:")
-                    print(result.stdout)
-
-                except subprocess.CalledProcessError as e:
-                    # Handle errors from the script execution
-                    print("Error occurred while executing the script:")
-                    print(e.stderr)
-                """
-                spock()
-                response_output = spock.format_output()
                 
                 
                 with open(ANALYZED_PAPERS_JSON_PATH, "w") as f: # TODO: Change this to match custom questions
@@ -427,9 +427,10 @@ def handle_file_shared(event, client, logger):
                 # Sending the response to the user
                 client.chat_postMessage(
                     channel=channel_id,
-                    text=f"Your file `{file_name}` has been processed. \n {response_output}",
+                    text=f"Your file `{file_name}` has been processed. \n {response_output} \n Cost (USD): {cost}",
                     mrkdwn=True
                 )
+                """
                 
                 """
             else:

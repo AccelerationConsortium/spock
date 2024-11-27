@@ -28,7 +28,7 @@ def get_api_key(env_var, prompt):
 class Helper_LLM:
     def __init__(self,model, temperature:int=0.2, embed_model=OpenAIEmbeddings(model="text-embedding-3-large"), folder_path='db2'):
 
-        if model == "gpt-4":
+        if model == "gpt-4o":
             get_api_key("OPENAI_API_KEY", "Enter your OpenAI API key: ")
             self.llm = ChatOpenAI(model="gpt-4o", temperature=temperature)
 
@@ -42,18 +42,17 @@ class Helper_LLM:
         else:
             raise ValueError("Model not supported")
             
-
+            
         self.oembed = embed_model
         self.folder_path = folder_path
         self.vectorstore = None
 
-    
-    def chunk_indexing(self, document:str):
-        
+    def chunk_indexing(self, document):
+        print("Indexing documents... \n " + str(document))
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
         data = []
-        if isinstance(document, str) and os.path.isfile(document):
+        if os.path.isfile(document):
             try:
                 pages = PyPDFLoader(document).load_and_split()
                 sliced_pages = text_splitter.split_documents(pages)

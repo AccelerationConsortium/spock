@@ -1,6 +1,6 @@
 """Main module."""
+from langchain_openai import ChatOpenAI
 from spock_literature.utils.Helper_LLM import Helper_LLM
-from operator import itemgetter
 import os
 import faiss
 from langchain_community.document_loaders import PyPDFLoader
@@ -8,14 +8,13 @@ import faiss
 import os
 import json
 from langchain_core.prompts import PromptTemplate
-import requests
-from scholarly import scholarly
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from texts import *
+from .texts import *
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
+
 
 class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
     """Spock class."""
@@ -100,16 +99,13 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         
         
         
-        
-    def summarize(self):
-        pass
     
     
     
     
     
     
-    def summarize_reduce_chaine(self):
+    def summarize(self) -> None:
         from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
         from langchain.chains.llm import LLMChain
         from langchain.chains.combine_documents.stuff import StuffDocumentsChain
@@ -125,10 +121,12 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         Helpful Answer:"""
         map_prompt = PromptTemplate.from_template(map_template)
         
-        if isinstance(self.llm, OllamaLLM):
-            llm = OllamaLLM(model="llama3.1", temperature=0.2)
+        if isinstance(self.llm, ChatOpenAI):
+            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+        else:
+            llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
-        else: llm = self.llm
+        
         map_chain = LLMChain(llm=llm, prompt=map_prompt)
 
         reduce_template = """The following is set of summaries:
@@ -156,20 +154,13 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         )
 
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=2500, chunk_overlap=20
+            chunk_size=2500
         )
         split_docs = text_splitter.split_documents(docs)
 
         # Invoke the chain and extract the summary
         result = map_reduce_chain.invoke(split_docs)
         self.paper_summary = result['output_text']
-        print(self.paper_summary)
-
-
-
-
-
-
 
             
     def get_topics(self):
@@ -182,7 +173,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         chain = prompt | self.llm
         
         #TODO: Continue from here/Add topics
-        return chain.invoke({"summary": self.paper_summary})
+        return chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
         
         
         
@@ -191,8 +182,11 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         """Run Spock."""
         self.download_pdf()
         self.add_custom_questions()
-        self.scan_pdf()
-        self.summarize()
+        self.scan_pdf() 
+        
+        # To not rerun the summarize method if the topics are already extracted
+        if not self.paper_summary: 
+            self.summarize()
         self.topics = self.get_topics()        
         
         
@@ -236,8 +230,8 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         """
         audio_file_path, transcript = generate_audio(self.paper)
         if transcript:
-            return f"Your audio podcast was stored in {audio_file_path} and the transcript is: {transcript}"
-        return f"Your audio podcast was stored in {audio_file_path}"    
+            return audio_file_path, transcript  
+        return audio_file_path  
     
     
     def format_output(self) -> str:

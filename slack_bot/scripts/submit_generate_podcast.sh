@@ -1,35 +1,33 @@
 #!/bin/bash
 
 PAPER=$1
-AUDIO_FILE_PATH=$2
-USER_ID=$3
-CHANNEL_ID=$4
-INITIAL_COMMENT=$5
+USER_ID=$2
+CHANNEL_ID=$3
+INITIAL_COMMENT=$4
 
-# Create a temporary job script
-JOB_SCRIPT=$(mktemp)
+# Define the path for the job script file
+JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
 
-# Generate the Slurm job script dynamically based on the model
+# Generate the SLURM job script dynamically
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --time=00:01:00
+#SBATCH --time=00:02:00
 #SBATCH --gpus-per-node=0
-
+#SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
+#SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
 
 module load BalamEnv
 module load python/3.8
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 
-cd to/path/slack_bot
+cd /home/m/mehrad/brikiyou/scratch/spock/slack_bot
 
-python3 /path/to/spock_processor.py \
-    --paper "$PAPER" \
-    --audio_file_path "$AUDIO_FILE_PATH" \
-    --user_id "$USER_ID" \
-    --channel_id "$CHANNEL_ID"
+python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_generate_podcast.py \\
+    --paper "$PAPER" \\
+    --user_id "$USER_ID" \\
+    --channel_id "$CHANNEL_ID" \\
     --initial_comment "$INITIAL_COMMENT"
 EOT
 
-# Submit the job script
-sbatch $JOB_SCRIPT
+tmux new-session -d -s temp_session "ssh -4 balam-login01 'sbatch $JOB_SCRIPT'"
