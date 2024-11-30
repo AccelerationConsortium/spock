@@ -122,7 +122,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         map_prompt = PromptTemplate.from_template(map_template)
         
         if isinstance(self.llm, ChatOpenAI):
-            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+            llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
