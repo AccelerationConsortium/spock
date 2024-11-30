@@ -12,7 +12,7 @@ source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 cd /home/m/mehrad/brikiyou/scratch/spock/slack_bot
 
 python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_generate_podcast.py \
-    --paper "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/cell_penetration_of_oxadiazole_containing_macrocycles.pdf" \
+    --paper "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/AGENT-BASED_LEARNING_OF_MATERIALS_DATASETS_FROM_SCIENTIFIC_LITERATURE.pdf" \
     --user_id "U073D78M8UT" \
     --channel_id "D073ZCA5L6N" \
     --initial_comment "Here's the audio podcast for your pdf!"

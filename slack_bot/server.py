@@ -25,7 +25,7 @@ APP_TOKEN = os.getenv("APP_TOKEN")
 PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
 USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
 ANALYZED_PAPERS_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/analyzed_publications.json"
-
+SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/"
 
 
 app = App(token=BOT_TOKEN)
@@ -326,16 +326,10 @@ def handle_file_shared(event, client, logger):
                     channel=channel_id,
                     text=f"Your file `{file_name}` has been uploaded. Processing it now..."
                 )
-                #audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
-
-                # Upload audio file to Slack
-                script_path = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/submit_generate_podcast.sh"
-
-                # Prepare the arguments for subprocess.run()
+                script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
                 args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!"]
 
                 try:
-                    # Execute the shell script
                     subprocess.run(args, check=True)
                     print("Script executed successfully!")
                 except subprocess.CalledProcessError as e:
@@ -384,19 +378,8 @@ def handle_file_shared(event, client, logger):
 
                 print(f"passing {file_name} to Spock")
                 
-                # Analyzing the paper
-                with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
-                    analyzed_papers = json.load(f)
-                    
-                if file_name in analyzed_papers:
-                    client.chat_postMessage(
-                        channel=channel_id,
-                        text=f"Hi there, <@{user_id}>! This paper has already been processed. Here is the summary: {analyzed_papers[file_name]}"
-                    )
-                    return
                 
                 
-                # Checking if the user is in the database
                 with open(USER_JSON_PATH, "r") as f:
                     users = json.load(f)
                     
@@ -412,16 +395,23 @@ def handle_file_shared(event, client, logger):
                 model = users[user_id]["user_model"]
                 
                 with get_openai_callback() as cb:
+                    
                     spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
                     spock()
                     response_output = spock.format_output()
                     cost = cb.total_cost
-                    
+                    """
+                    args = []
+                    script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
+                    try:
+                        subprocess.run(args, check=True)
+                        print("Script executed successfully!")
+                    except subprocess.CalledProcessError as e:
+                        print(f"An error occurred while executing the script: {e}")
+                        print(f"stderr: {e.stderr}")
+                        print(f"stdout: {e.stdout}")
+                    """
                 
-                
-                with open(ANALYZED_PAPERS_JSON_PATH, "w") as f: # TODO: Change this to match custom questions
-                    analyzed_papers[file_name] = response_output
-                    json.dump(analyzed_papers, f)
                 
                 
                 # Sending the response to the user
