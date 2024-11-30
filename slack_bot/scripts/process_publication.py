@@ -9,14 +9,14 @@ import re
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', required=True)
-    parser.add_argument('--doi_or_title', required=True)
+    parser.add_argument('--publication', required=True)
     parser.add_argument('--questions', default="")
     parser.add_argument('--user_id', required=True)
     parser.add_argument('--channel_id', required=True)
     args = parser.parse_args()
 
     model = args.model
-    doi_or_title = args.doi_or_title
+    publication = args.publication
     questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
@@ -28,15 +28,18 @@ def main():
     else:
         user_questions = []
         
-    if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', doi_or_title): 
+    if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', publication): 
         # DOI
-        doi = doi_or_title
+        doi = publication
         spock = Spock(model=model, publication_doi=doi, custom_questions=user_questions)
-    else:
+    elif re.match(r'https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)', doi_or_title):
+        # URL
+        url = publication
+        
+    else :
         # Title
-        title = doi_or_title
+        title = publication
         spock = Spock(model=model, publication_title=title, custom_questions=user_questions)
-
 
     # TODO:
     # Perform the processing
