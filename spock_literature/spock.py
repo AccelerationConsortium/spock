@@ -26,6 +26,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         custom_questions: Optional[List[str]] = None,
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
+        publication_url: Optional[str] = None,
     ):
         """
         Initialize a Spock object.
@@ -38,15 +39,12 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
             publication_title (str | None): Title of the paper to analyze. Defaults to None.
         """
         super().__init__(model=model)
-
-        # Convert `paper` to a `Path` if it's not already or handle None
         self.paper: Optional[Path] = Path(paper) if paper else None
-        
-        # Assign attributes
         self.paper_summary: str = ""
         self.custom_questions: List[str] = custom_questions or []
         self.publication_doi: Optional[str] = publication_doi
         self.publication_title: Optional[str] = publication_title
+        self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.questions = QUESTIONS
 
@@ -80,6 +78,10 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
                 raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
             else:
                 self.paper = Path(out)
+                
+        elif self.publication_url:
+            # Use Script given
+            pass
         
     
     def scan_pdf(self):

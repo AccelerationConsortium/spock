@@ -96,75 +96,24 @@ def handle_app_mention(ack, body, client):
 
 
 
-@app.command("/process_publication_title")
+@app.command("/process_publication")
 def handle_process_publication_name(ack, body, client):
     ack()
     user = body["user_id"]
     channel_id = body["channel_id"]
-    title = body["text"]
-    
-    print(title)
-    
-    
-    spock = Spock(publication_title=title, path=PAPERS_PATH)
-    try: 
-        response = f" Hi there, <@{user}>! Here is the summary of the publication with the title {title}: {spock()}"
-    except Exception as e:
-        if isinstance(e, RuntimeError):
-            response = "Couldn't download the PDF, probably because the publication is not available online."
-        else:
-            response = "An error occurred while processing the publication."
-            
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"{response}"
-    )
-    
+    publication = body["text"]
+    custom_questions = ""
+    script_path = SCRIPTS_PATH+"submit_process_publication_title.sh"
+    args = [script_path, publication, custom_questions, user, channel_id]    
+    try:
+        subprocess.run(args, check=True)
+        print("Script executed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the script: {e}")
+        print(f"stderr: {e.stderr}")
+        print(f"stdout: {e.stdout}")
 
-    
-    
-@app.command("/process_publication_doi")
-def handle_process_publication_doi(ack, body, client):
-    ack()
-    user = body["user_id"]
-    channel_id = body["channel_id"]
-    doi = body["text"]
-    
-    print(doi)
-    
-    
-    spock = Spock(publication_doi=doi, path=PAPERS_PATH)
-    try: 
-        response = f" Hi there, <@{user}>! Here is the summary of the publication with the DOI {doi}: {spock()}"
-    except Exception as e:
-        if isinstance(e, RuntimeError):
-            response = "Couldn't download the PDF, probably because the publication is not available online."
-        else:
-            response = "An error occurred while processing the publication."
-            
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"{response}"
-    )
-    
-
-# TODO: Better formatting
-@app.command("/get_authors_list")
-def get_authors_list(ack, body, client):
-    ack()
-    user_id = body["user_id"]
-    channel_id = body["channel_id"]
-    
-    with open("authors.txt", "r") as f: 
-        authors = f.read()
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here's the authors list: {authors}"
-    )
-    
+        
 @app.command("/get_author_publication")
 def get_author_publications(ack, body, client):
     ack()
@@ -176,27 +125,16 @@ def get_author_publications(ack, body, client):
     except:
         author = text
         count = 1
-        
-    author = Author(author)
-    # Format publications
-    publications = author(int(count))
-    
-    output = ""
-    for author, works in publications.items():
-        for work in works:
-            output += f"📄 Title: {work['title']}\n"
-            output += "📜 Abstract:\n"
-            output += f"    {work['abstract']}\n"
-            output += f"✍️ Authors: {work['author']}\n"
-            output += f"📅 Year: {work['year']}\n"
-            output += f"🔗 URL: {work['url']}\n"
-            output += "\n" + "-"*50 + "\n\n"
 
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here are the {count} latest publications of {author}: {output}"
-    )
+    try:
+        job_scipt = SCRIPTS_PATH+"submit_get_author_publications.sh"
+        args = [job_scipt, author, count, user_id, channel_id]
+        subprocess.run(args, check=True)
+        print("Script executed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the script: {e}")
+        print(f"stderr: {e.stderr}")
+        print(f"stdout: {e.stdout}")
     
         
         
@@ -206,6 +144,21 @@ def get_user_settings(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
+    with open(USER_JSON_PATH, "r") as f:
+        users = json.load(f)
+    
+
+    if user_id not in users:
+        user = User(user_id, "llama3.1")
+        users[user_id] = user.__dict__()[user.user_id]
+        with open(USER_JSON_PATH, "w") as f:
+            json.dump(users, f)
+        
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"Hi there, <@{user_id}>! Your current model is: {users[user_id]['user_model']}"
+    )
+
     
     
     
@@ -238,33 +191,10 @@ def handle_choose_llm(ack, body, client):
 
 
 
-@app.command("/get_history") # To edit
-def handle_get_history(ack, body, client):
-    ack()
-    user_id = body["user_id"]
-    channel_id = body["channel_id"]
     
-    with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
-        analyzed_papers = json.load(f)
     
-    user_files = list(filter(lambda x: x["user_id"]==user_id, analyzed_papers))
-    
-    if not user_files:
-        client.chat_postMessage(
-            channel=channel_id,
-            text="You haven't processed any files yet."
-        )
-        return
-    
-    output = ""
-    for file in user_files:
-        output += f"\n📄 Title: {file['title']}"    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here are the files you've processed: {output}"
-    )
 @app.command("/process_pdf")
-def handle_processpdf(ack, body, client):
+def handle_process_pdf(ack, body, client):
 
     ack()
     user_id = body["user_id"]
@@ -395,14 +325,15 @@ def handle_file_shared(event, client, logger):
                 model = users[user_id]["user_model"]
                 
                 with get_openai_callback() as cb:
-                    
+                    """
                     spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
                     spock()
                     response_output = spock.format_output()
                     cost = cb.total_cost
                     """
-                    args = []
+                    
                     script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
+                    args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id]
                     try:
                         subprocess.run(args, check=True)
                         print("Script executed successfully!")
@@ -410,19 +341,8 @@ def handle_file_shared(event, client, logger):
                         print(f"An error occurred while executing the script: {e}")
                         print(f"stderr: {e.stderr}")
                         print(f"stdout: {e.stdout}")
-                    """
                 
-                
-                
-                # Sending the response to the user
-                client.chat_postMessage(
-                    channel=channel_id,
-                    text=f"Your file `{file_name}` has been processed. \n {response_output} \n Cost (USD): {cost}",
-                    mrkdwn=True
-                )
-                """
-                
-                """
+                                
             else:
                 # Not a PDF file
                 client.chat_postMessage(
