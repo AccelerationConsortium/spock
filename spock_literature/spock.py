@@ -9,11 +9,12 @@ import os
 import json
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from .texts import *
+from texts import *
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
+from spock_literature.utils.url_downloader import URLDownloader
 
 
 class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
@@ -27,6 +28,8 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
         publication_url: Optional[str] = None,
+        papers_out = PAPERS_PATH # Make this a path
+   
     ):
         """
         Initialize a Spock object.
@@ -47,6 +50,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.questions = QUESTIONS
+        
 
         
     
@@ -81,7 +85,9 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
                 
         elif self.publication_url:
             # Use Script given
-            pass
+            downloader = URLDownloader(url=self.publication_url, download_path=PAPERS_PATH+"/pdf_demo.pdf")
+            downloader()
+            
         
     
     def scan_pdf(self):
@@ -125,6 +131,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         
         if isinstance(self.llm, ChatOpenAI):
             llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
+            #llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
@@ -266,5 +273,13 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
 
     
     
+if __name__ == "__main__":
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.biorxiv.org/content/10.1101/2024.11.11.622734v1"
+    )
+    
+    spock.download_pdf()
+        
 
 

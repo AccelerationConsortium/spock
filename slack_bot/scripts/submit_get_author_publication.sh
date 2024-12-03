@@ -16,6 +16,7 @@ cat <<EOT > $JOB_SCRIPT
 
 
 module load BalamEnv
+module load python/3.8
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 
 
@@ -25,8 +26,6 @@ python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_get_auth
     --user_id "$USER_ID" \\
     --channel_id "$CHANNEL_ID"
 EOT
-cd 
-cd scratch/
 
 # Submit the job script
 tmux new-session -d -s temp_session "ssh -4 balam-login01 'sbatch $JOB_SCRIPT'"
