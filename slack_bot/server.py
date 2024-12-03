@@ -199,7 +199,7 @@ def handle_process_pdf(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
-    questions[user_id] = list(filter(lambda x:x, body["text"].split("/")))
+    questions[user_id] = body["text"] #list(filter(lambda x:x, body["text"].split("/")))
     
 
     waiting_for_file[user_id] = channel_id
@@ -238,8 +238,6 @@ def handle_file_shared(event, client, logger):
     
     if user_id in waiting_for_podcast:
         channel_id = waiting_for_podcast[user_id]
-        try: user_questions = questions[user_id]
-        except: user_questions = []
         del waiting_for_podcast[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
@@ -287,8 +285,9 @@ def handle_file_shared(event, client, logger):
     
     elif user_id in waiting_for_file:
         channel_id = waiting_for_file[user_id]
+        # Edited this
         try: user_questions = questions[user_id]
-        except: user_questions = []
+        except: user_questions = ""
         del waiting_for_file[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
