@@ -86,7 +86,9 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         elif self.publication_url:
             # Use Script given
             downloader = URLDownloader(url=self.publication_url, download_path=PAPERS_PATH+"/pdf_demo.pdf")
-            downloader()
+            temp_return = downloader()
+            if temp_return:
+                self.paper = temp_return
             
         
     

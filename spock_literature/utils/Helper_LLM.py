@@ -13,7 +13,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_ollama import OllamaLLM
-
+from langchain.schema import Document
 import getpass
 import os
 from dotenv import load_dotenv
@@ -48,32 +48,30 @@ class Helper_LLM:
         self.vectorstore = None
 
     def chunk_indexing(self, document):
-        print("Indexing documents... \n " + str(document))
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
         data = []
         if os.path.isfile(document):
-            try:
-                pages = PyPDFLoader(document).load_and_split()
-                sliced_pages = text_splitter.split_documents(pages)
-
-            except Exception as e:
-                raise RuntimeError(f"Error loading PDF: {e}")
+            pages = PyPDFLoader(document).load_and_split()
+            sliced_pages = text_splitter.split_documents(pages)
         else:
-            try:
-                # Treat the document as raw text content
-                if isinstance(document, str):
-                    data.append(Document(page_content=document))
-                elif isinstance(document, list):
-                    for text in document:
-                        data.append(Document(page_content=text))
+            sliced_pages = text_splitter.split_documents([document])
 
-            except Exception as e:
-                raise RuntimeError(f"Error processing text: {e}")
-
-            
-        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed, )
-
+        self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed)
+        
+    
+    @staticmethod
+    def chunk_indexing_html(html,embed_model=OpenAIEmbeddings(model="text-embedding-3-large")):
+        soup = BeautifulSoup(html, 'html.parser')
+        title = soup.title.string
+        text = soup.get_text()        
+        document = Document(page_content=text, metadata={"title": title})
+        text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=750, chunk_overlap=25)
+        sliced_documents = text_splitter.split_documents([document])
+        return FAISS.from_documents(sliced_documents, embed_model) # Maybe use self here instead of returning a new instance
+        
+        
         
     def query_rag(self, question:str) -> None:
         if self.vectorstore:
