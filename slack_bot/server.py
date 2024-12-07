@@ -25,7 +25,7 @@ APP_TOKEN = os.getenv("APP_TOKEN")
 PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
 USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
 ANALYZED_PAPERS_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/analyzed_publications.json"
-
+SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/"
 
 
 app = App(token=BOT_TOKEN)
@@ -96,75 +96,29 @@ def handle_app_mention(ack, body, client):
 
 
 
-@app.command("/process_publication_title")
+@app.command("/process_publication")
 def handle_process_publication_name(ack, body, client):
     ack()
     user = body["user_id"]
     channel_id = body["channel_id"]
-    title = body["text"]
-    
-    print(title)
-    
-    
-    spock = Spock(publication_title=title, path=PAPERS_PATH)
-    try: 
-        response = f" Hi there, <@{user}>! Here is the summary of the publication with the title {title}: {spock()}"
-    except Exception as e:
-        if isinstance(e, RuntimeError):
-            response = "Couldn't download the PDF, probably because the publication is not available online."
-        else:
-            response = "An error occurred while processing the publication."
-            
-    
-    client.chat_postMessage(
+    publication = body["text"]
+    custom_questions = ""
+    script_path = SCRIPTS_PATH+"submit_process_publication.sh"
+    args = [script_path, publication, custom_questions, user, channel_id]    
+    try:
+        subprocess.run(args, check=True)
+        print("Script executed successfully!")
+        client.chat_postMessage(
         channel=channel_id,
-        text=f"{response}"
+        text="Script Submitted Successfully! Processing your file now..."
     )
-    
 
-    
-    
-@app.command("/process_publication_doi")
-def handle_process_publication_doi(ack, body, client):
-    ack()
-    user = body["user_id"]
-    channel_id = body["channel_id"]
-    doi = body["text"]
-    
-    print(doi)
-    
-    
-    spock = Spock(publication_doi=doi, path=PAPERS_PATH)
-    try: 
-        response = f" Hi there, <@{user}>! Here is the summary of the publication with the DOI {doi}: {spock()}"
-    except Exception as e:
-        if isinstance(e, RuntimeError):
-            response = "Couldn't download the PDF, probably because the publication is not available online."
-        else:
-            response = "An error occurred while processing the publication."
-            
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"{response}"
-    )
-    
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the script: {e}")
+        print(f"stderr: {e.stderr}")
+        print(f"stdout: {e.stdout}")
 
-# TODO: Better formatting
-@app.command("/get_authors_list")
-def get_authors_list(ack, body, client):
-    ack()
-    user_id = body["user_id"]
-    channel_id = body["channel_id"]
-    
-    with open("authors.txt", "r") as f: 
-        authors = f.read()
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here's the authors list: {authors}"
-    )
-    
+        
 @app.command("/get_author_publication")
 def get_author_publications(ack, body, client):
     ack()
@@ -176,27 +130,16 @@ def get_author_publications(ack, body, client):
     except:
         author = text
         count = 1
-        
-    author = Author(author)
-    # Format publications
-    publications = author(int(count))
-    
-    output = ""
-    for author, works in publications.items():
-        for work in works:
-            output += f"📄 Title: {work['title']}\n"
-            output += "📜 Abstract:\n"
-            output += f"    {work['abstract']}\n"
-            output += f"✍️ Authors: {work['author']}\n"
-            output += f"📅 Year: {work['year']}\n"
-            output += f"🔗 URL: {work['url']}\n"
-            output += "\n" + "-"*50 + "\n\n"
 
-    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here are the {count} latest publications of {author}: {output}"
-    )
+    try:
+        job_scipt = SCRIPTS_PATH+"submit_get_author_publications.sh"
+        args = [job_scipt, author, count, user_id, channel_id]
+        subprocess.run(args, check=True)
+        print("Script executed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the script: {e}")
+        print(f"stderr: {e.stderr}")
+        print(f"stdout: {e.stdout}")
     
         
         
@@ -206,6 +149,21 @@ def get_user_settings(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
+    with open(USER_JSON_PATH, "r") as f:
+        users = json.load(f)
+    
+
+    if user_id not in users:
+        user = User(user_id, "llama3.1")
+        users[user_id] = user.__dict__()[user.user_id]
+        with open(USER_JSON_PATH, "w") as f:
+            json.dump(users, f)
+        
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"Hi there, <@{user_id}>! Your current model is: {users[user_id]['user_model']}"
+    )
+
     
     
     
@@ -238,38 +196,15 @@ def handle_choose_llm(ack, body, client):
 
 
 
-@app.command("/get_history") # To edit
-def handle_get_history(ack, body, client):
-    ack()
-    user_id = body["user_id"]
-    channel_id = body["channel_id"]
     
-    with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
-        analyzed_papers = json.load(f)
     
-    user_files = list(filter(lambda x: x["user_id"]==user_id, analyzed_papers))
-    
-    if not user_files:
-        client.chat_postMessage(
-            channel=channel_id,
-            text="You haven't processed any files yet."
-        )
-        return
-    
-    output = ""
-    for file in user_files:
-        output += f"\n📄 Title: {file['title']}"    
-    client.chat_postMessage(
-        channel=channel_id,
-        text=f"Here are the files you've processed: {output}"
-    )
 @app.command("/process_pdf")
-def handle_processpdf(ack, body, client):
+def handle_process_pdf(ack, body, client):
 
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
-    questions[user_id] = list(filter(lambda x:x, body["text"].split("/")))
+    questions[user_id] = body["text"] #list(filter(lambda x:x, body["text"].split("/")))
     
 
     waiting_for_file[user_id] = channel_id
@@ -308,8 +243,6 @@ def handle_file_shared(event, client, logger):
     
     if user_id in waiting_for_podcast:
         channel_id = waiting_for_podcast[user_id]
-        try: user_questions = questions[user_id]
-        except: user_questions = []
         del waiting_for_podcast[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
@@ -326,16 +259,10 @@ def handle_file_shared(event, client, logger):
                     channel=channel_id,
                     text=f"Your file `{file_name}` has been uploaded. Processing it now..."
                 )
-                #audio_file_path, transcript = generate_audio(PAPERS_PATH+file_name)
-
-                # Upload audio file to Slack
-                script_path = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/submit_generate_podcast.sh"
-
-                # Prepare the arguments for subprocess.run()
+                script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
                 args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!"]
 
                 try:
-                    # Execute the shell script
                     subprocess.run(args, check=True)
                     print("Script executed successfully!")
                 except subprocess.CalledProcessError as e:
@@ -363,8 +290,9 @@ def handle_file_shared(event, client, logger):
     
     elif user_id in waiting_for_file:
         channel_id = waiting_for_file[user_id]
+        # Edited this
         try: user_questions = questions[user_id]
-        except: user_questions = []
+        except: user_questions = ""
         del waiting_for_file[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
@@ -384,19 +312,8 @@ def handle_file_shared(event, client, logger):
 
                 print(f"passing {file_name} to Spock")
                 
-                # Analyzing the paper
-                with open(ANALYZED_PAPERS_JSON_PATH, "r") as f:
-                    analyzed_papers = json.load(f)
-                    
-                if file_name in analyzed_papers:
-                    client.chat_postMessage(
-                        channel=channel_id,
-                        text=f"Hi there, <@{user_id}>! This paper has already been processed. Here is the summary: {analyzed_papers[file_name]}"
-                    )
-                    return
                 
                 
-                # Checking if the user is in the database
                 with open(USER_JSON_PATH, "r") as f:
                     users = json.load(f)
                     
@@ -412,27 +329,24 @@ def handle_file_shared(event, client, logger):
                 model = users[user_id]["user_model"]
                 
                 with get_openai_callback() as cb:
+                    """
                     spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
                     spock()
                     response_output = spock.format_output()
                     cost = cb.total_cost
+                    """
                     
+                    script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
+                    args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id]
+                    try:
+                        subprocess.run(args, check=True)
+                        print("Script executed successfully!")
+                    except subprocess.CalledProcessError as e:
+                        print(f"An error occurred while executing the script: {e}")
+                        print(f"stderr: {e.stderr}")
+                        print(f"stdout: {e.stdout}")
                 
-                
-                with open(ANALYZED_PAPERS_JSON_PATH, "w") as f: # TODO: Change this to match custom questions
-                    analyzed_papers[file_name] = response_output
-                    json.dump(analyzed_papers, f)
-                
-                
-                # Sending the response to the user
-                client.chat_postMessage(
-                    channel=channel_id,
-                    text=f"Your file `{file_name}` has been processed. \n {response_output} \n Cost (USD): {cost}",
-                    mrkdwn=True
-                )
-                """
-                
-                """
+                                
             else:
                 # Not a PDF file
                 client.chat_postMessage(

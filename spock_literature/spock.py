@@ -9,14 +9,19 @@ import os
 import json
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from .texts import *
+#########
+try:from .texts import *
+except:from texts import *
+#########
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
+from spock_literature.utils.url_downloader import URLDownloader
+from langchain.schema import Document
 
 
-class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
+class Spock(Helper_LLM):  
     """Spock class."""
     
     def __init__(
@@ -26,6 +31,9 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         custom_questions: Optional[List[str]] = None,
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
+        publication_url: Optional[str] = None,
+        papers_out = PAPERS_PATH # Make this a path
+   
     ):
         """
         Initialize a Spock object.
@@ -38,17 +46,15 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
             publication_title (str | None): Title of the paper to analyze. Defaults to None.
         """
         super().__init__(model=model)
-
-        # Convert `paper` to a `Path` if it's not already or handle None
         self.paper: Optional[Path] = Path(paper) if paper else None
-        
-        # Assign attributes
         self.paper_summary: str = ""
         self.custom_questions: List[str] = custom_questions or []
         self.publication_doi: Optional[str] = publication_doi
         self.publication_title: Optional[str] = publication_title
+        self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.questions = QUESTIONS
+        
 
         
     
@@ -80,6 +86,16 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
                 raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
             else:
                 self.paper = Path(out)
+                
+        elif self.publication_url:
+            # Use Script given
+            downloader = URLDownloader(url=self.publication_url, download_path=Path(PAPERS_PATH))
+            temp_return = downloader()
+            print(temp_return)
+            if temp_return != None:
+                self.paper = temp_return
+            else:
+                raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
         
     
     def scan_pdf(self):
@@ -112,8 +128,11 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         from langchain_openai import ChatOpenAI
 
         """Return the summary of the publication."""
-        loader = PyPDFLoader(self.paper)
-        docs = loader.load_and_split()
+        if isinstance(self.paper, Document):
+            docs = self.paper
+        else:
+            loader = PyPDFLoader(self.paper)
+            docs = loader.load_and_split()
 
         map_template = """The following is a set of documents
         {docs}
@@ -122,7 +141,8 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         map_prompt = PromptTemplate.from_template(map_template)
         
         if isinstance(self.llm, ChatOpenAI):
-            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+            llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
+            #llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
@@ -156,7 +176,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=2500
         )
-        split_docs = text_splitter.split_documents(docs)
+        split_docs = text_splitter.split_documents(docs) if not isinstance(docs, Document) else text_splitter.split_documents([docs])
 
         # Invoke the chain and extract the summary
         result = map_reduce_chain.invoke(split_docs)
@@ -264,5 +284,26 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
 
     
     
+if __name__ == "__main__":
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.biorxiv.org/content/10.1101/2024.11.11.622734v1"
+    )
+    spock()
+    print(spock.format_output())
+    
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.nature.com/articles/d41586-024-03714-6"
+    )
+    spock()
+    print(spock.format_output())
+    
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.nature.com/articles/s41467-023-44599-9"
+    )
+    spock()
+    print(spock.format_output())
 
 
