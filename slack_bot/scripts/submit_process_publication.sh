@@ -1,10 +1,9 @@
 #!/bin/bash
 
-MODEL=$1
-DOI_OR_TITLE=$2
-QUESTIONS_STR=$3
-USER_ID=$4
-CHANNEL_ID=$5
+DOI_OR_TITLE=$1
+QUESTIONS_STR=$2
+USER_ID=$3
+CHANNEL_ID=$4
 
 # Create a temporary job script
 JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
@@ -30,8 +29,7 @@ if [[ "$MODEL" == "llama" ]]; then
 fi
 
 python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_publication.py \
-    --model "$MODEL" \\
-    --paper "$DOI_OR_TITLE" \\
+    --publication "$DOI_OR_TITLE" \\
     --questions "$QUESTIONS_STR" \\
     --user_id "$USER_ID" \\
     --channel_id "$CHANNEL_ID"

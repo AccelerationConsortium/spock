@@ -14,6 +14,12 @@ from langchain_openai import ChatOpenAI
 
 
 
+load_dotenv()
+def get_api_key(env_var, prompt):
+    
+    if not os.getenv(env_var):
+        os.environ[env_var] = getpass.getpass(prompt)
+
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 class URLDownloader:
@@ -32,9 +38,9 @@ class URLDownloader:
         )
         
         if not re.match(preprint_regex, self.url):
-            self.__journals_download()
+            return self.__journals_download()
         else:
-            self.__preprint_download()
+            return self.__preprint_download()
 
 
     def __preprint_download(self):
@@ -55,7 +61,7 @@ class URLDownloader:
                     if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                         logger.error(f"Couldn't download the file: {self.download_path}")                    
                     logger.info(f"PDF downloaded successfully to {self.download_path}")
-                    return                
+                    return self.download_path/pdf_name               
                 else:
                     logger.error(f"Failed to download PDF from {pdf_url}")
             except ValueError as e:
@@ -70,15 +76,21 @@ class URLDownloader:
             if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                 logger.error(f"Couldn't download the file: {self.download_path}")                    
             logger.info(f"PDF downloaded successfully to {self.download_path}")
-            return
+            return self.download_path/pdf_name
     
     
     @staticmethod
     def extract_html_text(html_response):
         soup = BeautifulSoup(html_response, "html.parser")
         title = soup.title.string
-        text = soup.get_text()        
-        data = {"title": title, "text": text}
+        text = soup.get_text()
+        headings = []
+        for i in range(1, 7): 
+            for heading in soup.find_all(f"h{i}"):
+                if heading.string: 
+                    headings.append(heading.string.strip())
+
+        data = {"title": title, "text": text, "headings": headings}
         return data, soup        
 
     
@@ -110,8 +122,9 @@ class URLDownloader:
         
         try: 
             data,soup = self.extract_html_text(response.text)           
-            document = Document(page_content=data['text'], metadata={"title": data['title']})
+            document = Document(page_content=data['text'], metadata={"title": data['title'], "headings": data['headings']})
             response = self.llm_document_decider(document)
+            logger.info(f"Document is a complete scientific paper: {response}")
             if response:
                 # If the document is a complete scientific paper
                 return document
@@ -126,7 +139,7 @@ class URLDownloader:
                 if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                     logger.error(f"Couldn't download the file: {self.download_path}")                    
                 logger.info(f"PDF downloaded successfully to {self.download_path}")
-                return                
+                return self.download_path/pdf_name            # Return path ?
             else:
                 logger.error(f"Failed to download PDF from {pdf_url}")
         except ValueError as e:
@@ -149,31 +162,44 @@ class URLDownloader:
     
     @staticmethod
     def llm_document_decider(document:Document):
+        #print("-----------------")
+        #print(document)
+        #print("-----------------")
         prompt = PromptTemplate(
             template=f"""
-Here is an text, and we need to determine whether it represents a complete scientific paper. To do this, carefully review the text within the `{{document}}` placeholder. A complete scientific article often includes several key components, although formatting and exact naming of sections can vary. For instance, a typical full-length research article might include:
+Here is a text, and we need to determine whether it represents a complete scientific article or a sufficiently comprehensive scientific piece (such as a commentary, feature, or news article) that conveys scientific findings or analysis in a coherent and self-contained manner. Traditional full-length research articles often include:
 
-1. **Title and Authors**: A clear and descriptive title, along with the names and affiliations of the authors.
-2. **Abstract**: A concise summary of the purpose, methods, main findings, and conclusions of the study.
+1. **Title**: A clear and descriptive title.
+2. **Abstract**: A concise summary of the purpose, methods, main findings, and conclusions.
 3. **Introduction**: Background information and context that frame the research question or hypothesis, along with its significance.
 4. **Methods (or Materials and Methods)**: A detailed description of how the study was conducted, including experimental design, data collection, and analytical techniques.
 5. **Results**: A presentation of the study’s findings, often supported by tables, figures, and statistical analysis.
 6. **Discussion**: An interpretation of the results, their implications, their relationship to existing literature, and potential limitations.
 7. **Conclusions**: A brief recap of the main findings and their broader significance.
-8. **References**: A list of all sources cited in the paper.
+8. **References**: A list of all sources cited.
 
-Some articles may also include acknowledgments, funding information, appendices, or supplementary materials. The presence or absence of these sections—and the level of completeness in each—helps determine whether the provided text can be considered a full scientific article.
+However, not all scientific articles follow the traditional structure. Some scientific pieces—such as brief communications, news features, commentaries, or perspectives—might not have all these sections explicitly labeled. Instead, they may integrate these elements into a narrative that still conveys background, methodology or approach, key findings or points, analysis or interpretation, and references to the broader scientific context.
 
-Your task: Examine the text inside {document}. Identify if it contains recognizable sections that align with the structure of a complete scientific article (title, abstract, introduction, methods, results, discussion, conclusion, references) output 1. If it lacks critical sections or clearly appears to be incomplete, output 0
-The output should only contain one number, no text or additional information."""
-,
+Your task:
+Examine the text inside {{document}} and determine if it provides a coherent, self-contained scientific narrative that includes some combination of the following:
+- A defined scientific topic or question
+- Background or context to understand the issue
+- Some evidence, data, examples, or references that support its main points
+- An explanation or interpretation of the implications or significance of the information presented
+
+If the text either closely aligns with a full-length research article’s structure or is a shorter, self-contained scientific piece that adequately conveys a clear scientific message and context (even if non-traditional in format), output 1.
+If it lacks critical information, coherence, or appears clearly incomplete as a scientific piece, output 0.
+
+Your output should contain only one number, no text or additional information.
+        """,
             input_variables=["document"]
         )
-        
-        temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.05)
+        get_api_key("OPENAI_API_KEY", "Enter your OpenAI API key: ")
+        temp_llm = ChatOpenAI(model="gpt-4o", temperature=0.05)
         chain = prompt | temp_llm
         response = chain.invoke({"document": document})
-        if "1" in response:
+        #print(response.content)
+        if "1" in response.content:
             return True
         return False
         
@@ -185,7 +211,7 @@ if __name__ == "__main__":
     download_path = Path("/home/m/mehrad/brikiyou/scratch/spock/spock_literature/utils/")
     downloader = URLDownloader(url, download_path)
     downloader()
-    downloader = URLDownloader("https://www.nature.com/articles/d41586-024-03714-6#author-0", download_path)
+    downloader = URLDownloader("https://www.nature.com/articles/d41586-024-03714-6", download_path)
     downloader()
     downloader = URLDownloader("https://www.nature.com/articles/s41467-023-44599-9", download_path)
     downloader()

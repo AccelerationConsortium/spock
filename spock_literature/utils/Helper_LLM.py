@@ -13,7 +13,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_openai import ChatOpenAI
 from langchain_anthropic import ChatAnthropic
 from langchain_ollama import OllamaLLM
-from langchain.schema import Document
 import getpass
 import os
 from dotenv import load_dotenv
@@ -36,8 +35,8 @@ class Helper_LLM:
             get_api_key("ANTHROPIC_API_KEY", "Enter your Anthropic API key: ")
             self.llm = ChatAnthropic(model="claude-3-5-sonnet-20240620", temperature=temperature)
 
-        elif model == "llama3.1":
-            self.llm = OllamaLLM(model="nemotron", temperature=temperature)
+        elif model == "llama3.3":
+            self.llm = OllamaLLM(model="llama3.3", temperature=temperature)
             
         else:
             raise ValueError("Model not supported")
@@ -51,10 +50,11 @@ class Helper_LLM:
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
         data = []
-        if os.path.isfile(document):
+        if not isinstance(document,Document) and os.path.isfile(document):
             pages = PyPDFLoader(document).load_and_split()
             sliced_pages = text_splitter.split_documents(pages)
         else:
+            print("Not a PDF file")
             sliced_pages = text_splitter.split_documents([document])
 
         self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed)

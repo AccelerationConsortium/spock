@@ -9,15 +9,19 @@ import os
 import json
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from texts import *
+#########
+try:from .texts import *
+except:from texts import *
+#########
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
 from spock_literature.utils.url_downloader import URLDownloader
+from langchain.schema import Document
 
 
-class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
+class Spock(Helper_LLM):  
     """Spock class."""
     
     def __init__(
@@ -85,11 +89,13 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
                 
         elif self.publication_url:
             # Use Script given
-            downloader = URLDownloader(url=self.publication_url, download_path=PAPERS_PATH+"/pdf_demo.pdf")
+            downloader = URLDownloader(url=self.publication_url, download_path=Path(PAPERS_PATH))
             temp_return = downloader()
-            if temp_return:
+            print(temp_return)
+            if temp_return != None:
                 self.paper = temp_return
-            
+            else:
+                raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
         
     
     def scan_pdf(self):
@@ -122,8 +128,11 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         from langchain_openai import ChatOpenAI
 
         """Return the summary of the publication."""
-        loader = PyPDFLoader(self.paper)
-        docs = loader.load_and_split()
+        if isinstance(self.paper, Document):
+            docs = self.paper
+        else:
+            loader = PyPDFLoader(self.paper)
+            docs = loader.load_and_split()
 
         map_template = """The following is a set of documents
         {docs}
@@ -167,7 +176,7 @@ class Spock(Helper_LLM):  # Heritage to review later - maybe bot_llm
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=2500
         )
-        split_docs = text_splitter.split_documents(docs)
+        split_docs = text_splitter.split_documents(docs) if not isinstance(docs, Document) else text_splitter.split_documents([docs])
 
         # Invoke the chain and extract the summary
         result = map_reduce_chain.invoke(split_docs)
@@ -280,8 +289,21 @@ if __name__ == "__main__":
         model="gpt-4o",
         publication_url="https://www.biorxiv.org/content/10.1101/2024.11.11.622734v1"
     )
+    spock()
+    print(spock.format_output())
     
-    spock.download_pdf()
-        
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.nature.com/articles/d41586-024-03714-6"
+    )
+    spock()
+    print(spock.format_output())
+    
+    spock = Spock(
+        model="gpt-4o",
+        publication_url="https://www.nature.com/articles/s41467-023-44599-9"
+    )
+    spock()
+    print(spock.format_output())
 
 
