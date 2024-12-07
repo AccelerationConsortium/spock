@@ -103,11 +103,16 @@ def handle_process_publication_name(ack, body, client):
     channel_id = body["channel_id"]
     publication = body["text"]
     custom_questions = ""
-    script_path = SCRIPTS_PATH+"submit_process_publication_title.sh"
+    script_path = SCRIPTS_PATH+"submit_process_publication.sh"
     args = [script_path, publication, custom_questions, user, channel_id]    
     try:
         subprocess.run(args, check=True)
         print("Script executed successfully!")
+        client.chat_postMessage(
+        channel=channel_id,
+        text="Script Submitted Successfully! Processing your file now..."
+    )
+
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while executing the script: {e}")
         print(f"stderr: {e.stderr}")

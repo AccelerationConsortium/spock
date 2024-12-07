@@ -8,7 +8,7 @@ import re
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--model', required=True)
+    parser.add_argument('--model', default="gpt-4o")
     parser.add_argument('--publication', required=True)
     parser.add_argument('--questions', default="")
     parser.add_argument('--user_id', required=True)
@@ -28,22 +28,32 @@ def main():
     else:
         user_questions = []
         
-    if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', publication): 
+    if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', publication):
         # DOI
         doi = publication
         spock = Spock(model=model, publication_doi=doi, custom_questions=user_questions)
-    elif re.match(r'https?://(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&//=]*)', doi_or_title):
+
+    elif re.match(r"https?://(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}/[a-zA-Z0-9\-_/]+", publication):
         # URL
         url = publication
-        
-    else :
+        spock = Spock(model=model, publication_url=url, custom_questions=user_questions)
+
+    else:
         # Title
         title = publication
         spock = Spock(model=model, publication_title=title, custom_questions=user_questions)
 
-    # TODO:
-    # Perform the processing
-    spock()
+    try:
+        spock()
+    except Exception as e:
+        client.chat_postMessage(
+        channel=channel_id,
+        text=f"Hi there, <@{user_id}>! Please upload the PDF for this article, couldn't find the publication with the given title/DOI/URL",
+        mrkdwn=True
+    )
+
+        return
+        
     response_output = spock.format_output()
 
     # Save the analyzed paper
