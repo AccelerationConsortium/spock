@@ -14,17 +14,21 @@ cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --time=00:05:00
+#SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
+#SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
+
 $(if [[ "$MODEL" == "llama" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=0"; fi)
 
 
 module load BalamEnv
+
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 
-source 
 if [[ "$MODEL" == "llama" ]]; then
     source /home/m/mehrad/brikiyou/scratch/to_run.sh
-    ollama serve > ollama.log 2>&1 &
+    ollama serve > /home/m/mehrad/brikiyou/scratch/ollama.log 2>&1 &
 fi
+
 
 python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_pdf.py \
     --model "$MODEL" \\
