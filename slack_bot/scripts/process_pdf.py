@@ -46,7 +46,7 @@ def main():
     client = WebClient(token=BOT_TOKEN)
     client.chat_postMessage(
         channel=channel_id,
-        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output} \n Cost (USD): {cost} \n Time taken: {total_time} seconds",
+        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output} \n Cost (USD): {cost} \n Time taken: {total_time} seconds \n questions: {user_questions}",
         mrkdwn=True
     )
 
