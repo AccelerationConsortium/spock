@@ -24,7 +24,7 @@ blinker==1.8.2
 bracex==2.4
 build==1.2.1
 bump-my-version==0.22.0
-langchain-anthropic
+langchain-anthropic==0.3.0
 cachetools==5.3.3
 certifi==2024.6.2
 cffi==1.16.0
