@@ -69,7 +69,3 @@ class Author:
                 data[self.author_name] = [publication_data]
         return data
     
-    
-if __name__ == "__main__":
-    author = Author("Mehrad Ansari")
-    print(author(2))

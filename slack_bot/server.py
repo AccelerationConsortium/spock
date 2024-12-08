@@ -16,7 +16,7 @@ from spock_literature.utils.generate_podcast import generate_audio
 import logging
 import subprocess
 from langchain_community.callbacks import get_openai_callback
-
+import random
 
 load_dotenv()
 
@@ -26,7 +26,22 @@ PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
 USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
 SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/"
 GENERATED_SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/generated_job_scripts/"
+COMMANDS = """- 📜 get_authors_list: Retrieve a list of all authors.
+  Example: /get_authors_list
 
+- 📚 get_author_publication: Get the latest publications of a specific author. By default, it fetches the most recent one. To specify how many publications you'd like, provide the author's name followed by a comma and the number of publications.
+  Example: /get_author_publication Jane Doe, 3 (This will retrieve the 3 latest publications by Jane Doe.)
+
+- 📄 process_pdf: Share and process a PDF file from your local computer. You can also include custom questions about the PDF by writing them next to the command, separated by a `||`.
+  Example: /process_pdf Does the paper discuss the impact of AI on society? / What are the key findings of the paper?
+
+- 📖 process_publication: Process a publication by providing its title, DOI, or URL. You can also include custom questions about the publication by writing them next to the command, separated by a `||`.  
+    Example: /process_publication Title of the publication / DOI of the publication / URL of the publication || Does the paper discuss the impact of AI on society? || What are the key findings of the paper?
+
+- 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
+
+- 🎙️ generate_podcast: Generate a podcast from a text input. This command is currently disabled.
+"""
 from pathlib import Path
 
 def create_empty_sh_file(file_path):
@@ -49,31 +64,9 @@ def help(ack, body, client):
     text = body["text"] # Add LLM here to help
     client.chat_postMessage(
         channel=channel_id,
-        text="""👋 Welcome! I'm Spock 🖖, a bot designed to process PDF files and assist you in extracting valuable information from publications. To get started, simply type `/processpdf`.
+        text=f"""👋 Welcome! I'm Spock 🖖, a bot designed to process PDF files and assist you in extracting valuable information from publications. To get started, simply type `/processpdf`.
 
-Commands:
-
-- 📜 get_authors_list: Retrieve a list of all authors.
-  Example: /get_authors_list
-
-- 📚 get_author_publication: Get the latest publications of a specific author. By default, it fetches the most recent one. To specify how many publications you'd like, provide the author's name followed by a comma and the number of publications.
-  Example: /get_author_publication Jane Doe, 3 (This will retrieve the 3 latest publications by Jane Doe.)
-
-- 📄 process_pdf: Share and process a PDF file from your local computer. You can also include custom questions about the PDF by writing them next to the command, separated by a `/`.
-  Example: /process_pdf Does the paper discuss the impact of AI on society? / What are the key findings of the paper?
-
-- 🔗 process_publication_doi: Process a publication using its DOI (Digital Object Identifier). Just enter the DOI after the command.
-  Example: /process_publication_doi example-doi
-
-- 📝 process_publication_title: Process a publication by its title. Simply enter the title after the command.
-  Example: /process_publication_title The Future of AI in 2024
-  
-- 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
-
-- 🎙️ generate_podcast: Generate a podcast from a text input. This command is currently disabled.
-Feel free to ask me questions or share your files for processing!
-
-        """
+Commands: {COMMANDS} """
     )
     
 
@@ -99,12 +92,14 @@ def handle_process_publication_name(ack, body, client):
     user = body["user_id"]
     channel_id = body["channel_id"]
     try: 
-        publication, custom_questions = body["text"].split("|")
+        response = body["text"].split("||")
+        publication, custom_questions = response[0], "".join(response[1:])
     except: 
         publication = body["text"]
         custom_questions = ""
     script_path = SCRIPTS_PATH+"submit_process_publication.sh"
-    args = [script_path, publication, custom_questions, user, channel_id]    
+    generate_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_publication_{user}{str(random.randint(0,1000))}.sh")
+    args = [script_path, publication, custom_questions, user, channel_id, generate_script]    
     try:
         subprocess.run(args, check=True)
         print("Script executed successfully!")
@@ -133,7 +128,8 @@ def get_author_publications(ack, body, client):
 
     try:
         job_scipt = SCRIPTS_PATH+"submit_get_author_publications.sh"
-        args = [job_scipt, author, count, user_id, channel_id]
+        generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"get_author_publications_{user_id}{str(random.randint(0,1000))}.sh")
+        args = [job_scipt, author, count, user_id, channel_id, generated_script]
         subprocess.run(args, check=True)
         print("Script executed successfully!")
     except subprocess.CalledProcessError as e:
@@ -154,7 +150,7 @@ def get_user_settings(ack, body, client):
     
 
     if user_id not in users:
-        user = User(user_id, "llama3.1")
+        user = User(user_id, "llama3.3")
         users[user_id] = user.__dict__()[user.user_id]
         with open(USER_JSON_PATH, "w") as f:
             json.dump(users, f)
@@ -174,7 +170,6 @@ def handle_choose_llm(ack, body, client):
     user_id = body["user_id"]
     channel_id = body["channel_id"]
     model = body["text"].strip().lower()
-    print(model)
     
     with open(USER_JSON_PATH, "r") as f:
         users = json.load(f)
@@ -183,7 +178,14 @@ def handle_choose_llm(ack, body, client):
         user = User(user_id, model)
         users[user_id] = user.__dict__()[user.user_id]
     else:
-        users[user_id]["user_model"] = model
+        if "llama3.3" in model or "gpt-4o" in model:
+            users[user_id]["user_model"] = model
+        else:
+            client.chat_postMessage(
+                channel=channel_id,
+                text="Invalid model. Please choose between Llama3.3 and GPT-4."
+            )
+            return
         
     with open(USER_JSON_PATH, "w") as f:
         json.dump(users, f)
@@ -204,7 +206,7 @@ def handle_process_pdf(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
-    questions[user_id] = body["text"] #list(filter(lambda x:x, body["text"].split("/")))
+    questions[user_id] = body["text"] 
     
 
     waiting_for_file[user_id] = channel_id
@@ -220,17 +222,17 @@ def handle_app_mention(event, say):
     user = event["user"]
     user_text = event["text"]
     
-    llm = ChatOpenAI(model="gpt-4o", temperature=0.4)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.4)
 
 
-    # Customize it 
     prompt = PromptTemplate(
-        template="You are a text assistant, and here is someone asking you a question. Please provide a response. {question}",
+        template=f"""You are an assistant of a slack bot. Here is what can the bot do Commands: {COMMANDS}
+ and here is someone asking you a question. Please provide a response to the following question: {{question}}""",
         input_variables=["question"]
     )
 
     chain = prompt | llm
-    response = chain.invoke({"question": user_text})
+    response = chain.invoke({"question": user_text}).content
     say(f"Hi there, <@{user}>! \n {response}")
 
     
@@ -260,7 +262,8 @@ def handle_file_shared(event, client, logger):
                     text=f"Your file `{file_name}` has been uploaded. Processing it now..."
                 )
                 script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
-                args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!"]
+                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"generate_podcast_{user_id}{str(random.randint(0,1000))}.sh")
+                args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!", generated_script]
 
                 try:
                     subprocess.run(args, check=True)
@@ -291,7 +294,9 @@ def handle_file_shared(event, client, logger):
     elif user_id in waiting_for_file:
         channel_id = waiting_for_file[user_id]
         # Edited this
-        try: user_questions = questions[user_id]
+        try: 
+            user_questions = questions[user_id]
+            del questions[user_id]
         except: user_questions = ""
         del waiting_for_file[user_id]
         try:
@@ -319,7 +324,7 @@ def handle_file_shared(event, client, logger):
                     
                 
                 if user_id not in users:
-                    user = User(user_id, "llama3.1")
+                    user = User(user_id, "llama3.3")
                     users[user_id] = user.__dict__()[user.user_id]
                     with open(USER_JSON_PATH, "w") as f:
                         json.dump(users, f)
@@ -328,23 +333,16 @@ def handle_file_shared(event, client, logger):
                 # Choosing the model for the user
                 model = users[user_id]["user_model"]
                 
-                with get_openai_callback() as cb:
-                    """
-                    spock = Spock(model=model,paper=PAPERS_PATH+file_name,custom_questions=user_questions)                
-                    spock()
-                    response_output = spock.format_output()
-                    cost = cb.total_cost
-                    """
-                    
-                    script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
-                    args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id]
-                    try:
-                        subprocess.run(args, check=True)
-                        print("Script executed successfully!")
-                    except subprocess.CalledProcessError as e:
-                        print(f"An error occurred while executing the script: {e}")
-                        print(f"stderr: {e.stderr}")
-                        print(f"stdout: {e.stdout}")
+                script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
+                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_pdf_{user_id}{str(random.randint(0,1000))}.sh")
+                args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id, generated_script]
+                try:
+                    subprocess.run(args, check=True)
+                    print("Script executed successfully!")
+                except subprocess.CalledProcessError as e:
+                    print(f"An error occurred while executing the script: {e}")
+                    print(f"stderr: {e.stderr}")
+                    print(f"stdout: {e.stdout}")
                 
                                 
             else:

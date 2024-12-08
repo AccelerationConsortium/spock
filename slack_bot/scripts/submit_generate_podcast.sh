@@ -4,11 +4,10 @@ PAPER=$1
 USER_ID=$2
 CHANNEL_ID=$3
 INITIAL_COMMENT=$4
+JOBSCRIPT_PATH=$5
 
-# Define the path for the job script file
-JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
+JOB_SCRIPT=$JOBSCRIPT_PATH
 
-# Generate the SLURM job script dynamically
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1

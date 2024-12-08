@@ -1,5 +1,5 @@
 class User(object):
-    def __init__(self, user_id: str, user_name: str="llama3.1"):
+    def __init__(self, user_id: str, user_name: str="llama3.3"):
         self.user_id = user_id
         self.user_model = user_name
         self.analyzed_files = {}
@@ -15,11 +15,4 @@ class User(object):
         return {self.user_id: {"user_model": self.user_model, "analyzed_files": self.analyzed_files}}
     
     
-    def add_file(self, file_name, file_url):
-        self.analyzed_files[file_name] = file_url
-        
-        
-if __name__ == "__main__":
-    user = User("1234")
-    user.add_file("file1", "url1")
-    print(user.__dict__())
+
