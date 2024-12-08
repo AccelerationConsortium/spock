@@ -4,6 +4,7 @@ AUTHOR=$1
 COUNT=$2
 USER_ID=$3
 CHANNEL_ID=$4
+JOBSCRIPT_PATH=$5
 
 JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
 

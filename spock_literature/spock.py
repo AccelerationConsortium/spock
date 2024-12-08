@@ -9,10 +9,7 @@ import os
 import json
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-#########
-try:from .texts import *
-except:from texts import *
-#########
+from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.generate_podcast import generate_audio
 from pathlib import Path

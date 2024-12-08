@@ -24,9 +24,16 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
 PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
 USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
-ANALYZED_PAPERS_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/analyzed_publications.json"
 SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/"
+GENERATED_SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/generated_job_scripts/"
 
+from pathlib import Path
+
+def create_empty_sh_file(file_path):
+    path = Path(file_path)
+    path.touch(exist_ok=False)
+    path.chmod(0o755)
+    return path
 
 app = App(token=BOT_TOKEN)
 waiting_for_file = {}
@@ -69,16 +76,6 @@ Feel free to ask me questions or share your files for processing!
         """
     )
     
-#TODO
-# - deleting pdfs after some time if unuesed - to implement
-# - Storing all the pdfs chunks in one single vectorestore and haveing the user query that vectorstore through the @app_mention
-# - Choose the LLM with a /command  | LLama | Claude 3.5 Sonnet | OpenAI gpt 4-o (High priority - fixed (need claud key))
-# - https://www.nvidia.com/en-us/ai/
-# - OpenAI CallBack for trqcking tokens - To implement
-# - Add github actions and testing 
-# - Storage - To upgrade
-# - Upgrading quality of the summaries - fixed
-
 
 
 # Slack event handler
@@ -101,8 +98,11 @@ def handle_process_publication_name(ack, body, client):
     ack()
     user = body["user_id"]
     channel_id = body["channel_id"]
-    publication = body["text"]
-    custom_questions = ""
+    try: 
+        publication, custom_questions = body["text"].split("|")
+    except: 
+        publication = body["text"]
+        custom_questions = ""
     script_path = SCRIPTS_PATH+"submit_process_publication.sh"
     args = [script_path, publication, custom_questions, user, channel_id]    
     try:
