@@ -43,15 +43,4 @@ class Publication_scholarly(): # Give it Publication as inheritance
     
     def get_citation(self) -> str:
         return self.publication_filled['bib']['citation']
-    
-    
-    """
-    def get_topic(self) -> str:
-        prompt = PromptTemplate(
-            template="You are an AI assistant, and here is a document. get the topic of the document. Here it is: \n {document}",
-            input_variables=["document"]
-        )
-        temp_llm = OllamaLLM(model="llama3.1", temperature=0.05) # Change the model to the one you want to useq
-        chain = prompt | temp_llm
-        return chain.invoke({"document": self.abstract})
-    """    
+
