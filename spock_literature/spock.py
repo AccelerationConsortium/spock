@@ -29,7 +29,7 @@ class Spock(Helper_LLM):
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
         publication_url: Optional[str] = None,
-        papers_out = PAPERS_PATH # Make this a path
+        papers_path: str = PAPERS_PATH
    
     ):
         """
@@ -51,10 +51,8 @@ class Spock(Helper_LLM):
         self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.questions = QUESTIONS
-        
-
-        
-    
+        self.papers_path = papers_path
+  
     
     def download_pdf(self):
         """Download the PDF of a publication."""
@@ -65,7 +63,7 @@ class Spock(Helper_LLM):
 
             paper = "https://doi.org/" + self.publication_doi
             paper_type = "doi"
-            out = f"{PAPERS_PATH}{self.publication_doi.replace('/','_')}.pdf"
+            out = f"{self.papers_path}{self.publication_doi.replace('/','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             
             if not os.path.exists(out):
@@ -77,7 +75,7 @@ class Spock(Helper_LLM):
             
             paper = self.publication_title
             paper_type = "title"
-            out = f"{PAPERS_PATH}{self.publication_title.replace(' ','_')}.pdf"
+            out = f"{self.papers_path}{self.publication_title.replace(' ','_')}.pdf"
             scihub_download(paper, paper_type=paper_type, out=out)
             if not os.path.exists(out):
                 raise RuntimeError(f"Failed to download the PDF for the publication with title: {self.publication_title}")
@@ -86,9 +84,8 @@ class Spock(Helper_LLM):
                 
         elif self.publication_url:
             # Use Script given
-            downloader = URLDownloader(url=self.publication_url, download_path=Path(PAPERS_PATH))
+            downloader = URLDownloader(url=self.publication_url, download_path=Path(self.papers_path))
             temp_return = downloader()
-            print(temp_return)
             if temp_return != None:
                 self.paper = temp_return
             else:
@@ -109,14 +106,7 @@ class Spock(Helper_LLM):
             temp_response = temp_response.split('/')
             self.questions[question]['output']['response'] = temp_response[0]
             self.questions[question]['output']['sentence'] = temp_response[1]
-        
-        
-        
-    
-    
-    
-    
-    
+   
     
     def summarize(self) -> None:
         from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
@@ -139,7 +129,6 @@ class Spock(Helper_LLM):
         
         if isinstance(self.llm, ChatOpenAI):
             llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
-            #llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
         
@@ -175,7 +164,6 @@ class Spock(Helper_LLM):
         )
         split_docs = text_splitter.split_documents(docs) if not isinstance(docs, Document) else text_splitter.split_documents([docs])
 
-        # Invoke the chain and extract the summary
         result = map_reduce_chain.invoke(split_docs)
         self.paper_summary = result['output_text']
 
@@ -189,7 +177,6 @@ class Spock(Helper_LLM):
         )
         chain = prompt | self.llm
         
-        #TODO: Continue from here/Add topics
         return chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
         
         
@@ -201,7 +188,6 @@ class Spock(Helper_LLM):
         self.add_custom_questions()
         self.scan_pdf() 
         
-        # To not rerun the summarize method if the topics are already extracted
         if not self.paper_summary: 
             self.summarize()
         self.topics = self.get_topics()        
@@ -235,8 +221,7 @@ class Spock(Helper_LLM):
             
             chain = prompt | self.llm
             question_topic = chain.invoke({"question":question})
-            print(f"Custom question: {question_topic}")
-            self.questions.update({question_topic:{"question":question+"Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
+            self.questions.update({question_topic.content if not isinstance(question_topic, str) else question_topic :{"question":question+"Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
                                                 from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'" , "output":{'response':"","sentence":""}}})
             
             
@@ -281,26 +266,4 @@ class Spock(Helper_LLM):
 
     
     
-if __name__ == "__main__":
-    spock = Spock(
-        model="gpt-4o",
-        publication_url="https://www.biorxiv.org/content/10.1101/2024.11.11.622734v1"
-    )
-    spock()
-    print(spock.format_output())
-    
-    spock = Spock(
-        model="gpt-4o",
-        publication_url="https://www.nature.com/articles/d41586-024-03714-6"
-    )
-    spock()
-    print(spock.format_output())
-    
-    spock = Spock(
-        model="gpt-4o",
-        publication_url="https://www.nature.com/articles/s41467-023-44599-9"
-    )
-    spock()
-    print(spock.format_output())
-
 

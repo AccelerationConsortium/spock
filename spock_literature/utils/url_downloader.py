@@ -203,18 +203,3 @@ Your output should contain only one number, no text or additional information.
             return True
         return False
         
-
-
-if __name__ == "__main__":
-    print("Testing URLDownloader")
-    url = "https://www.biorxiv.org/content/10.1101/2024.11.11.622734v1" # no Pdf link 
-    download_path = Path("/home/m/mehrad/brikiyou/scratch/spock/spock_literature/utils/")
-    downloader = URLDownloader(url, download_path)
-    downloader()
-    downloader = URLDownloader("https://www.nature.com/articles/d41586-024-03714-6", download_path)
-    downloader()
-    downloader = URLDownloader("https://www.nature.com/articles/s41467-023-44599-9", download_path)
-    downloader()
-    
-    #print(downloader.journals_download())
-    print("Downloaded successfully")

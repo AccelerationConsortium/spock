@@ -23,14 +23,12 @@ def main():
     channel_id = args.channel_id
     
 
-    # Prepare custom questions
     if questions_str:
         print("Custom questions provided: ", questions_str)
         user_questions = questions_str.split("||")
     else:
         user_questions = []
 
-    # Perform the processing
     start_time = time.time()
     with get_openai_callback() as cb:
         spock = Spock(model=model, paper=paper_path, custom_questions=user_questions)
@@ -46,7 +44,7 @@ def main():
     client = WebClient(token=BOT_TOKEN)
     client.chat_postMessage(
         channel=channel_id,
-        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output} \n Cost (USD): {cost} \n Time taken: {total_time} seconds \n questions: {user_questions}",
+        text=f"Hi there, <@{user_id}>! Your file `{os.path.basename(paper_path)}` has been processed. \n {response_output} \n Cost (USD): {cost} \n Time taken: {total_time} seconds",
         mrkdwn=True
     )
 

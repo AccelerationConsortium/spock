@@ -159,5 +159,3 @@ def main():
     print(f"Transcript:\n{transcript}")
 
 
-if __name__ == "__main__":
-    main()
