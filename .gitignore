@@ -11,7 +11,7 @@ __pycache__/
 private/
 *.py[cod]
 *$py.class
-
+test.txt
 # C extensions
 *.so
 
