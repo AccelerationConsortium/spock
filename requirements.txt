@@ -138,7 +138,7 @@ kiwisolver==1.4.5
 kubernetes==30.1.0
 langchain==0.3.7
 langchain-anthropic==0.2.4
-langchain-community==0.3.0
+langchain-community==0.2.10
 langchain-core==0.3.15
 langchain-experimental==0.0.64
 langchain-ollama==0.2.0
