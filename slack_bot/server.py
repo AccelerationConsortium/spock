@@ -1,47 +1,19 @@
-from langchain_community.vectorstores import FAISS
-import faiss
 from dotenv import load_dotenv
 import os
-from langchain_openai import ChatOpenAI
 import requests
 from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
-from langchain_ollama import OllamaLLM
-from langchain_core.prompts import PromptTemplate
-from spock_literature import Spock
-from spock_literature.utils.Author import Author
 import json
 from User import User
-from spock_literature.utils.generate_podcast import generate_audio
 import logging
 import subprocess
-from langchain_community.callbacks import get_openai_callback
 import random
+from texts import *
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
-PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
-USER_JSON_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
-SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/"
-GENERATED_SCRIPTS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/generated_job_scripts/"
-COMMANDS = """- 📜 get_authors_list: Retrieve a list of all authors.
-  Example: /get_authors_list
-
-- 📚 get_author_publication: Get the latest publications of a specific author. By default, it fetches the most recent one. To specify how many publications you'd like, provide the author's name followed by a comma and the number of publications.
-  Example: /get_author_publication Jane Doe, 3 (This will retrieve the 3 latest publications by Jane Doe.)
-
-- 📄 process_pdf: Share and process a PDF file from your local computer. You can also include custom questions about the PDF by writing them next to the command, separated by a `||`.
-  Example: /process_pdf Does the paper discuss the impact of AI on society? / What are the key findings of the paper?
-
-- 📖 process_publication: Process a publication by providing its title, DOI, or URL. You can also include custom questions about the publication by writing them next to the command, separated by a `||`.  
-    Example: /process_publication Title of the publication / DOI of the publication / URL of the publication || Does the paper discuss the impact of AI on society? || What are the key findings of the paper?
-
-- 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
-
-- 🎙️ generate_podcast: Generate a podcast from a text input. This command is currently disabled.
-"""
 from pathlib import Path
 
 def create_empty_sh_file(file_path):
@@ -218,23 +190,20 @@ def handle_process_pdf(ack, body, client):
     )
     
 @app.event("app_mention")
-def handle_app_mention(event, say):
+def handle_app_mention(event, client, logger):
     user = event["user"]
     user_text = event["text"]
-    
-    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.4)
-
-
-    prompt = PromptTemplate(
-        template=f"""You are an assistant of a slack bot. Here is what can the bot do Commands: {COMMANDS}
- and here is someone asking you a question. Please provide a response to the following question: {{question}}""",
-        input_variables=["question"]
-    )
-
-    chain = prompt | llm
-    response = chain.invoke({"question": user_text}).content
-    say(f"Hi there, <@{user}>! \n {response}")
-
+    channel_id = event["channel"]
+    generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"app_mention_{user}{str(random.randint(0,1000))}.sh")
+    script_path = SCRIPTS_PATH+"submit_app_mention.sh"
+    args = [script_path, user_text, user, channel_id, generated_script]
+    try:
+        subprocess.run(args, check=True)
+        print("Script executed successfully!")
+    except subprocess.CalledProcessError as e:
+        print(f"An error occurred while executing the script: {e}")
+        print(f"stderr: {e.stderr}")
+        print(f"stdout: {e.stdout}")
     
 
 
