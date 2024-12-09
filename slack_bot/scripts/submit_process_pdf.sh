@@ -5,11 +5,10 @@ PAPER_PATH=$2
 QUESTIONS_STR=$3
 USER_ID=$4
 CHANNEL_ID=$5
+JOBSCRIPT_PATH=$6
 
-# Create a temporary job script
-JOB_SCRIPT="/home/m/mehrad/brikiyou/scratch/spock/slack_bot/generated_job_script.sh"
+JOB_SCRIPT=$JOBSCRIPT_PATH
 
-# Generate the Slurm job script dynamically based on the model
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
@@ -17,14 +16,14 @@ cat <<EOT > $JOB_SCRIPT
 #SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
 #SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
 
-$(if [[ "$MODEL" == "llama" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=0"; fi)
+$(if [[ "$MODEL" == "llama3.3" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=0"; fi)
 
 
 module load BalamEnv
 
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 
-if [[ "$MODEL" == "llama" ]]; then
+if [[ "$MODEL" == "llama3.3" ]]; then
     source /home/m/mehrad/brikiyou/scratch/to_run.sh
     ollama serve > /home/m/mehrad/brikiyou/scratch/ollama.log 2>&1 &
 fi
