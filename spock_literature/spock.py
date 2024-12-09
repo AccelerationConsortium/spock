@@ -6,7 +6,6 @@ import faiss
 from langchain_community.document_loaders import PyPDFLoader
 import faiss
 import os
-import json
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
@@ -23,7 +22,7 @@ class Spock(Helper_LLM):
     
     def __init__(
         self,
-        model: str = "llama3.1",
+        model: str = "llama3.3",
         paper: Optional[Union[Path, str]] = None,
         custom_questions: Optional[List[str]] = None,
         publication_doi: Optional[str] = None,
