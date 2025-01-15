@@ -1,4 +1,0 @@
- 
-# spock module
-
-::: spock.spock
