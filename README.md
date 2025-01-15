@@ -1,7 +1,6 @@
 # spock
 
 [![image](https://img.shields.io/pypi/v/spock.svg)](https://pypi.python.org/pypi/spock)
-[![image](https://img.shields.io/conda/vn/conda-forge/spock.svg)](https://anaconda.org/conda-forge/spock)
 
 **LLM Literature**
 
