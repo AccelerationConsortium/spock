@@ -18,7 +18,6 @@ $(if [[ "$MODEL" == "llama3.3" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "
 
 
 module load BalamEnv
-module load python/3.8
 
 source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
 

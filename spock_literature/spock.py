@@ -2,20 +2,17 @@
 from langchain_openai import ChatOpenAI
 from spock_literature.utils.Helper_LLM import Helper_LLM
 import os
-import faiss
 from langchain_community.document_loaders import PyPDFLoader
-import faiss
-import os
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from langchain_ollama import OllamaLLM
-from spock_literature.utils.generate_podcast import generate_audio
+from spock_literature.utils.Generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
-from spock_literature.utils.url_downloader import URLDownloader
+from spock_literature.utils.Url_downloader import URLDownloader
 from langchain.schema import Document
-
+from scidownl import scihub_download
 
 class Spock(Helper_LLM):  
     """Spock class."""
@@ -28,7 +25,7 @@ class Spock(Helper_LLM):
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
         publication_url: Optional[str] = None,
-        papers_path: str = PAPERS_PATH
+        papers_download_path: str = PAPERS_PATH
    
     ):
         """
@@ -40,6 +37,8 @@ class Spock(Helper_LLM):
             custom_questions (list[str] | None): List of custom questions. Defaults to None.
             publication_doi (str | None): DOI of the paper to analyze. Defaults to None.
             publication_title (str | None): Title of the paper to analyze. Defaults to None.
+            publication_url (str | None): URL of the paper to analyze. Defaults to None.
+            papers_download_path (str): Path to download the papers. 
         """
         super().__init__(model=model)
         self.paper: Optional[Path] = Path(paper) if paper else None
@@ -50,15 +49,15 @@ class Spock(Helper_LLM):
         self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.questions = QUESTIONS
-        self.papers_path = papers_path
+        self.papers_path = papers_download_path
   
     
     def download_pdf(self):
         """Download the PDF of a publication."""
     
-        from scidownl import scihub_download
         
-        if self.publication_doi:
+        # To update  
+        if self.publication_doi and not self.paper:
 
             paper = "https://doi.org/" + self.publication_doi
             paper_type = "doi"

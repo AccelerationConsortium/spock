@@ -1,6 +1,5 @@
 import argparse
 import os
-import json
 from slack_sdk import WebClient
 from spock_literature import Spock
 import re
@@ -42,11 +41,9 @@ def main():
     add_transcript = args.add_transcript
     
     
-    with get_openai_callback() as cb:
-        spock = Spock(paper=paper)
-        audio_file_path, transcript = spock.generate_podcast()
-        cost = cb.total_cost
-    upload_audio_file(channel_id, audio_file_path, initial_comment + f"\n\nCost (USD): {cost}")
+    spock = Spock(paper=paper)
+    audio_file_path, transcript = spock.generate_podcast()
+    upload_audio_file(channel_id, audio_file_path, initial_comment)
     if add_transcript:
         client.chat_postMessage(
             channel=channel_id,

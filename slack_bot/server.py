@@ -5,22 +5,34 @@ from slack_bolt import App
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 import json
 from User import User
-import logging
 import subprocess
-import random
 from texts import *
+from pathlib import Path
+
+
+
 
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
-from pathlib import Path
 
 def create_empty_sh_file(file_path):
-    path = Path(file_path)
+    """
+    Create an empty shell script file
+    """
+    path = Path(file_path) if isinstance(file_path, str) else file_path
     path.touch(exist_ok=False)
     path.chmod(0o755)
     return path
+
+def count_files(dir=GENERATED_SCRIPTS_PATH):
+    """
+    Count the number of files in a directory
+    """ 
+    return len([1 for x in list(os.scandir(dir)) if x.is_file()]) 
+
+
 
 app = App(token=BOT_TOKEN)
 waiting_for_file = {}
@@ -33,7 +45,7 @@ def help(ack, body, client):
     ack()
     user_id = body["user_id"]
     channel_id = body["channel_id"]
-    text = body["text"] # Add LLM here to help
+    text = body["text"]
     client.chat_postMessage(
         channel=channel_id,
         text=f"""👋 Welcome! I'm Spock 🖖, a bot designed to process PDF files and assist you in extracting valuable information from publications. To get started, simply type `/processpdf`.
@@ -70,7 +82,7 @@ def handle_process_publication_name(ack, body, client):
         publication = body["text"]
         custom_questions = ""
     script_path = SCRIPTS_PATH+"submit_process_publication.sh"
-    generate_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_publication_{user}{str(random.randint(0,1000))}.sh")
+    generate_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_publication_{user}{count_files()}.sh")
     args = [script_path, publication, custom_questions, user, channel_id, generate_script]    
     try:
         subprocess.run(args, check=True)
@@ -82,8 +94,6 @@ def handle_process_publication_name(ack, body, client):
 
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while executing the script: {e}")
-        print(f"stderr: {e.stderr}")
-        print(f"stdout: {e.stdout}")
 
         
 @app.command("/get_author_publication")
@@ -99,15 +109,13 @@ def get_author_publications(ack, body, client):
         count = 1
 
     try:
-        job_scipt = SCRIPTS_PATH+"submit_get_author_publications.sh"
-        generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"get_author_publications_{user_id}{str(random.randint(0,1000))}.sh")
-        args = [job_scipt, author, count, user_id, channel_id, generated_script]
+        script_path = SCRIPTS_PATH+"submit_get_author_publication.sh"
+        generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"get_author_publication_{user_id}{count_files()}.sh")
+        args = [script_path, author, str(count), user_id, channel_id, generated_script]
         subprocess.run(args, check=True)
         print("Script executed successfully!")
     except subprocess.CalledProcessError as e:
         print(f"An error occurred while executing the script: {e}")
-        print(f"stderr: {e.stderr}")
-        print(f"stdout: {e.stdout}")
     
         
         
@@ -155,7 +163,7 @@ def handle_choose_llm(ack, body, client):
         else:
             client.chat_postMessage(
                 channel=channel_id,
-                text="Invalid model. Please choose between Llama3.3 and GPT-4."
+                text="Invalid model. Please choose between Llama3.3 and GPT-4o."
             )
             return
         
@@ -190,11 +198,11 @@ def handle_process_pdf(ack, body, client):
     )
     
 @app.event("app_mention")
-def handle_app_mention(event, client, logger):
+def handle_app_mention(event, client):
     user = event["user"]
     user_text = event["text"]
     channel_id = event["channel"]
-    generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"app_mention_{user}{str(random.randint(0,1000))}.sh")
+    generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"app_mention_{user}{count_files()}.sh")
     script_path = SCRIPTS_PATH+"submit_app_mention.sh"
     args = [script_path, user_text, user, channel_id, generated_script]
     try:
@@ -208,7 +216,7 @@ def handle_app_mention(event, client, logger):
 
 
 @app.event("file_shared")
-def handle_file_shared(event, client, logger):
+def handle_file_shared(event, client):
     user_id = event.get("user_id")
     file_id = event.get("file_id")
     
@@ -231,7 +239,7 @@ def handle_file_shared(event, client, logger):
                     text=f"Your file `{file_name}` has been uploaded. Processing it now..."
                 )
                 script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
-                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"generate_podcast_{user_id}{str(random.randint(0,1000))}.sh")
+                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"generate_podcast_{user_id}{count_files()}.sh")
                 args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!", generated_script]
 
                 try:
@@ -251,7 +259,7 @@ def handle_file_shared(event, client, logger):
                     text="The uploaded file is not a PDF. Please try again."
                 )
         except Exception as e:
-            logger.error(f"Error processing file: {e}")
+            print(f"Error processing file: {e}")
             client.chat_postMessage(
                 channel=channel_id,
                 text=f"An error occurred while processing your file. Please try again. {e}"
@@ -286,8 +294,7 @@ def handle_file_shared(event, client, logger):
 
                 print(f"passing {file_name} to Spock")
                 
-                
-                
+                    
                 with open(USER_JSON_PATH, "r") as f:
                     users = json.load(f)
                     
@@ -303,7 +310,7 @@ def handle_file_shared(event, client, logger):
                 model = users[user_id]["user_model"]
                 
                 script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
-                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_pdf_{user_id}{str(random.randint(0,1000))}.sh")
+                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_pdf_{user_id}{count_files()}.sh")
                 args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id, generated_script]
                 try:
                     subprocess.run(args, check=True)
@@ -321,7 +328,7 @@ def handle_file_shared(event, client, logger):
                     text="The uploaded file is not a PDF. Please try again."
                 )
         except Exception as e:
-            logger.error(f"Error processing file: {e}")
+            print(f"Error processing file: {e}")
             client.chat_postMessage(
                 channel=channel_id,
                 text=f"An error occurred while processing your file. Please try again. {e}"

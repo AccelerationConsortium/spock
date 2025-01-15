@@ -22,7 +22,7 @@ COMMANDS = """- 📜 get_authors_list: Retrieve a list of all authors.
 
 - 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
 
-- 🎙️ generate_podcast: Generate a podcast from a text input. This command is currently disabled.
+- 🎙️ generate_podcast: Generate a podcast from a text input. You would do /generate_podcast, then input your PDF file.
 """
 load_dotenv()
 def get_api_key(env_var, prompt):

@@ -1,19 +1,4 @@
-
-import os
-from bs4 import BeautifulSoup
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_community.document_loaders import PDFPlumberLoader, TextLoader
-from langchain_community.embeddings import OllamaEmbeddings
-from langchain_community.vectorstores import Chroma
-from langchain_ollama import OllamaLLM
-import json
-from langchain_core.prompts import PromptTemplate
-import requests
-from scholarly import scholarly
-
-
-
-class Publication_scholarly(): # Give it Publication as inheritance
+class Publication_scholarly(): 
     def __init__(self,publication_filled, get_topic:bool=False) -> None:
         """Initialize a Publication object."""
         self.publication_filled = publication_filled

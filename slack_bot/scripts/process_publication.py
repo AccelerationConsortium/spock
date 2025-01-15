@@ -5,6 +5,8 @@ import json
 from slack_sdk import WebClient
 from spock_literature import Spock
 import re
+from langchain_community.callbacks import get_openai_callback
+import time
 
 def main():
     parser = argparse.ArgumentParser()
@@ -20,17 +22,18 @@ def main():
     questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
-        # Send the response back to the user via Slack
     BOT_TOKEN = os.getenv('BOT_TOKEN')
     client = WebClient(token=BOT_TOKEN)
 
 
     # Prepare custom questions
+    start_time = time.time()    
     if questions_str:
         user_questions = questions_str.split("||")
     else:
         user_questions = []
-        
+    
+    
     if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', publication):
         # DOI
         doi = publication
@@ -47,7 +50,10 @@ def main():
         spock = Spock(model=model, publication_title=title, custom_questions=user_questions)
 
     try:
-        spock()
+        with get_openai_callback() as cb:
+            spock()
+            cost = round(cb.total_cost,2)
+            total_time = round(time.time() - start_time,2)
     except Exception as e:
         client.chat_postMessage(
         channel=channel_id,
@@ -61,7 +67,7 @@ def main():
     
     client.chat_postMessage(
         channel=channel_id,
-        text=f"Hi there, <@{user_id}>! Your file has been processed. \n {response_output}",
+        text=f"Hi there, <@{user_id}>! Your file has been processed. \n {response_output} \n Cost (USD): {cost} \n Time taken: {total_time} seconds",
         mrkdwn=True
     )
 
