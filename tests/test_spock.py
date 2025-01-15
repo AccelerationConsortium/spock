@@ -1,100 +1,48 @@
-import pytest
-from unittest.mock import patch
-from .fake_llm import FakeChatModel
-from langchain.schema import Document, ChatResult, ChatGeneration, AIMessage
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
-from openai import OpenAIError
-from spock_literature import Spock
-
 """
-# To change the test cases, change the function name
-def test_RetrievalQABypassTokenLimit():
-    # Create simple documents
-    documents = [
-        Document(page_content="Document about AI."),
-        Document(page_content="Document about machine learning."),
-        Document(page_content="Document about language models."),
-    ]
+import pytest
+from unittest.mock import patch, MagicMock
+from pathlib import Path
+from .fake_llm import FakeChatModel
+from spock_literature.spock import Spock
+from spock_literature.utils.Url_downloader import URLDownloader
+from langchain_ollama import OllamaLLM
 
-    # Initialize OpenAIEmbeddings and FAISS vector store
-    embeddings = OpenAIEmbeddings()
-    vector_store = FAISS.from_documents(documents, embeddings)
-
-    # Define a FakeChatModel that simulates LLM responses
-    responses = ["This is a response within token limit.", 
-                 "This is another response within token limit."]
-    llm = FakeChatModel(responses=responses)
-
-    # Set up the RetrievalQA prompt
-    RetrievalQA_prompt = "What are these documents about?"
-
-    # Call the function and capture the result
-    result = RetrievalQABypassTokenLimit(
-        vector_store=vector_store,
-        RetrievalQA_prompt=RetrievalQA_prompt,
-        llm=llm,
-        k=3,
-        fetch_k=5,
-        min_k=2,
-        chain_type="stuff"
+@pytest.fixture
+def spock_instance(tmp_path):
+    return Spock(
+        model="llama3.3",
+        paper=None,
+        custom_questions=["What is the main novelty?"],
+        publication_doi="10.1234/example.doi",
+        publication_title="Sample Title",
+        publication_url="http://example.com",
+        papers_download_path=str(tmp_path) + "/"
     )
 
-    # Assertions to check the result
-    assert result is not None
-    assert isinstance(result, str)
-    assert result == "This is a response within token limit."
+def test_spock_initialization(spock_instance):
+    s = spock_instance
+    assert isinstance(s.llm, OllamaLLM())
+    assert s.custom_questions == ["What is the main novelty?"]
+    assert s.publication_doi == "10.1234/example.doi" 
+    assert s.publication_title == "Sample Title"
+    assert s.publication_url == "http://example.com"
+    assert s.paper is None
 
+def test_spock_download_pdf(spock_instance):
+    responses = [""]
+    fake_llm = FakeChatModel() 
 
-@patch.object(FakeChatModel, '_generate')
-def test_RetrievalQABypassTokenLimit_token_limit_exceeded(mock_generate):
-    # Create large documents to trigger token limit reduction
-    large_text = "This is a large document content. " * 500
-    documents = [Document(page_content=large_text) for _ in range(3)]
-
-    # Initialize OpenAIEmbeddings and FAISS vector store
-    embeddings = OpenAIEmbeddings()
-    vector_store = FAISS.from_documents(documents, embeddings)
-
-    # Define a FakeChatModel that raises OpenAIError once and then succeeds
-    responses = [
-        "This is a response that exceeds the token limit.",
-        "Another response within token limit."
-    ]
-    llm = FakeChatModel(responses=responses)
-
-    # Mock the _generate method to raise an OpenAIError on the first call and succeed afterward
-    mock_generate.side_effect = [
-        OpenAIError("maximum context length exceeded"),
-        ChatResult(generations=[ChatGeneration(message=AIMessage(content="This is another response within token limit."))])
-    ]
-
-    RetrievalQA_prompt = "Summarize these large documents."
-
-    # Capture stdout to check print statements
-    import io
-    from contextlib import redirect_stdout
-
-    f = io.StringIO()
-    with redirect_stdout(f):
-        result = RetrievalQABypassTokenLimit(
-            vector_store=vector_store,
-            RetrievalQA_prompt=RetrievalQA_prompt,
-            llm=llm,
-            k=3,
-            fetch_k=5,
-            min_k=2,
-            chain_type="stuff"
-        )
-    output = f.getvalue()
-
-    # Check if the function reduced k due to token limit and then succeeded
-    assert result is not None
-    assert isinstance(result, str)
-    assert "k=3 results hitting the token limit. Reducing k and retrying..." in output
-    assert result == "This is another response within token limit."
-
-    print("Test Output:\n", output)
-    print("Test Result:", result)
-    
+def test_spock_format_output():
+    s = Spock(model="llama3.3")
+    s.paper_summary = "Paper summary"
+    s.topics = "Topic1/Topic2"
+    s.questions = {
+        "Q1": {"question": "Is this a test?", "output": {"response": "Yes", "sentence": "This is a test sentence."}}
+    }
+    output = s.format_output()
+    assert "Paper summary" in output
+    assert "Topic1/Topic2" in output
+    assert "Q1" in output
+    assert "Yes" in output
+    assert "This is a test sentence." in output
 """

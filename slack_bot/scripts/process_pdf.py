@@ -34,8 +34,8 @@ def main():
         spock = Spock(model=model, paper=paper_path, custom_questions=user_questions)
         spock()
         response_output = spock.format_output()
-        cost = cb.total_cost
-    total_time = time.time() - start_time
+        cost = round(cb.total_cost,2)
+    total_time = round(time.time() - start_time,2)
     
 
 

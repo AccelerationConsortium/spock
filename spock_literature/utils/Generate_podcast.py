@@ -150,12 +150,4 @@ def generate_audio(file: str, openai_api_key: str = None):
     return temporary_file.name, transcript
 
 
-def main():
-    import argparse
-
-    audio_file, transcript = generate_audio("/home/youssef/clone/spock/slack_bot/papers/synergistic_effects_of_thermosensitive_liposomal_doxorubicin_mild_hyperthermia_and_radiotherapy_in_breast_cancer_management_an_orthotopic_mouse_model_study.pdf")
-
-    print(f"Audio file saved to: {audio_file}")
-    print(f"Transcript:\n{transcript}")
-
 

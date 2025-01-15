@@ -129,7 +129,6 @@ class URLDownloader:
                 # If the document is a complete scientific paper
                 return document
 
-            # If the document is not a complete scientific paper / Download the PDF
             pdf_url = self.find_pdf_link(soup, self.url)
             pdf_name = pdf_url.split("/")[-1]
             pdf_response = requests.get(pdf_url)
@@ -139,7 +138,7 @@ class URLDownloader:
                 if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                     logger.error(f"Couldn't download the file: {self.download_path}")                    
                 logger.info(f"PDF downloaded successfully to {self.download_path}")
-                return self.download_path/pdf_name            # Return path ?
+                return self.download_path/pdf_name        
             else:
                 logger.error(f"Failed to download PDF from {pdf_url}")
         except ValueError as e:
@@ -155,16 +154,13 @@ class URLDownloader:
             r"(([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})" 
             r"(:\d+)?(/.*)?$"
         )
-        if re.match(url_regex, url):
-            return True
-        return False
+        return bool(re.match(url_regex, url))
     
     
     @staticmethod
     def llm_document_decider(document:Document):
-        #print("-----------------")
-        #print(document)
-        #print("-----------------")
+
+
         prompt = PromptTemplate(
             template=f"""
 Here is a text, and we need to determine whether it represents a complete scientific article or a sufficiently comprehensive scientific piece (such as a commentary, feature, or news article) that conveys scientific findings or analysis in a coherent and self-contained manner. Traditional full-length research articles often include:
@@ -173,7 +169,7 @@ Here is a text, and we need to determine whether it represents a complete scient
 2. **Abstract**: A concise summary of the purpose, methods, main findings, and conclusions.
 3. **Introduction**: Background information and context that frame the research question or hypothesis, along with its significance.
 4. **Methods (or Materials and Methods)**: A detailed description of how the study was conducted, including experimental design, data collection, and analytical techniques.
-5. **Results**: A presentation of the study’s findings, often supported by tables, figures, and statistical analysis.
+5. **Results**: A presentation of the study''s findings, often supported by tables, figures, and statistical analysis.
 6. **Discussion**: An interpretation of the results, their implications, their relationship to existing literature, and potential limitations.
 7. **Conclusions**: A brief recap of the main findings and their broader significance.
 8. **References**: A list of all sources cited.
@@ -187,7 +183,7 @@ Examine the text inside {{document}} and determine if it provides a coherent, se
 - Some evidence, data, examples, or references that support its main points
 - An explanation or interpretation of the implications or significance of the information presented
 
-If the text either closely aligns with a full-length research article’s structure or is a shorter, self-contained scientific piece that adequately conveys a clear scientific message and context (even if non-traditional in format), output 1.
+If the text either closely aligns with a full-length research article's structure or is a shorter, self-contained scientific piece that adequately conveys a clear scientific message and context (even if non-traditional in format), output 1.
 If it lacks critical information, coherence, or appears clearly incomplete as a scientific piece, output 0.
 
 Your output should contain only one number, no text or additional information.
