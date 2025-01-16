@@ -194,7 +194,6 @@ Your output should contain only one number, no text or additional information.
         temp_llm = ChatOpenAI(model="gpt-4o", temperature=0.05)
         chain = prompt | temp_llm
         response = chain.invoke({"document": document})
-        #print(response.content)
         if "1" in response.content:
             return True
         return False
