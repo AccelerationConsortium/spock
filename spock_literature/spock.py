@@ -25,7 +25,10 @@ class Spock(Helper_LLM):
         publication_doi: Optional[str] = None,
         publication_title: Optional[str] = None,
         publication_url: Optional[str] = None,
-        papers_download_path: str = PAPERS_PATH
+        papers_download_path: str = PAPERS_PATH,
+        temperature: float = 0.2,
+        embed_model=None,
+        folder_path=None,
    
     ):
         """
@@ -39,8 +42,11 @@ class Spock(Helper_LLM):
             publication_title (str | None): Title of the paper to analyze. Defaults to None.
             publication_url (str | None): URL of the paper to analyze. Defaults to None.
             papers_download_path (str): Path to download the papers. 
+            temperature (float): Temperature for the model. Defaults to 0.2.
+            embed_model (str): Embedding model. Defaults to None.
+            folder_path (str): Folder path. Defaults to None.
         """
-        super().__init__(model=model)
+        super().__init__(model=model, temperature=temperature, embed_model=embed_model, folder_path=folder_path)
         self.paper: Optional[Path] = Path(paper) if paper else None
         self.paper_summary: str = ""
         self.custom_questions: List[str] = custom_questions or []
@@ -56,7 +62,6 @@ class Spock(Helper_LLM):
         """Download the PDF of a publication."""
     
         
-        # To update  
         if self.publication_doi and not self.paper:
 
             paper = "https://doi.org/" + self.publication_doi
@@ -81,7 +86,6 @@ class Spock(Helper_LLM):
                 self.paper = Path(out)
                 
         elif self.publication_url:
-            # Use Script given
             downloader = URLDownloader(url=self.publication_url, download_path=Path(self.papers_path))
             temp_return = downloader()
             if temp_return != None:
@@ -100,7 +104,6 @@ class Spock(Helper_LLM):
             except Exception as e:
                 print("An error occured while scanning the PDF for the question: ", question)
                 temp_response = "NA/None"
-            print(temp_response)
             temp_response = temp_response.split('/')
             self.questions[question]['output']['response'] = temp_response[0]
             self.questions[question]['output']['sentence'] = temp_response[1]
@@ -195,7 +198,6 @@ class Spock(Helper_LLM):
     def add_custom_questions(self):
         """Add custom questions to the questions dictionary."""
         
-        print(self.custom_questions)
         for question in self.custom_questions:
             prompt = PromptTemplate(
                 template="""Here is a question, I want you to give me to what topic it is related the most. \ Here is the question you are going to work on: {question}. 
@@ -261,7 +263,3 @@ class Spock(Helper_LLM):
 
         output_text = '\n'.join(output_lines)     
         return output_text
-
-    
-    
-

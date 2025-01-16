@@ -270,7 +270,6 @@ def handle_file_shared(event, client):
     
     elif user_id in waiting_for_file:
         channel_id = waiting_for_file[user_id]
-        # Edited this
         try: 
             user_questions = questions[user_id]
             del questions[user_id]
@@ -306,7 +305,6 @@ def handle_file_shared(event, client):
                         json.dump(users, f)
                 
                 
-                # Choosing the model for the user
                 model = users[user_id]["user_model"]
                 
                 script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
@@ -337,6 +335,5 @@ def handle_file_shared(event, client):
         pass  
 
 if __name__ == "__main__":
-    # Initialize Socket Mode handler
     handler = SocketModeHandler(app, APP_TOKEN)
     handler.start()
