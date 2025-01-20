@@ -1,3 +1,4 @@
+import os
 QUESTIONS = {
             "new materials":{"question":""""Does the document mention any new or novel materials discovered?\
                                             Examples sentences for new materials discovery:
@@ -105,4 +106,4 @@ QUESTIONS = {
                                                 from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}}}
 
 
-PAPERS_PATH = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/papers/"
+PAPERS_PATH = os.getcwd()+"/papers"

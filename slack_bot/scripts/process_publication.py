@@ -1,7 +1,5 @@
-# TTILE OR DOI
 import argparse
 import os
-import json
 from slack_sdk import WebClient
 from spock_literature import Spock
 import re
