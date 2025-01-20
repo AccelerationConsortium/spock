@@ -5,7 +5,6 @@ from slack_sdk import WebClient
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import getpass
-import os
 from dotenv import load_dotenv
 
 COMMANDS = """- 📜 get_authors_list: Retrieve a list of all authors.

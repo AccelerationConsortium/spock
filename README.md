@@ -26,10 +26,12 @@
 - [Spock Literature](#spock-literature)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
-  - [Architecture Overview](#architecture-overview)
     - [Key Components](#key-components)
   - [Requirements and Installation](#requirements-and-installation)
   - [Usage Examples](#usage-examples)
+  - [Workflow](#workflow)
+    - [Spock workflow](#spock-workflow)
+    - [Slack workflow](#slack-workflow)
 
 ---
 
@@ -55,13 +57,6 @@
    - You can provide your own custom questions, or use the default set in `QUESTIONS`.  
    - Returns both an answer and a supporting sentence from the document.
 
-5. **Podcast Generation**  
-
-
-## Architecture Overview
-
-TODO: tree
-
 
 ### Key Components
 
@@ -85,7 +80,7 @@ TODO: tree
 2. **Environment Setup**  
    - Clone the repository:  
      ```bash
-     git clone https://github.com/username/spock_literature.git
+     git clone git@github.com:AccelerationConsortium/spock.git
      cd spock_literature
      ```
    - Create and activate a virtual environment (recommended):  
@@ -112,4 +107,19 @@ Below are a few common tasks using the `Spock` class.
 
 Insert video here
 
+
+## Workflow
+
+### Spock workflow
+When calling the a Spock instance, the following steps are executed:
+![call special method workflow](images/spock_uml.png )
+
+
+### Slack workflow
+
+When calling the a Spock instance from Slack, the following steps are executed:
+
+We are using the `process_pdf` command as an example.
+
+![Spock workflow on Slack for the process_pdf command](images/spock_slack_uml.png "Spock workflow on Slack for the process_pdf command")
 

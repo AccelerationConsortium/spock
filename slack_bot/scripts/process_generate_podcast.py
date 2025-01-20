@@ -2,9 +2,6 @@ import argparse
 import os
 from slack_sdk import WebClient
 from spock_literature import Spock
-import re
-from spock_literature.utils.Author import Author
-from langchain_community.callbacks import get_openai_callback
 
 
 BOT_TOKEN = os.getenv('BOT_TOKEN')

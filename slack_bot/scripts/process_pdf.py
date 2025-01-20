@@ -1,6 +1,5 @@
 import argparse
 import os
-import json
 from slack_sdk import WebClient
 from spock_literature import Spock
 from langchain_community.callbacks import get_openai_callback
@@ -39,7 +38,6 @@ def main():
     
 
 
-    # Send the response back to the user via Slack
     BOT_TOKEN = os.getenv('BOT_TOKEN')
     client = WebClient(token=BOT_TOKEN)
     client.chat_postMessage(
