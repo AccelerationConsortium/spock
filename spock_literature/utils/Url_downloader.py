@@ -1,4 +1,3 @@
-import os 
 import requests
 import re
 from pathlib import Path
@@ -53,7 +52,7 @@ class URLDownloader:
             try: 
                 data,soup = self.extract_html_text(response.text)                
                 pdf_url = self.find_pdf_link(soup, self.url)
-                pdf_name = pdf_url.split("/")[-1]
+                pdf_name = pdf_url.split("/")[-1] + ".pdf"  
                 pdf_response = requests.get(pdf_url)
                 if pdf_response.status_code == 200:
                     with open(self.download_path/pdf_name, 'wb') as f:
@@ -115,7 +114,6 @@ class URLDownloader:
                 
     def __journals_download(self):
         
-        # To update 
         response = requests.get(self.url)
         if response.status_code != 200:
             raise ConnectionError(f"Failed to access {self.url}")
@@ -130,7 +128,7 @@ class URLDownloader:
                 return document
 
             pdf_url = self.find_pdf_link(soup, self.url)
-            pdf_name = pdf_url.split("/")[-1]
+            pdf_name = pdf_url.split("/")[-1] + ".pdf"  
             pdf_response = requests.get(pdf_url)
             if pdf_response.status_code == 200:
                 with open(self.download_path/pdf_name, 'wb') as f:
@@ -197,4 +195,3 @@ Your output should contain only one number, no text or additional information.
         if "1" in response.content:
             return True
         return False
-        
