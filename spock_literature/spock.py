@@ -178,7 +178,7 @@ class Spock(Helper_LLM):
         )
         chain = prompt | self.llm
         
-        return chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
+        self.topics = chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
         
         
         
@@ -191,7 +191,8 @@ class Spock(Helper_LLM):
         
         if not self.paper_summary: 
             self.summarize()
-        self.topics = self.get_topics()        
+        if not self.topics:
+            self.get_topics()        
         
         
     
