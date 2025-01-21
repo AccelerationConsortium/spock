@@ -19,11 +19,17 @@
 - Optionally producing an audio “podcast” version of a publication.
 
 ---
+## Quick demo:
+<video width="640" height="360" controls>
+  <source src="images/spock.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
 ## Table of Contents
 
 - [spock](#spock)
 - [Spock Literature](#spock-literature)
+  - [Quick demo:](#quick-demo)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
     - [Key Components](#key-components)
