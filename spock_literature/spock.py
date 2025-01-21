@@ -29,6 +29,7 @@ class Spock(Helper_LLM):
         temperature: float = 0.2,
         embed_model=None,
         folder_path=None,
+        settings:Optional[bool] = None
    
     ):
         """
