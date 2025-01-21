@@ -17,7 +17,7 @@ cat <<EOT > $JOB_SCRIPT
 
 module load BalamEnv
 module load python/3.8
-source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
+source /home/m/mehrad/brikiyou/scratch/new_spock_venv_2/bin/activate
 
 cd /home/m/mehrad/brikiyou/scratch/spock/slack_bot
 
