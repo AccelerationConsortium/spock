@@ -21,7 +21,7 @@ $(if [[ "$MODEL" == "llama3.3" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "
 
 module load BalamEnv
 
-source /home/m/mehrad/brikiyou/scratch/new_spock_venv/bin/activate
+source /home/m/mehrad/brikiyou/scratch/new_spock_venv_2/bin/activate
 
 if [[ "$MODEL" == "llama3.3" ]]; then
     source /home/m/mehrad/brikiyou/scratch/to_run.sh
