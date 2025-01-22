@@ -14,8 +14,8 @@ cat <<EOT > $JOB_SCRIPT
 #SBATCH --nodes=1
 #SBATCH --time=00:02:00
 #SBATCH --gpus-per-node=0
-#SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
-#SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
+#SBATCH --output=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.out
+#SBATCH --error=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.err
 
 
 module load BalamEnv
