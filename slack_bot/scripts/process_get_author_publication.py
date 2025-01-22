@@ -1,9 +1,7 @@
 import argparse
 import os
-import json
 from slack_sdk import WebClient
 from spock_literature import Spock
-import re
 from spock_literature.utils.Author import Author
 
 def main():
