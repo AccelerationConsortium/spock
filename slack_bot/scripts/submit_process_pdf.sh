@@ -13,8 +13,8 @@ cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
 #SBATCH --time=00:05:00
-#SBATCH --output=/home/m/mehrad/brikiyou/scratch/slurm-%j.out
-#SBATCH --error=/home/m/mehrad/brikiyou/scratch/slurm-%j.err
+#SBATCH --output=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.out
+#SBATCH --error=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.err
 
 $(if [[ "$MODEL" == "llama3.3" ]]; then echo "#SBATCH --gpus-per-node=4"; echo "#SBATCH -p compute_full_node"; else echo "#SBATCH --gpus-per-node=0"; fi)
 
