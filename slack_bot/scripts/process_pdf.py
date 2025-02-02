@@ -4,7 +4,10 @@ from slack_sdk import WebClient
 from spock_literature import Spock
 from langchain_community.callbacks import get_openai_callback
 import time
+import json
 
+
+USERS_FILE = "/home/m/mehrad/brikiyou/scratch/spock/slack_bot/users.json"
 
 def main():
     parser = argparse.ArgumentParser()
@@ -21,6 +24,18 @@ def main():
     user_id = args.user_id
     channel_id = args.channel_id
     
+    with open(USERS_FILE, "r") as f:
+        users = json.load(f)
+        
+    if user_id not in users:
+        client.chat_postMessage(
+            channel=channel_id,
+            text=f"Hi there, <@{user_id}>! An error occured, couldn't find your user information.",
+            mrkdwn=True
+        )
+        raise ValueError(f"User {user_id} not found in the users file.")
+        
+    
 
     if questions_str:
         print("Custom questions provided: ", questions_str)
@@ -30,7 +45,7 @@ def main():
 
     start_time = time.time()
     with get_openai_callback() as cb:
-        spock = Spock(model=model, paper=paper_path, custom_questions=user_questions)
+        spock = Spock(model=model, paper=paper_path, custom_questions=user_questions, settings=users[user_id]["settings"])
         spock()
         response_output = spock.format_output()
         cost = round(cb.total_cost,2)

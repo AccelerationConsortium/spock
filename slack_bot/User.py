@@ -1,6 +1,6 @@
 from typing import Optional
 class User(object):
-    def __init__(self, user_id: str, user_name: str="llama3.3", settings:Optional[dict[str, bool]]={'Summary':True, 'Topics':True, 'Questions':True,'Binary Response':True}) -> None:
+    def __init__(self, user_id: str, user_name: str="llama3.3", settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True}) -> None:
         self.user_id = user_id
         self.user_model = user_name
         self.settings = settings

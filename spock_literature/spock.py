@@ -5,7 +5,7 @@ import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from spock_literature.texts import QUESTIONS, PAPERS_PATH
+from spock_literature.texts import get_questions, PAPERS_PATH
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.Generate_podcast import generate_audio
 from pathlib import Path
@@ -29,7 +29,7 @@ class Spock(Helper_LLM):
         temperature: float = 0.2,
         embed_model=None,
         folder_path=None,
-        settings:Optional[bool] = None
+        settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True}
    
     ):
         """
@@ -55,7 +55,8 @@ class Spock(Helper_LLM):
         self.publication_title: Optional[str] = publication_title
         self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
-        self.questions = QUESTIONS
+        self.settings = settings
+        self.questions = get_questions(self.settings['Binary Response'])
         self.papers_path = papers_download_path
   
     
@@ -99,16 +100,34 @@ class Spock(Helper_LLM):
         """Scan the PDF of a publication."""
         
         self.chunk_indexing(self.paper)
-        for question in self.questions:
-            try:
-                temp_response = self.query_rag(self.questions[question]['question'])
-            except Exception as e:
-                print("An error occured while scanning the PDF for the question: ", question)
-                temp_response = "NA/None"
-            temp_response = temp_response.split('/')
-            self.questions[question]['output']['response'] = temp_response[0]
-            self.questions[question]['output']['sentence'] = temp_response[1]
-   
+        lim = 0 if self.settings['Questions'] else 10
+        for i,question in enumerate(self.questions):
+            if i >= lim:
+                try:
+                    temp_response = self.query_rag(self.questions[question]['question'])
+                except Exception as e:
+                    print("An error occured while scanning the PDF for the question: ", question)
+                    temp_response = "NA/None"
+                if self.settings['Binary Response']:
+                    temp_response = temp_response.split('/')
+                    self.questions[question]['output']['response'] = temp_response[0]
+                    self.questions[question]['output']['sentence'] = temp_response[1]
+                else:
+                    try:
+                        temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+                        prompt = PromptTemplate(
+                            template="Here is a text {text}. It contains an answer followed by some extracts from a text supporting that answer. The output should look like this: Answer/Supporting answers. If the answer is 'no' or there is no Supporting sentence mentioned in the text, output, followed by a '/None'",
+                            input_variables=["text"]
+                        )
+                        chain = prompt | temp_llm
+                        temp_response = chain.invoke({"text":temp_response}).content.split('/')
+                        self.questions[question]['output']['response'] = temp_response[0]
+                        self.questions[question]['output']['sentence'] = temp_response[1]
+                    except Exception as e:
+                        print("An error occured while scanning the PDF for the question: ", question)
+                        self.questions[question]['output']['response'] = "NA"
+                        self.questions[question]['output']['sentence'] = "None"
+    
     
     def summarize(self) -> None:
         from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
@@ -190,10 +209,11 @@ class Spock(Helper_LLM):
         self.add_custom_questions()
         self.scan_pdf() 
         
-        if not self.paper_summary: 
-            self.summarize()
-        if not self.topics:
-            self.get_topics()        
+        if self.settings['Summary']:
+            if not self.paper_summary: 
+                self.summarize()
+            if not self.topics:
+                self.get_topics()        
         
         
     
@@ -223,8 +243,10 @@ class Spock(Helper_LLM):
             
             chain = prompt | self.llm
             question_topic = chain.invoke({"question":question})
-            self.questions.update({question_topic.content if not isinstance(question_topic, str) else question_topic :{"question":question+"Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                                from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'" , "output":{'response':"","sentence":""}}})
+            temp_text = " Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
+                                                from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'" if self.settings['Binary Response'] else " Respond to the question followed by a '/' then the exact sentence without any changes\
+                                                    from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
+            self.questions.update({question_topic.content if not isinstance(question_topic, str) else question_topic :{"question":question+temp_text, "output":{'response':"","sentence":""}}})
             
             
             
