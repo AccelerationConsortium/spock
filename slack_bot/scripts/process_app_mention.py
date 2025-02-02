@@ -6,23 +6,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import PromptTemplate
 import getpass
 from dotenv import load_dotenv
+from texts import COMMANDS
 
-COMMANDS = """- 📜 get_authors_list: Retrieve a list of all authors.
-  Example: /get_authors_list
-
-- 📚 get_author_publication: Get the latest publications of a specific author. By default, it fetches the most recent one. To specify how many publications you'd like, provide the author's name followed by a comma and the number of publications.
-  Example: /get_author_publication Jane Doe, 3 (This will retrieve the 3 latest publications by Jane Doe.)
-
-- 📄 process_pdf: Share and process a PDF file from your local computer. You can also include custom questions about the PDF by writing them next to the command, separated by a `||`.
-  Example: /process_pdf Does the paper discuss the impact of AI on society? / What are the key findings of the paper?
-
-- 📖 process_publication: Process a publication by providing its title, DOI, or URL. You can also include custom questions about the publication by writing them next to the command, separated by a `||`.  
-    Example: /process_publication Title of the publication / DOI of the publication / URL of the publication || Does the paper discuss the impact of AI on society? || What are the key findings of the paper?
-
-- 🤖 choose_llm: Choose the language model you'd like to use for future responses. You can choose between Llama3.1, Claude 3.5 Sonnet, and GPT-4. To do so, type /choose_llm followed by the model name.
-
-- 🎙️ generate_podcast: Generate a podcast from a text input. You would do /generate_podcast, then input your PDF file.
-"""
 load_dotenv()
 def get_api_key(env_var, prompt):
     

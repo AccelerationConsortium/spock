@@ -15,6 +15,8 @@ cat <<EOT > $JOB_SCRIPT
 #SBATCH --gpus-per-node=0
 #SBATCH --output=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.out
 #SBATCH --error=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.err
+#SBATCH -p debug
+
 
 module load BalamEnv
 module load python/3.8

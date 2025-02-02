@@ -141,8 +141,50 @@ def get_user_settings(ack, body, client):
     )
 
     
+@app.command("/toggle_binary_responses")
+def turn_on_binary_responses(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    with open(USER_JSON_PATH, "r") as f:
+        users = json.load(f)
     
+    if user_id not in users:
+        user = User(user_id, "llama3.3")
+        users[user_id] = user.__dict__()[user.user_id]
+    users[user_id]["settings"]["Binary Response"] = not users[user_id]["settings"]["Binary Response"]
+     
+    with open(USER_JSON_PATH, "w") as f:
+        json.dump(users, f)
     
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f'Hi there, <@{user_id}>! Binary responses have been turned {"on" if users[user_id]["settings"]["Binary Response"] else "off"}.'
+    )
+
+
+
+@app.command("/toggle_summary")
+def turn_on_summary(ack, body, client):
+    ack()
+    user_id = body["user_id"]
+    channel_id = body["channel_id"]
+    with open(USER_JSON_PATH, "r") as f:
+        users = json.load(f)
+    
+    if user_id not in users:
+        user = User(user_id, "llama3.3")
+        users[user_id] = user.__dict__()[user.user_id]
+    users[user_id]["settings"]["Summary"] = not users[user_id]["settings"]["Summary"]
+     
+    with open(USER_JSON_PATH, "w") as f:
+        json.dump(users, f)
+    
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f'Hi there, <@{user_id}>! Summaries have been turned {"on" if users[user_id]["settings"]["Summary"] else "off"}.'
+    )
+
 
 @app.command("/choose_llm")
 def handle_choose_llm(ack, body, client):

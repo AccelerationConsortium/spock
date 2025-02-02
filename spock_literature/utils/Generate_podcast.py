@@ -9,7 +9,6 @@ from typing import List, Literal
 import getpass
 import os
 from dotenv import load_dotenv
-
 import sentry_sdk
 from loguru import logger
 from openai import OpenAI
@@ -142,7 +141,6 @@ def generate_audio(file: str, openai_api_key: str = None):
     temporary_file.write(audio)   
     temporary_file.close()
 
-    # Delete any files in the temp directory that end with .mp3 and are over a day old
     for file in glob.glob(f"{temporary_directory}*.mp3"):
         if os.path.isfile(file) and time.time() - os.path.getmtime(file) > 24 * 60 * 60:
             os.remove(file)

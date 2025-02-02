@@ -9,7 +9,7 @@ QUESTIONS = {
                         found to have exceptional low-temperature performance at substantially lower weight loadings of Ru.
                     4. We applied a workflow of combined in silico methods (virtual drug screening, molecular docking and supervised machine learning algorithms)\
                                             to identify novel drug candidates against COVID-19.\
-                    Answer either 'Yes' or 'No' followed by a '/' then an exact sentence without any changes from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'""" , "output": {'response':"","sentence":""}},
+                    """ , "output": {'response':"","sentence":""}},
             
             
             "screening algorithms":{"question":"Does the document mention any new or novel high-throughput or large-scale screening algorithm, methods or workflow?\
@@ -24,8 +24,7 @@ QUESTIONS = {
                                             DFT workflow tailored for MOF structures\
                                             to construct a large-scale database of MOF quantum mechanical properties.\
                                             If there are any, what are the screening algorithms used in the document? Answer either\
-                                            'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                            from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                            ", "output": {'response':"","sentence":""}},
             
             
             "experimental methodology":{"question":"Does the document mention any new or novel experimental methodology used?\
@@ -38,8 +37,7 @@ QUESTIONS = {
                                             'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
                                         3. This study revealed the therapeutic potency of a novel hybrid peptide, \
                                         and supports the use of rational design in development of new antibacterial agents\
-                                        'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                            from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                        ", "output": {'response':"","sentence":""}},
             
             "ML algirothms":{"question":"Does the document mention the development of any new machine learning and deep learning algorithm\
                                             or AI model/architecutre?\
@@ -48,8 +46,7 @@ QUESTIONS = {
                                             paradigm based on the extreme learning machines (ELM) method using the BAT algorithm optimization.\
                                         2. We here therefore introduce ionbot, a novel open modification search engine that is the first\
                                             to fully merge machine learning with peptide identification.\
-                                        Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from\
-                                            the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                        ", "output": {'response':"","sentence":""}},
             
             "models":{"question":"Are there specific new or novel methods, models and workflows used in the document?\
                                         Examples sentences for new methods and workflows :\
@@ -60,8 +57,7 @@ QUESTIONS = {
             "funding":{"question":"Does the document mention funding, award or financial support in the acknowledgements?\
                                         Examples sentences for funding or financial support:\
                                         1. This work is supported in part by the National Science Foundation under Award No. OIA-1946391.\
-                                            Answer either 'Yes' or 'No' followed by a '/' then the exact sentence\
-                                            without any changes from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                            ", "output": {'response':"","sentence":""}},
         
         "material datasets":{"question":"Does the document mention the development of any new material-related datasets or databases? \
                                         Examples sentences for new dataset/database:\
@@ -72,8 +68,7 @@ QUESTIONS = {
                                             to construct a large-scale database of MOF quantum mechanical properties. \
                                         3. In this work, to build the predictive tool, a dataset was constructed\
                                             and models were trained and tested at a ratio of 75:25.\
-                                            Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from the document\
-                                            that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                            ", "output": {'response':"","sentence":""}},
         
         "drug formulations explored":{"question":"Has the document mentioned exploring any drug formulations?\
                                         Examples sentences for exploring drug formulations:\
@@ -82,16 +77,13 @@ QUESTIONS = {
                                             route based on physiological knowledge and formulation research information.\
                                         2. Notably, they can be incorporated in pharmaceutical formulations to enhance drug solubility,\
                                             absorption, and bioavailability due to the formulation itself and the P-gp inhibitory effects of the excipients.\
-                                            Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from the document\
-                                            that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                            ", "output": {'response':"","sentence":""}},
         
         "lead small-molecule drug candidates":{"question":"Does the document mention identifying to developing lead small-molecule drug candidates?\
                                         Example sentences for new lead small-molecule drug candidates:\
                                         1. Discovery of a Small Molecule Drug Candidate for Selective NKCC1 Inhibition in Brain Disorders\
                                         2. We have setup a drug discovery program of small-molecule compounds that act as chaperones enhancing\
-                                            TTR/Amyloid-beta peptide (Aβ) interactions.\
-                                            Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes from\
-                                            the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}},
+                                            TTR/Amyloid-beta peptide (Aβ) interactions.\ ", "output": {'response':"","sentence":""}},
         
         
         
@@ -101,9 +93,21 @@ QUESTIONS = {
                                             on which viral measurements should be prioritized in HIV-cure-directed clinical trials\
                                         2.  This 12-month longitudinal, 2-group randomized clinical trial recruited MSM through\
                                             online banner advertisements from March through August 2015.\
-                                        3. Efficacy of hydroxychloroquine in patients with COVID-19: results of a randomized clinical trial\
-                                            Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
-                                                from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'", "output": {'response':"","sentence":""}}}
+                                        3. Efficacy of hydroxychloroquine in patients with COVID-19: results of a randomized clinical trial\ ", "output": {'response':"","sentence":""}}}
 
 
 PAPERS_PATH = os.getcwd()+"/papers"
+
+
+def get_questions(binary_response:bool=True) -> dict:
+    if binary_response:
+        for key in QUESTIONS:
+            if binary_response:
+                QUESTIONS[key]["question"] =  QUESTIONS[key]["question"] + "Answer either 'Yes' or 'No' followed by a '/' then the exact sentence without any changes\
+                                                    from the document that supports your answer. If the answer is No or If you don't know the answer, say 'NA/None'"
+            else:
+                QUESTIONS[key]["question"] =  QUESTIONS[key]["question"] + "Respond to the question by developing a little bit more of information from the article. Then, followed by a '/' the exact sentence without any changes\
+                                                    from the document that supports your answer.  If you don't know the answer, say 'NA/None'"
+    return QUESTIONS                              
+                                                
+                                                
