@@ -13,6 +13,9 @@ from typing import List, Optional, Union
 from spock_literature.utils.Url_downloader import URLDownloader
 from langchain.schema import Document
 from scidownl import scihub_download
+import concurrent.futures
+from langchain.docstore.document import Document
+from time import time
 
 class Spock(Helper_LLM):  
     """Spock class."""
@@ -100,49 +103,63 @@ class Spock(Helper_LLM):
         """Scan the PDF of a publication."""
         
         self.chunk_indexing(self.paper)
+        
         lim = 0 if self.settings['Questions'] else 10
-        for i,question in enumerate(self.questions):
+
+        keys_to_process = []
+        for i, question_key in enumerate(self.questions):
             if i >= lim:
+                keys_to_process.append(question_key)
+
+        def process_question(question_key):
+            try:
+                temp_response = self.query_rag(self.questions[question_key]['question'])
+            except Exception as e:
+                print("An error occurred while scanning the PDF for the question:", question_key)
+                temp_response = "NA/None"
+
+            if self.settings['Binary Response']:
+                parts = temp_response.split('/')
+                if len(parts) < 2:
+                    parts.append("None")
+                return parts[0], parts[1]
+            else:
                 try:
-                    temp_response = self.query_rag(self.questions[question]['question'])
-                except Exception as e:
-                    print("An error occured while scanning the PDF for the question: ", question)
-                    temp_response = "NA/None"
-                if self.settings['Binary Response']:
-                    temp_response = temp_response.split('/')
-                    self.questions[question]['output']['response'] = temp_response[0]
-                    self.questions[question]['output']['sentence'] = temp_response[1]
-                else:
+                    from langchain_openai import ChatOpenAI
+                    from langchain.prompts import PromptTemplate
                     
-                    ##### To update
-                    try:
-                        temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
-                        prompt = PromptTemplate(
-                            template="Here is a text {text}. It contains an answer followed by some extracts from a text supporting that answer. The output should look like this: Answer/Supporting answers. If the answer is 'no' or there is no Supporting sentence mentioned in the text, output, followed by a '/None'",
-                            input_variables=["text"]
-                        )
-                        chain = prompt | temp_llm
-                        
-                        # To verify le .content si c'est chatgpt ou llama
-                        temp_response = chain.invoke({"text":temp_response}).content.split('/')
-                        self.questions[question]['output']['response'] = temp_response[0]
-                        self.questions[question]['output']['sentence'] = temp_response[1]
-                    except Exception as e:
-                        print("An error occured while scanning the PDF for the question: ", question)
-                        self.questions[question]['output']['response'] = "NA"
-                        self.questions[question]['output']['sentence'] = "None"
-                        
-                    ######
-    
+                    temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+                    prompt = PromptTemplate(
+                        template=(
+                            "Here is a text {text}. It contains an answer followed by some extracts from a text "
+                            "supporting that answer. The output should look like this: Answer/Supporting answers. "
+                            "If the answer is 'no' or there is no Supporting sentence mentioned in the text, output, "
+                            "followed by a '/None'"
+                        ),
+                        input_variables=["text"]
+                    )
+                    chain = prompt | temp_llm
+                    
+                    result = chain.invoke({"text": temp_response})
+                    text = result.content if hasattr(result, "content") else result
+                    parts = text.split('/')
+                    if len(parts) < 2:
+                        parts.append("None")
+                    return parts[0], parts[1]
+                except Exception as e:
+                    print("An error occurred while scanning the PDF for the question:", question_key)
+                    return "NA", "None"
+
+        
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            results = list(executor.map(process_question, keys_to_process))
+
+        for key, (response, sentence) in zip(keys_to_process, results):
+            self.questions[key]['output']['response'] = response
+            self.questions[key]['output']['sentence'] = sentence
+        
     
     def summarize(self) -> None:
-        from langchain.docstore.document import Document
-        from langchain.text_splitter import RecursiveCharacterTextSplitter
-        from langchain.chains.llm import LLMChain
-        from langchain.prompts import PromptTemplate
-        from langchain_openai import ChatOpenAI
-        from time import time
-        import concurrent.futures
 
         start = time()
 
@@ -205,17 +222,23 @@ class Spock(Helper_LLM):
     
     def __call__(self):
         """Run Spock."""
+
         self.download_pdf()
         self.add_custom_questions()
-        self.scan_pdf() 
-        
-        if self.settings['Summary']:
-            if not self.paper_summary: 
-                self.summarize()
-            if not self.topics:
-                self.get_topics()        
-        
-        
+
+        tasks = []
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            tasks.append(executor.submit(self.scan_pdf))
+            
+            if self.settings.get('Summary'):
+                if not self.paper_summary:
+                    tasks.append(executor.submit(self.summarize))
+                if not self.topics:
+                    tasks.append(executor.submit(self.get_topics))
+            
+            for future in concurrent.futures.as_completed(tasks):
+                future.result()
+            
     
     def add_custom_questions(self):
         """Add custom questions to the questions dictionary."""
@@ -305,9 +328,14 @@ class Spock(Helper_LLM):
 
 
 if __name__ == "__main__":
+    from time import time
     spock = Spock(
-        model="gpt-4o",
         paper="data-sample.pdf",
     )
+    start = time()
+    spock.scan_pdf()
     spock.summarize()
-    print(spock.paper_summary)
+    spock()
+    print(spock.format_output())
+    print(f"Time taken: {time() - start}")
+    #print(spock.paper_summary)
