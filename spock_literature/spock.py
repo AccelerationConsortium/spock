@@ -113,6 +113,8 @@ class Spock(Helper_LLM):
                     self.questions[question]['output']['response'] = temp_response[0]
                     self.questions[question]['output']['sentence'] = temp_response[1]
                 else:
+                    
+                    ##### To update
                     try:
                         temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
                         prompt = PromptTemplate(
@@ -120,6 +122,8 @@ class Spock(Helper_LLM):
                             input_variables=["text"]
                         )
                         chain = prompt | temp_llm
+                        
+                        # To verify le .content si c'est chatgpt ou llama
                         temp_response = chain.invoke({"text":temp_response}).content.split('/')
                         self.questions[question]['output']['response'] = temp_response[0]
                         self.questions[question]['output']['sentence'] = temp_response[1]
@@ -127,81 +131,77 @@ class Spock(Helper_LLM):
                         print("An error occured while scanning the PDF for the question: ", question)
                         self.questions[question]['output']['response'] = "NA"
                         self.questions[question]['output']['sentence'] = "None"
+                        
+                    ######
     
     
     def summarize(self) -> None:
-        from langchain.chains import MapReduceDocumentsChain, ReduceDocumentsChain
+        from langchain.docstore.document import Document
+        from langchain.text_splitter import RecursiveCharacterTextSplitter
         from langchain.chains.llm import LLMChain
-        from langchain.chains.combine_documents.stuff import StuffDocumentsChain
+        from langchain.prompts import PromptTemplate
         from langchain_openai import ChatOpenAI
+        from time import time
+        import concurrent.futures
 
-        """Return the summary of the publication."""
+        start = time()
+
         if isinstance(self.paper, Document):
-            docs = self.paper
+            docs = [self.paper]
         else:
             loader = PyPDFLoader(self.paper)
-            docs = loader.load_and_split()
+            docs = loader.load_and_split()  
 
-        map_template = """The following is a set of documents
-        {docs}
-        Based on this list of docs, please identify the main themes 
-        Helpful Answer:"""
-        map_prompt = PromptTemplate.from_template(map_template)
-        
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=5000)
+        split_docs = text_splitter.split_documents(docs)
+
         if isinstance(self.llm, ChatOpenAI):
-            llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
+            #llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
+            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
-        
-        
-        map_chain = LLMChain(llm=llm, prompt=map_prompt)
 
-        reduce_template = """The following is set of summaries:
-        {docs}
-        Take these and distill it into a final, consolidated summary of the main themes. 
-        Helpful Answer:"""
-        reduce_prompt = PromptTemplate.from_template(reduce_template)
-
-        reduce_chain = LLMChain(llm=llm, prompt=reduce_prompt)
-
-        combine_documents_chain = StuffDocumentsChain(
-            llm_chain=reduce_chain, document_variable_name="docs"
-        )
-
-        reduce_documents_chain = ReduceDocumentsChain(
-            combine_documents_chain=combine_documents_chain,
-            collapse_documents_chain=combine_documents_chain,
-        )
-
-        map_reduce_chain = MapReduceDocumentsChain(
-            llm_chain=map_chain,
-            reduce_documents_chain=reduce_documents_chain,
-            document_variable_name="docs",
-            return_intermediate_steps=False,
-        )
-
-        text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=2500
-        )
-        split_docs = text_splitter.split_documents(docs) if not isinstance(docs, Document) else text_splitter.split_documents([docs])
-
-        result = map_reduce_chain.invoke(split_docs)
-        self.paper_summary = result['output_text']
-
-            
-    def get_topics(self):
-        if self.paper_summary == "":
-            self.summarize()
         prompt = PromptTemplate(
-            template="""Here is it's summary: \n {summary} \n Get the scientific topics that are related to the abstarct above. Ouput only the keywords separated by a '/'. Desired format: Machine Learning/New Materials/NLP""", # Work on the prompt/output of LLM
-            input_variables=["summary"]
+            template="Please summarize the following text, focusing on the main themes:\n\n{text}",
+            input_variables=["text"]
         )
-        chain = prompt | self.llm
-        
-        self.topics = chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
-        
-        
-        
+        chain = prompt | llm
+
+        def process_doc(doc):
+            summary = chain.invoke({"text": doc})
+            return summary.content if not isinstance(summary, str) else summary
+
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            chunk_summaries = list(executor.map(process_doc, split_docs))
+
+        prompt = PromptTemplate(
+            template="""You are provided with several summaries from different chunks of a document.
+    Please merge them into a single, cohesive summary that captures the overall main themes. 
+
+    Summaries:
+    {summaries}
+
+    """,
+            input_variables=["summaries"]
+        )
+        chain = prompt | llm
+
+        summaries_text = "\n".join(chunk_summaries)
+        final_summary = chain.invoke({"summaries": summaries_text})
+
+        print(f"Time taken to summarize the document: {time() - start}")
+
+        self.paper_summary = final_summary.content if not isinstance(final_summary, str) else final_summary
+            
+    
+    
+    def get_topics(self) -> None:
+        """Get the topics covered in the publication."""
+        pass
+    
+    
+    
+    
     
     def __call__(self):
         """Run Spock."""
@@ -287,3 +287,27 @@ class Spock(Helper_LLM):
 
         output_text = '\n'.join(output_lines)     
         return output_text
+    
+    def verificator(self):
+        """
+        Verify if input is good
+        """
+        pass
+    
+    
+    def answer_question(self, question:str):
+        """
+        Answer a question
+        """
+        pass
+
+
+
+
+if __name__ == "__main__":
+    spock = Spock(
+        model="gpt-4o",
+        paper="data-sample.pdf",
+    )
+    spock.summarize()
+    print(spock.paper_summary)
