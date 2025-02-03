@@ -256,6 +256,12 @@ def handle_app_mention(event, client):
         print(f"stdout: {e.stdout}")
     
 
+# Text
+@app.event("")
+def handle_text_sent(event,client):
+    user_id = event.get("user")
+    text = event.get("text")
+    
 
 @app.event("file_shared")
 def handle_file_shared(event, client):
@@ -264,7 +270,11 @@ def handle_file_shared(event, client):
     
     if user_id in waiting_for_podcast:
         channel_id = waiting_for_podcast[user_id]
+        
+        ######
         del waiting_for_podcast[user_id]
+        ######
+        
         try:
             file_info_response = client.files_info(file=file_id)
             file_info = file_info_response["file"]

@@ -1,10 +1,18 @@
 from typing import Optional
+
+
+
+# TODO: - Current this
 class User(object):
     def __init__(self, user_id: str, user_name: str="llama3.3", settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True}) -> None:
         self.user_id = user_id
         self.user_model = user_name
         self.settings = settings
+        self.current_pdf = ""
         
+        
+    def change_current_pdf(self, pdf_path:str):
+        self.current_pdf = pdf_path
         
     def __repr__(self) -> str:
         return f"User({self.user_id}, {self.user_model})"
