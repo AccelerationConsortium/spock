@@ -211,14 +211,16 @@ class Spock(Helper_LLM):
         self.paper_summary = final_summary.content if not isinstance(final_summary, str) else final_summary
             
     
-    
-    def get_topics(self) -> None:
-        """Get the topics covered in the publication."""
-        pass
-    
-    
-    
-    
+    def get_topics(self):
+        if self.paper_summary == "":
+            self.summarize()
+        prompt = PromptTemplate(
+            template="""Here is it's summary: \n {summary} \n Get the scientific topics that are related to the abstarct above. Ouput only the keywords separated by a '/'. Desired format: Machine Learning/New Materials/NLP""", # Work on the prompt/output of LLM
+            input_variables=["summary"]
+        )
+        chain = prompt | self.llm
+        self.topics = chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
+
     
     def __call__(self):
         """Run Spock."""
@@ -330,6 +332,7 @@ class Spock(Helper_LLM):
 if __name__ == "__main__":
     from time import time
     spock = Spock(
+        model="gpt-4o",
         paper="data-sample.pdf",
     )
     start = time()
