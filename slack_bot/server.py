@@ -255,19 +255,29 @@ def handle_app_mention(event, client):
         print(f"stderr: {e.stderr}")
         print(f"stdout: {e.stdout}")
     
+@app.event("message")
+def handle_message_events(body, logger, say):
 
-# Text
-@app.event("")
-def handle_text_sent(event,client):
-    user_id = event.get("user")
-    text = event.get("text")
-    
+    event = body.get("event", {})
+    if event.get("subtype") is None:
+        user = event.get("user")
+        text = event.get("text")
+        channel = event.get("channel")
+        if user not in waiting_for_file:
+            # To update maybe
+            say(
+                channel=channel,
+                text="Please submit a PDF file"
+            )
+        else:
+            # Submit custom question
+            pass
+        
 
 @app.event("file_shared")
 def handle_file_shared(event, client):
     user_id = event.get("user_id")
     file_id = event.get("file_id")
-    
     if user_id in waiting_for_podcast:
         channel_id = waiting_for_podcast[user_id]
         
