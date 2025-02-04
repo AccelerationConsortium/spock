@@ -336,5 +336,9 @@ class Spock(Helper_LLM):
         """
         Answer a question
         """
-        return self.query_rag(question)
+        if self.vectorstore:
+            return self.query_rag(question)
+        else:
+            self.chunk_indexing(self.paper)
+            return self.query_rag(question)
 

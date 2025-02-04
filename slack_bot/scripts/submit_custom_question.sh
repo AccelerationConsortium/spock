@@ -30,7 +30,7 @@ if [[ "$MODEL" == "llama3.3" ]]; then
 fi
 
 
-python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/custom_question.py \
+python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_custom_question.py \
     --model "$MODEL" \\
     --paper "$PAPER_PATH" \\
     --question "$QUESTION" \\
