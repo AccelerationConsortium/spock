@@ -77,7 +77,7 @@ class Helper_LLM:
         
         
         
-    def query_rag(self, question:str) -> None:
+    def query_rag(self, question:str):
         if self.vectorstore:
             self.retriever = self.vectorstore.as_retriever(
                     search_type="mmr",

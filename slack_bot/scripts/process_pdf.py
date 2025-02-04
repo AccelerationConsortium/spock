@@ -13,14 +13,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', required=True)
     parser.add_argument('--paper', required=True)
-    parser.add_argument('--questions', default="")
     parser.add_argument('--user_id', required=True)
     parser.add_argument('--channel_id', required=True)
     args = parser.parse_args()
 
     model = args.model
     paper_path = args.paper
-    questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
     
@@ -37,18 +35,12 @@ def main():
         
     
 
-    if questions_str:
-        print("Custom questions provided: ", questions_str)
-        user_questions = questions_str.split("||")
-    else:
-        user_questions = []
-
     start_time = time.time()
     with get_openai_callback() as cb:
-        spock = Spock(model=model, paper=paper_path, custom_questions=user_questions, settings=users[user_id]["settings"])
+        spock = Spock(model=model, paper=paper_path, settings=users[user_id]["settings"])
         spock()
         response_output = spock.format_output()
-        cost = round(cb.total_cost,2)
+        cost = round(cb.total_cost,5)
     total_time = round(time.time() - start_time,2)
     
 
