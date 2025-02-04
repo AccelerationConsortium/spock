@@ -2,10 +2,9 @@
 
 MODEL=$1
 PAPER_PATH=$2
-QUESTIONS_STR=$3
-USER_ID=$4
-CHANNEL_ID=$5
-JOBSCRIPT_PATH=$6
+USER_ID=$3
+CHANNEL_ID=$4
+JOBSCRIPT_PATH=$5
 
 JOB_SCRIPT=$JOBSCRIPT_PATH
 
@@ -33,7 +32,6 @@ fi
 python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_pdf.py \
     --model "$MODEL" \\
     --paper "$PAPER_PATH" \\
-    --questions "$QUESTIONS_STR" \\
     --user_id "$USER_ID" \\
     --channel_id "$CHANNEL_ID"
 EOT

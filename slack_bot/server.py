@@ -271,7 +271,18 @@ def handle_message_events(body, logger, say):
             )
         else:
             # Submit custom question
-            pass
+            generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"custom_question{user}{count_files()}.sh")
+            script_path = SCRIPTS_PATH+"submit_custom_question.sh"
+            
+            # Get user model
+            args = [script_path, user, user, channel, generated_script]
+            try:
+                subprocess.run(args, check=True)
+                print("Script executed successfully!")
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred while executing the script: {e}")
+                print(f"stderr: {e.stderr}")
+                print(f"stdout: {e.stdout}")
         
 
 @app.event("file_shared")
@@ -281,9 +292,7 @@ def handle_file_shared(event, client):
     if user_id in waiting_for_podcast:
         channel_id = waiting_for_podcast[user_id]
         
-        ######
-        del waiting_for_podcast[user_id]
-        ######
+        #del waiting_for_podcast[user_id]
         
         try:
             file_info_response = client.files_info(file=file_id)
@@ -334,7 +343,9 @@ def handle_file_shared(event, client):
         channel_id = waiting_for_file[user_id]
         try: 
             user_questions = questions[user_id]
-            del questions[user_id]
+            
+            #del questions[user_id]
+            
         except: user_questions = ""
         del waiting_for_file[user_id]
         try:
@@ -371,7 +382,7 @@ def handle_file_shared(event, client):
                 
                 script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
                 generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_pdf_{user_id}{count_files()}.sh")
-                args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id, generated_script]
+                args = [script_path, model, PAPERS_PATH+file_name,user_id, channel_id, generated_script]
                 try:
                     subprocess.run(args, check=True)
                     print("Script executed successfully!")
