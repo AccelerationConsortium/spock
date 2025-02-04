@@ -2,9 +2,10 @@
 
 MODEL=$1
 PAPER_PATH=$2
-USER_ID=$3
-CHANNEL_ID=$4
-JOBSCRIPT_PATH=$5
+QUESTION=$3
+USER_ID=$4
+CHANNEL_ID=$5
+JOBSCRIPT_PATH=$6
 
 JOB_SCRIPT=$JOBSCRIPT_PATH
 
@@ -29,9 +30,10 @@ if [[ "$MODEL" == "llama3.3" ]]; then
 fi
 
 
-python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_pdf.py \
+python3 /home/m/mehrad/brikiyou/scratch/spock/slack_bot/scripts/process_custom_question.py \
     --model "$MODEL" \\
     --paper "$PAPER_PATH" \\
+    --question "$QUESTION" \\
     --user_id "$USER_ID" \\
     --channel_id "$CHANNEL_ID"
 EOT

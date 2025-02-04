@@ -11,7 +11,7 @@ JOB_SCRIPT=$JOBSCRIPT_PATH
 cat <<EOT > $JOB_SCRIPT
 #!/bin/bash
 #SBATCH --nodes=1
-#SBATCH --time=00:02:00
+#SBATCH --time=00:05:00
 #SBATCH --gpus-per-node=0
 #SBATCH --output=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.out
 #SBATCH --error=/home/m/mehrad/brikiyou/scratch/spock/slack_bot/out/slurm-%j.err

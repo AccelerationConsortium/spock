@@ -10,14 +10,12 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--model', default="gpt-4o")
     parser.add_argument('--publication', required=True)
-    parser.add_argument('--questions', default="")
     parser.add_argument('--user_id', required=True)
     parser.add_argument('--channel_id', required=True)
     args = parser.parse_args()
 
     model = args.model
     publication = args.publication
-    questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
     BOT_TOKEN = os.getenv('BOT_TOKEN')
@@ -26,26 +24,22 @@ def main():
 
     # Prepare custom questions
     start_time = time.time()    
-    if questions_str:
-        user_questions = questions_str.split("||")
-    else:
-        user_questions = []
     
     
     if re.match(r'^10\.\d{4,9}/[-._;()/:A-Za-z0-9]+$', publication):
         # DOI
         doi = publication
-        spock = Spock(model=model, publication_doi=doi, custom_questions=user_questions)
+        spock = Spock(model=model, publication_doi=doi)
 
     elif re.match(r"https?://(www\.)?[a-zA-Z0-9\-]+\.[a-zA-Z]{2,}/[a-zA-Z0-9\-_/]+", publication):
         # URL
         url = publication
-        spock = Spock(model=model, publication_url=url, custom_questions=user_questions)
+        spock = Spock(model=model, publication_url=url)
 
     else:
         # Title
         title = publication
-        spock = Spock(model=model, publication_title=title, custom_questions=user_questions)
+        spock = Spock(model=model, publication_title=title)
 
     try:
         with get_openai_callback() as cb:

@@ -35,7 +35,8 @@ def count_files(dir=GENERATED_SCRIPTS_PATH):
 
 
 app = App(token=BOT_TOKEN)
-waiting_for_file = {}
+
+waiting_for_file = {} # [key: user_id, value: List[channel_id, file_name]]
 waiting_for_podcast = {}
 questions = {}
 
@@ -61,11 +62,28 @@ def handle_app_mention(ack, body, client):
     ack()
     channel_id = body['channel_id']
     user_id = body['user_id']
-    waiting_for_podcast[user_id] = channel_id
-    client.chat_postMessage(
-        channel=channel_id,
-        text="Please upload the PDF file you'd like to convert to a podcast."
-    )
+    
+    if user_id in waiting_for_file and waiting_for_file[user_id][1] != None:
+        file_name = waiting_for_file[user_id][1]
+        client.chat_postMessage(
+            channel=channel_id,
+            text="Generating podcast now...",
+            mrkdwn=True
+        )
+        
+        script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
+        generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"generate_podcast_{user_id}{count_files()}.sh")
+        args = [script_path, file_name, user_id, channel_id, "Here's the audio podcast for your pdf!", generated_script]
+
+        try:
+            subprocess.run(args, check=True)
+            print("Script executed successfully!")
+        except subprocess.CalledProcessError as e:
+            print(f"An error occurred while executing the script: {e}")
+            print(f"stderr: {e.stderr}")
+            print(f"stdout: {e.stdout}")
+
+
     
 
 
@@ -231,7 +249,7 @@ def handle_process_pdf(ack, body, client):
     questions[user_id] = body["text"] 
     
 
-    waiting_for_file[user_id] = channel_id
+    waiting_for_file[user_id] = [channel_id,None]
     client.chat_postMessage(
         channel=channel_id,
         text="Please upload the PDF file you'd like to process.",
@@ -255,16 +273,53 @@ def handle_app_mention(event, client):
         print(f"stderr: {e.stderr}")
         print(f"stdout: {e.stdout}")
     
+@app.event("message")
+def handle_message_events(body, logger, say):
 
+    event = body.get("event", {})
+    if event.get("subtype") is None:
+        user = event.get("user")
+        text = event.get("text")
+        channel = event.get("channel")
+        if user not in waiting_for_file or waiting_for_file[user][1] == None:
+            say(
+                channel=channel,
+                text="Please submit a PDF file"
+            )
+        else:
+            # Submit custom question
+            generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"custom_question{user}{count_files()}.sh")
+            script_path = SCRIPTS_PATH+"submit_custom_question.sh"
+                        
+            with open(USER_JSON_PATH, "r") as f:
+                users = json.load(f)
+            user_model = users[user]["user_model"]
+            paper_path = waiting_for_file[user][1]            
+            
+            args = [script_path, user_model, paper_path, text, user, channel, generated_script]
+            try:
+                subprocess.run(args, check=True)
+                print("Script executed successfully!")
+            except subprocess.CalledProcessError as e:
+                print(f"An error occurred while executing the script: {e}")
+                print(f"stderr: {e.stderr}")
+                print(f"stdout: {e.stdout}")
+        
 
 @app.event("file_shared")
 def handle_file_shared(event, client):
     user_id = event.get("user_id")
     file_id = event.get("file_id")
-    
-    if user_id in waiting_for_podcast:
-        channel_id = waiting_for_podcast[user_id]
-        del waiting_for_podcast[user_id]
+
+    if user_id in waiting_for_file:
+        channel_id = waiting_for_file[user_id][0]
+        try: 
+            user_questions = questions[user_id]
+            
+            #del questions[user_id]
+            
+        except: user_questions = ""
+        #del waiting_for_file[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
             file_info = file_info_response["file"]
@@ -276,57 +331,8 @@ def handle_file_shared(event, client):
                 with open(PAPERS_PATH+file_name, "wb") as f:
                     f.write(response.content)
                     
-                client.chat_postMessage(
-                    channel=channel_id,
-                    text=f"Your file `{file_name}` has been uploaded. Processing it now..."
-                )
-                script_path = SCRIPTS_PATH+"submit_generate_podcast.sh"
-                generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"generate_podcast_{user_id}{count_files()}.sh")
-                args = [script_path, PAPERS_PATH + file_name, user_id, channel_id, "Here's the audio podcast for your pdf!", generated_script]
-
-                try:
-                    subprocess.run(args, check=True)
-                    print("Script executed successfully!")
-                except subprocess.CalledProcessError as e:
-                    print(f"An error occurred while executing the script: {e}")
-                    print(f"stderr: {e.stderr}")
-                    print(f"stdout: {e.stdout}")
-
+                waiting_for_file[user_id][1] = PAPERS_PATH+file_name
                 
-
-            else:
-                # Not a PDF file
-                client.chat_postMessage(
-                    channel=channel_id,
-                    text="The uploaded file is not a PDF. Please try again."
-                )
-        except Exception as e:
-            print(f"Error processing file: {e}")
-            client.chat_postMessage(
-                channel=channel_id,
-                text=f"An error occurred while processing your file. Please try again. {e}"
-            )
-        
-
-
-    
-    elif user_id in waiting_for_file:
-        channel_id = waiting_for_file[user_id]
-        try: 
-            user_questions = questions[user_id]
-            del questions[user_id]
-        except: user_questions = ""
-        del waiting_for_file[user_id]
-        try:
-            file_info_response = client.files_info(file=file_id)
-            file_info = file_info_response["file"]
-            if file_info["filetype"] == "pdf":
-                url_private = file_info["url_private_download"]
-                file_name = file_info["name"]
-                response = requests.get(url_private, headers={'Authorization': f'Bearer {BOT_TOKEN}'})
-                print(f"Writing {file_name} to disk")
-                with open(PAPERS_PATH+file_name, "wb") as f:
-                    f.write(response.content)
                     
                 client.chat_postMessage(
                     channel=channel_id,
@@ -351,7 +357,7 @@ def handle_file_shared(event, client):
                 
                 script_path = SCRIPTS_PATH+"submit_process_pdf.sh"
                 generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"process_pdf_{user_id}{count_files()}.sh")
-                args = [script_path, model, PAPERS_PATH+file_name,user_questions,user_id, channel_id, generated_script]
+                args = [script_path, model, PAPERS_PATH+file_name,user_id, channel_id, generated_script]
                 try:
                     subprocess.run(args, check=True)
                     print("Script executed successfully!")

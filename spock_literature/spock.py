@@ -17,6 +17,25 @@ import concurrent.futures
 from langchain.docstore.document import Document
 from time import time
 
+
+
+def verificator(paper, publication_doi, publication_title, publication_url):
+    """
+    Verify if input is valid
+    """
+    if not paper and not publication_doi and not publication_title and not publication_url:
+        raise ValueError("Please provide a paper, publication DOI, publication title, or publication URL.")
+    if paper and (publication_doi or publication_title or publication_url):
+        raise ValueError("Please provide either a paper or a publication DOI, title, or URL, not both.")
+    if publication_doi and (publication_title or publication_url):
+        raise ValueError("Please provide either a publication DOI or a publication title or URL, not both.")
+    if publication_title and (publication_doi or publication_url):
+        raise ValueError("Please provide either a publication title or a publication DOI or URL, not both.")
+    if publication_url and (publication_doi or publication_title):
+        raise ValueError("Please provide either a publication URL or a publication DOI or title, not both.")
+    if os.path.exists(paper) and not paper.endswith(".pdf"):
+        raise ValueError("Please provide a PDF file.")
+
 class Spock(Helper_LLM):  
     """Spock class."""
     
@@ -50,6 +69,7 @@ class Spock(Helper_LLM):
             embed_model (str): Embedding model. Defaults to None.
             folder_path (str): Folder path. Defaults to None.
         """
+        verificator(paper, publication_doi, publication_title, publication_url)
         super().__init__(model=model, temperature=temperature, embed_model=embed_model, folder_path=folder_path)
         self.paper: Optional[Path] = Path(paper) if paper else None
         self.paper_summary: str = ""
@@ -124,10 +144,7 @@ class Spock(Helper_LLM):
                     parts.append("None")
                 return parts[0], parts[1]
             else:
-                try:
-                    from langchain_openai import ChatOpenAI
-                    from langchain.prompts import PromptTemplate
-                    
+                try:                    
                     temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
                     prompt = PromptTemplate(
                         template=(
@@ -242,7 +259,7 @@ class Spock(Helper_LLM):
                 future.result()
             
     
-    def add_custom_questions(self):
+    def add_custom_questions(self): # Add custom metrics
         """Add custom questions to the questions dictionary."""
         
         for question in self.custom_questions:
@@ -313,32 +330,15 @@ class Spock(Helper_LLM):
         output_text = '\n'.join(output_lines)     
         return output_text
     
-    def verificator(self):
-        """
-        Verify if input is good
-        """
-        pass
     
     
     def answer_question(self, question:str):
         """
         Answer a question
         """
-        pass
+        if self.vectorstore:
+            return self.query_rag(question)
+        else:
+            self.chunk_indexing(self.paper)
+            return self.query_rag(question)
 
-
-
-
-if __name__ == "__main__":
-    from time import time
-    spock = Spock(
-        model="gpt-4o",
-        paper="data-sample.pdf",
-    )
-    start = time()
-    spock.scan_pdf()
-    spock.summarize()
-    spock()
-    print(spock.format_output())
-    print(f"Time taken: {time() - start}")
-    #print(spock.paper_summary)
