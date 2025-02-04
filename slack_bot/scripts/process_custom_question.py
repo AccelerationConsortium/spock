@@ -23,3 +23,18 @@ def main():
     questions_str = args.questions
     user_id = args.user_id
     channel_id = args.channel_id
+    
+    spock = Spock(model=model, paper=paper_path)
+    response  = spock.answer_question( questions_str)
+    
+    BOT_TOKEN = os.getenv('BOT_TOKEN')
+    client = WebClient(token=BOT_TOKEN)
+    client.chat_postMessage(
+        channel=channel_id,
+        text=f"{response}",
+        mrkdwn=True
+    )
+
+    
+if __name__ == "__main__":
+    main()

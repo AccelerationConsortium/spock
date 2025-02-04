@@ -35,7 +35,8 @@ def count_files(dir=GENERATED_SCRIPTS_PATH):
 
 
 app = App(token=BOT_TOKEN)
-waiting_for_file = {}
+
+waiting_for_file = {} # [key: user_id, value: List[channel_id, file_name]]
 waiting_for_podcast = {}
 questions = {}
 
@@ -231,7 +232,7 @@ def handle_process_pdf(ack, body, client):
     questions[user_id] = body["text"] 
     
 
-    waiting_for_file[user_id] = channel_id
+    waiting_for_file[user_id] = [channel_id,None]
     client.chat_postMessage(
         channel=channel_id,
         text="Please upload the PDF file you'd like to process.",
@@ -263,8 +264,7 @@ def handle_message_events(body, logger, say):
         user = event.get("user")
         text = event.get("text")
         channel = event.get("channel")
-        if user not in waiting_for_file:
-            # To update maybe
+        if user not in waiting_for_file or waiting_for_file[user][1] == None:
             say(
                 channel=channel,
                 text="Please submit a PDF file"
@@ -273,9 +273,13 @@ def handle_message_events(body, logger, say):
             # Submit custom question
             generated_script = create_empty_sh_file(GENERATED_SCRIPTS_PATH+f"custom_question{user}{count_files()}.sh")
             script_path = SCRIPTS_PATH+"submit_custom_question.sh"
+                        
+            with open(USER_JSON_PATH, "r") as f:
+                users = json.load(f)
+            user_model = users[user]["user_model"]
+            paper_path = waiting_for_file[user][1]            
             
-            # Get user model
-            args = [script_path, user, user, channel, generated_script]
+            args = [script_path, user_model, paper_path, text, user, channel, generated_script]
             try:
                 subprocess.run(args, check=True)
                 print("Script executed successfully!")
@@ -340,14 +344,14 @@ def handle_file_shared(event, client):
 
     
     elif user_id in waiting_for_file:
-        channel_id = waiting_for_file[user_id]
+        channel_id = waiting_for_file[user_id][0]
         try: 
             user_questions = questions[user_id]
             
             #del questions[user_id]
             
         except: user_questions = ""
-        del waiting_for_file[user_id]
+        #del waiting_for_file[user_id]
         try:
             file_info_response = client.files_info(file=file_id)
             file_info = file_info_response["file"]
@@ -358,6 +362,9 @@ def handle_file_shared(event, client):
                 print(f"Writing {file_name} to disk")
                 with open(PAPERS_PATH+file_name, "wb") as f:
                     f.write(response.content)
+                    
+                waiting_for_file[user_id][1] = PAPERS_PATH+file_name
+                
                     
                 client.chat_postMessage(
                     channel=channel_id,
