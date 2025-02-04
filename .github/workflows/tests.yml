@@ -38,7 +38,7 @@ jobs:
       - name: Install package
         shell: bash
         run: |
-          pip install .
+          pip install -e .
 
       - name: Run tests
         shell: bash
