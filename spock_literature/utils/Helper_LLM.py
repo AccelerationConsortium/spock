@@ -34,7 +34,7 @@ class Helper_LLM:
             self.llm = ChatOpenAI(model="gpt-4o", temperature=temperature)
         
         elif model == "llama3.3":
-            self.llm = OllamaLLM(model="llama3.3", temperature=temperature)
+            self.llm = OllamaLLM(model="llama3.1", temperature=temperature) # to change to llama3.3
             
         else:
             raise ValueError("Model not supported")
