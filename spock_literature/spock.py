@@ -5,7 +5,7 @@ import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import PromptTemplate
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from spock_literature.texts import get_questions, PAPERS_PATH
+from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.Generate_podcast import generate_audio
 from pathlib import Path
@@ -79,7 +79,7 @@ class Spock(Helper_LLM):
         self.publication_url: Optional[str] = publication_url
         self.topics: str = ""
         self.settings = settings
-        self.questions = get_questions(self.settings['Binary Response'])
+        self.questions = QUESTIONS
         self.papers_path = papers_download_path
   
     
@@ -122,7 +122,11 @@ class Spock(Helper_LLM):
     def scan_pdf(self):
         """Scan the PDF of a publication."""
         
-        self.chunk_indexing(self.paper)
+        ########### - to check first if the document is already chunked (self.vectorstore)
+        if self.vectorstore == None:
+            self.chunk_indexing(self.paper)
+        ###########
+        
         
         lim = 0 if self.settings['Questions'] else 10
 
@@ -131,13 +135,15 @@ class Spock(Helper_LLM):
             if i >= lim:
                 keys_to_process.append(question_key)
 
-        def process_question(question_key):
+        def __process_question(question_key):
             try:
                 temp_response = self.query_rag(self.questions[question_key]['question'])
             except Exception as e:
                 print("An error occurred while scanning the PDF for the question:", question_key)
                 temp_response = "NA/None"
 
+
+            ###### To delete binary response
             if self.settings['Binary Response']:
                 parts = temp_response.split('/')
                 if len(parts) < 2:
@@ -145,7 +151,6 @@ class Spock(Helper_LLM):
                 return parts[0], parts[1]
             else:
                 try:                    
-                    temp_llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
                     prompt = PromptTemplate(
                         template=(
                             "Here is a text {text}. It contains an answer followed by some extracts from a text "
@@ -155,7 +160,7 @@ class Spock(Helper_LLM):
                         ),
                         input_variables=["text"]
                     )
-                    chain = prompt | temp_llm
+                    chain = prompt | self.llm
                     
                     result = chain.invoke({"text": temp_response})
                     text = result.content if hasattr(result, "content") else result
@@ -166,10 +171,12 @@ class Spock(Helper_LLM):
                 except Exception as e:
                     print("An error occurred while scanning the PDF for the question:", question_key)
                     return "NA", "None"
+                
+            #########
 
         
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            results = list(executor.map(process_question, keys_to_process))
+            results = list(executor.map(__process_question, keys_to_process))
 
         for key, (response, sentence) in zip(keys_to_process, results):
             self.questions[key]['output']['response'] = response
@@ -177,7 +184,6 @@ class Spock(Helper_LLM):
         
     
     def summarize(self) -> None:
-
         start = time()
 
         if isinstance(self.paper, Document):
@@ -241,22 +247,14 @@ class Spock(Helper_LLM):
     
     def __call__(self):
         """Run Spock."""
-
         self.download_pdf()
         self.add_custom_questions()
-
-        tasks = []
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            tasks.append(executor.submit(self.scan_pdf))
-            
-            if self.settings.get('Summary'):
-                if not self.paper_summary:
-                    tasks.append(executor.submit(self.summarize))
-                if not self.topics:
-                    tasks.append(executor.submit(self.get_topics))
-            
-            for future in concurrent.futures.as_completed(tasks):
-                future.result()
+        self.scan_pdf() 
+        
+        if not self.paper_summary: 
+            self.summarize()
+            if not self.topics:
+                self.get_topics()        
             
     
     def add_custom_questions(self): # Add custom metrics
