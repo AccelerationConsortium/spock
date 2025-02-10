@@ -12,13 +12,11 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
-  env:
-    PYTHONUTF8: 1
+    env:
+      PYTHONUTF8: 1
     strategy:
       matrix:
         python-version: [3.11]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
