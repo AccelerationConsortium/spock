@@ -1,1 +1,10 @@
-{"U073D78M8UT": {"user_model": "gpt-4o", "settings": {"Summary": false, "Questions": true, "Binary Response": false}}}
+{
+    "U073D78M8UT": {
+        "user_model": "gpt-4o",
+        "settings": {
+            "Summary": true,
+            "Questions": true,
+            "Binary Response": false
+        }
+    }
+}

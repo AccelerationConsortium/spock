@@ -1,22 +1,11 @@
-name: Tests
-
-on:
-  push:
-    branches:
-      - "main"
-  pull_request:
-    branches:
-      - "main"
-  workflow_dispatch:
-
 jobs:
   build:
     runs-on: windows-latest
-
+    env:
+      PYTHONUTF8: 1  # Force UTF-8 encoding
     strategy:
       matrix:
         python-version: [3.11]
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
