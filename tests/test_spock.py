@@ -15,6 +15,7 @@ def test_add_custom_questions():
     fake_llm = FakeChatModel(mock_responses)
 
     spock = Spock(
+        paper="fake-paper.pdf",
         model="llama3.3",
         custom_questions=[
             "Does the PDF mention any screening algorithms?",
@@ -41,7 +42,7 @@ def test_scan_pdf():
     ]
     fake_llm = FakeChatModel(mock_responses)
 
-    spock = Spock(embed_model=True)
+    spock = Spock(paper="fake-paper.pdf", embed_model=True)
     spock.llm = fake_llm
     spock.questions = {
         "TopicA": {
@@ -71,17 +72,17 @@ def test_get_topics():
     ]
     fake_llm = FakeChatModel(mock_responses)
 
-    spock = Spock(model="llama3.3", embed_model=True)
+    spock = Spock(paper="fake-paper.pdf", model="llama3.3", embed_model=True)
     spock.llm = fake_llm
     spock.paper_summary = "This should be a scientific summary."
 
-    topics = spock.get_topics()
+    spock.get_topics()
 
     assert spock.paper_summary == "This should be a scientific summary."
-    assert topics.content == "Topic1/Topic2"
+    assert spock.topics.content == "Topic1/Topic2"
 
 def test_format_output():
-    spock = Spock(embed_model=True)
+    spock = Spock(paper="fake-paper.pdf",embed_model=True)
     spock.paper_summary = "This PDF is about advanced screening algorithms."
     spock.topics = "screening algorithms/automation"
 
