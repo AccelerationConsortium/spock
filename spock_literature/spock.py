@@ -119,62 +119,98 @@ class Spock(Helper_LLM):
                 raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
         
     
+
     def scan_pdf(self):
+        import concurrent.futures
+        import threading
+        import time
+        
+        api_semaphore = threading.Semaphore(2) # Semaphore size 
+
         """Scan the PDF of a publication."""
         
-        ########### - to check first if the document is already chunked (self.vectorstore)
-        if self.vectorstore == None:
+        if self.vectorstore is None:
             self.chunk_indexing(self.paper)
-        ###########
         
-        
+        # Determine which questions to process.
         lim = 0 if self.settings['Questions'] else 10
-
         keys_to_process = []
         for i, question_key in enumerate(self.questions):
             if i >= lim:
                 keys_to_process.append(question_key)
 
         def __process_question(question_key):
-            try:
-                temp_response = self.query_rag(self.questions[question_key]['question'])
-            except Exception as e:
-                print("An error occurred while scanning the PDF for the question:", question_key)
+            tries = 0
+            max_retries = 3
+            wait_time = 2
+            temp_response = None
+            while tries < max_retries:
+                try:
+                    # Small delay before starting the API call
+                    with api_semaphore:
+                        temp_response = self.query_rag(self.questions[question_key]['question'])
+                    break  # Success, exit the loop.
+                except Exception as e:
+                    if "429" in str(e):
+                        print(f"429 error encountered for question {question_key}. Retrying in {wait_time} seconds.")
+                        time.sleep(wait_time)
+                        wait_time *= 2  # Exponential backoff.
+                        tries += 1
+                    else:
+                        print("An error occurred while scanning the PDF for the question:", question_key)
+                        print(e)
+                        temp_response = "NA/None"
+                        break
+
+            if temp_response is None:
                 temp_response = "NA/None"
 
-
-            ###### To delete binary response
+            # If Binary Response is enabled, simply split and return.
             if self.settings['Binary Response']:
                 parts = temp_response.split('/')
                 if len(parts) < 2:
                     parts.append("None")
                 return parts[0], parts[1]
             else:
-                try:                    
-                    prompt = PromptTemplate(
-                        template=(
-                            "Here is a text {text}. It contains an answer followed by some extracts from a text "
-                            "supporting that answer. The output should look like this: Answer/Supporting answers. "
-                            "If the answer is 'no' or there is no Supporting sentence mentioned in the text, output, "
-                            "followed by a '/None'"
-                        ),
-                        input_variables=["text"]
-                    )
-                    chain = prompt | self.llm
-                    
-                    result = chain.invoke({"text": temp_response})
-                    text = result.content if hasattr(result, "content") else result
-                    parts = text.split('/')
-                    if len(parts) < 2:
-                        parts.append("None")
-                    return parts[0], parts[1]
-                except Exception as e:
-                    print("An error occurred while scanning the PDF for the question:", question_key)
-                    return "NA", "None"
-                
-            #########
+                tries = 0
+                wait_time = 2
+                result_text = None
+                while tries < max_retries:
+                    try:
+                        prompt = PromptTemplate(
+                            template=(
+                                "Here is a text {text}. It contains an answer followed by some extracts from a text "
+                                "supporting that answer. The output should look like this: Answer/Supporting answers. "
+                                "If the answer is 'no' or there is no Supporting sentence mentioned in the text, output, "
+                                "followed by a '/None'"
+                            ),
+                            input_variables=["text"]
+                        )
+                        chain = prompt | self.llm
+                        with api_semaphore:
+                            result = chain.invoke({"text": temp_response})
+                        text = result.content if hasattr(result, "content") else result
+                        result_text = text
+                        break
+                    except Exception as e:
+                        if "429" in str(e):
+                            print(f"429 error during chain.invoke for question {question_key}. Retrying in {wait_time} seconds.")
+                            time.sleep(wait_time)
+                            wait_time *= 2
+                            tries += 1
+                        else:
+                            print("An error occurred during chain.invoke for question:", question_key)
+                            print(e)
+                            result_text = "NA/None"
+                            break
 
-        
+                if result_text is None:
+                    result_text = "NA/None"
+                parts = result_text.split('/')
+                if len(parts) < 2:
+                    parts.append("None")
+                return parts[0], parts[1]
+
         with concurrent.futures.ThreadPoolExecutor() as executor:
             results = list(executor.map(__process_question, keys_to_process))
 
@@ -209,7 +245,7 @@ class Spock(Helper_LLM):
 
         def process_doc(doc):
             summary = chain.invoke({"text": doc})
-            return summary.content if not isinstance(summary, str) else summary
+            return summary.content if hasattr(summary, "content") else summary
 
         with concurrent.futures.ThreadPoolExecutor() as executor:
             chunk_summaries = list(executor.map(process_doc, split_docs))
@@ -231,7 +267,7 @@ class Spock(Helper_LLM):
 
         print(f"Time taken to summarize the document: {time() - start}")
 
-        self.paper_summary = final_summary.content if not isinstance(final_summary, str) else final_summary
+        self.paper_summary = final_summary.content if hasattr(final_summary, "content") else final_summary
             
     
     def get_topics(self):
@@ -242,7 +278,8 @@ class Spock(Helper_LLM):
             input_variables=["summary"]
         )
         chain = prompt | self.llm
-        self.topics = chain.invoke({"summary": self.paper_summary}).content if isinstance(self.llm, ChatOpenAI) else chain.invoke({"summary": self.paper_summary})
+        result = chain.invoke({"summary": self.paper_summary})
+        self.topics = result.content if hasattr(result, "content") else result
 
     
     def __call__(self):
@@ -257,7 +294,7 @@ class Spock(Helper_LLM):
                 self.get_topics()        
             
     
-    def add_custom_questions(self): # Add custom metrics
+    def add_custom_metrics(self): # Add custom metrics
         """Add custom questions to the questions dictionary."""
         
         for question in self.custom_questions:

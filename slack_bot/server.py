@@ -36,7 +36,7 @@ def count_files(dir=GENERATED_SCRIPTS_PATH):
 
 app = App(token=BOT_TOKEN)
 
-waiting_for_file = {} # [key: user_id, value: List[channel_id, file_name]]
+waiting_for_file = {} # [key: user_id, value: List[channel_id, file_name, URL, title/DOI]]
 waiting_for_podcast = {}
 questions = {}
 
@@ -281,10 +281,10 @@ def handle_message_events(body, logger, say):
         user = event.get("user")
         text = event.get("text")
         channel = event.get("channel")
-        if user not in waiting_for_file or waiting_for_file[user][1] == None:
+        if user not in waiting_for_file and (not waiting_for_file[user][1] or not waiting_for_file[user][2] or not waiting_for_file[user][3]):
             say(
                 channel=channel,
-                text="Please submit a PDF file"
+                text="Please submit a scientific publication to process."
             )
         else:
             # Submit custom question
