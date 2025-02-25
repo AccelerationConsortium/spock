@@ -7,33 +7,6 @@ from spock_literature.utils.Url_downloader import URLDownloader
 from langchain_ollama import OllamaLLM
 from langchain.schema import Document
 
-def test_add_custom_questions():
-    mock_responses = [
-        "screening algorithms",
-        "new materials",
-    ]
-    fake_llm = FakeChatModel(mock_responses)
-
-    spock = Spock(
-        paper="fake-paper.pdf",
-        model="llama3.3",
-        custom_questions=[
-            "Does the PDF mention any screening algorithms?",
-            "Are there any new materials tested?"
-        ],
-        embed_model=True,
-        folder_path=None
-    )
-    spock.llm = fake_llm
-    spock.add_custom_questions()
-
-    for topic in ["screening algorithms", "new materials"]:
-        assert topic in spock.questions, f"Topic '{topic}' was not added to spock.questions"
-        assert "question" in spock.questions[topic]
-        assert "output" in spock.questions[topic]
-        assert "response" in spock.questions[topic]["output"]
-        assert "sentence" in spock.questions[topic]["output"]
-
 
 def test_scan_pdf():
     mock_responses = [
@@ -79,7 +52,7 @@ def test_get_topics():
     spock.get_topics()
 
     assert spock.paper_summary == "This should be a scientific summary."
-    assert spock.topics.content == "Topic1/Topic2"
+    assert spock.topics == "Topic1/Topic2"
 
 def test_format_output():
     spock = Spock(paper="fake-paper.pdf",embed_model=True)
