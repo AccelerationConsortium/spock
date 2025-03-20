@@ -50,7 +50,6 @@ class Helper_LLM:
     def chunk_indexing(self, document):
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
-        data = []
         if not isinstance(document,Document) and os.path.isfile(document):
             pages = PyPDFLoader(document).load_and_split()
             sliced_pages = text_splitter.split_documents(pages)

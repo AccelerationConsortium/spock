@@ -1,7 +1,8 @@
 docs
 requirements_dev.txt
-#benchmark.py
-benchmark_nvidia.py 
+#launch_benchmark*.sh
+#benchmark*
+#benchmark_nvidia.py 
 out
 to_run.py
 scholarly_creative_work/
