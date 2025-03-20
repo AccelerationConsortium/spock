@@ -12,6 +12,7 @@ from langchain_ollama import OllamaLLM
 import getpass
 import os
 from dotenv import load_dotenv
+import nvtx
 
 
 load_dotenv()
@@ -59,8 +60,8 @@ class Helper_LLM:
 
         self.vectorstore = FAISS.from_documents(sliced_pages, self.oembed)
         
-    
     @staticmethod
+    @nvtx.annotate(message="Document Embedding")
     def chunk_indexing_html(html,embed_model=None):
         if embed_model is None:
             get_api_key("OPENAI_API_KEY", "Enter your OpenAI API key for embeddings: ")
@@ -75,7 +76,7 @@ class Helper_LLM:
         return FAISS.from_documents(sliced_documents, embed_model)
         
         
-        
+    @nvtx.annotate("RAG - Retrieval & Generation")
     def query_rag(self, question:str):
         if self.vectorstore:
             self.retriever = self.vectorstore.as_retriever(

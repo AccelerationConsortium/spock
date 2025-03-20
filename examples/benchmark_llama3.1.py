@@ -8,7 +8,7 @@ from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from dotenv import load_dotenv
 import numpy as np
 import logging
-
+import nvtx
 
 logging.basicConfig(filename='/home/m/mehrad/brikiyou/scratch/spock/examples/experiment.log', level=logging.INFO)
 logging.basicConfig(level=logging.INFO)
@@ -21,28 +21,28 @@ load_dotenv()
 
 
 
-TIMES_BENCHMARK = 100
+TIMES_BENCHMARK = 1
 
-
+"""
 nvidia_api_key = os.getenv("NVIDIA_API_KEY")
 if not nvidia_api_key:
     raise Exception("NVIDIA_API_KEY is not set in the environment.")
-
+"""
 all_times_ollama = []
 spock_ollama = Spock(paper="data-sample.pdf", model="llama3.3")
 spock_ollama.llm = OllamaLLM(model="llama3.1:latest", temperature=0.2)
 
 for i in range(TIMES_BENCHMARK):
     start_time = time()
-    spock_ollama.summarize()
-    logging.info(f'iteration {i} of llama3.3 using ollama took {time() - start_time} seconds')
+    spock_ollama()
+    logging.info(f'iteration {i} of llama3.1 using ollama took {time() - start_time} seconds')
     all_times_ollama.append(time() - start_time)
     
     
 # Collect timing data for Chat NVIDIA
 
 spock_nvidia = Spock(paper="data-sample.pdf", model="llama3.3")
-
+"""
 spock_nvidia.llm = ChatNVIDIA(
     model="meta/llama-3.3-70b-instruct",
     api_key=nvidia_api_key, 
@@ -75,6 +75,7 @@ fig = plt.figure(figsize=(12, 10))
 gs = gridspec.GridSpec(2, 2, height_ratios=[3, 1])
 
 """
+"""
 ax_line = fig.add_subplot(gs[0, :])
 ax_line.plot(range(TIMES_BENCHMARK), all_times_ollama, label="Spock Llama", marker='o')
 ax_line.plot(range(TIMES_BENCHMARK), all_times_nvidia, label="Chat NVIDIA", marker='x')
@@ -94,7 +95,7 @@ ax_line.text(0.05, 0.95, average_text, transform=ax_line.transAxes, fontsize=12,
              verticalalignment='top',
              bbox=dict(facecolor='lightgrey', alpha=0.5, pad=5))
              
-"""
+
 ax_hist_ollama = fig.add_subplot(gs[1, 0])
 ax_hist_ollama.hist(all_times_ollama, bins=10, color='blue', alpha=0.7)
 ax_hist_ollama.set_xlabel("Execution Time (seconds)")
@@ -124,3 +125,4 @@ plt.savefig(file_path)
 print(f"Plot saved to: {file_path}")
 
 plt.show()
+"""
