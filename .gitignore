@@ -1,4 +1,5 @@
 docs
+data
 requirements_dev.txt
 #launch_benchmark*.sh
 #benchmark*
@@ -7,6 +8,7 @@ out
 to_run.py
 scholarly_creative_work/
 generated_job_scripts/
+examples/benchmarking/nsys_reports/
 #scholarly_creative_work/
 spock_literature/json/*
 tmp
