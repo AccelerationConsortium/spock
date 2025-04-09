@@ -16,6 +16,8 @@ from scidownl import scihub_download
 import concurrent.futures
 from langchain.docstore.document import Document
 from time import time
+import nvtx
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
 
 
@@ -82,7 +84,7 @@ class Spock(Helper_LLM):
         self.questions = QUESTIONS
         self.papers_path = papers_download_path
   
-    
+    @nvtx.annotate("Download PDF")
     def download_pdf(self):
         """Download the PDF of a publication."""
     
@@ -119,13 +121,14 @@ class Spock(Helper_LLM):
                 raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
         
     
-
+    @nvtx.annotate("Question Answering - RAG retrieval + Generation")
     def scan_pdf(self):
         import concurrent.futures
         import threading
         import time
         
-        api_semaphore = threading.Semaphore(2) # Semaphore size 
+        semaphore_size = 2 if isinstance(self.llm, ChatNVIDIA) else 100  # Max semaphore size for non Nvidia models
+        api_semaphore = threading.Semaphore(semaphore_size) # Semaphore size 
 
         """Scan the PDF of a publication."""
         
@@ -218,7 +221,7 @@ class Spock(Helper_LLM):
             self.questions[key]['output']['response'] = response
             self.questions[key]['output']['sentence'] = sentence
         
-    
+    @nvtx.annotate("Summerize")
     def summarize(self) -> None:
         start = time()
 
@@ -269,7 +272,7 @@ class Spock(Helper_LLM):
 
         self.paper_summary = final_summary.content if hasattr(final_summary, "content") else final_summary
             
-    
+    @nvtx.annotate("Topics")
     def get_topics(self):
         if self.paper_summary == "":
             self.summarize()
@@ -285,7 +288,7 @@ class Spock(Helper_LLM):
     def __call__(self):
         """Run Spock."""
         self.download_pdf()
-        self.add_custom_questions()
+        self.add_custom_metrics()
         self.scan_pdf() 
         
         if not self.paper_summary: 
@@ -366,7 +369,7 @@ class Spock(Helper_LLM):
         return output_text
     
     
-    
+    @nvtx.annotate("Answer Question")
     def answer_question(self, question:str):
         """
         Answer a question
