@@ -1,11 +1,14 @@
 docs
+data
 requirements_dev.txt
-#benchmark.py
-benchmark_nvidia.py 
+#launch_benchmark*.sh
+#benchmark*
+#benchmark_nvidia.py 
 out
 to_run.py
 scholarly_creative_work/
 generated_job_scripts/
+examples/benchmarking/nsys_reports/
 #scholarly_creative_work/
 spock_literature/json/*
 tmp
