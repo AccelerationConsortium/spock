@@ -22,4 +22,5 @@ typing==3.7.4.3
 pytest==8.2.2
 slack_bolt==1.19.0
 slack_sdk==3.29.0
-nvtx
+langchain-nvidia-ai-endpoints==0.3.8
+nvtx==0.2.11
