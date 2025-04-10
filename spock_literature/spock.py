@@ -20,7 +20,6 @@ import nvtx
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
 
 
-
 def verificator(paper, publication_doi, publication_title, publication_url):
     """
     Verify if input is valid
