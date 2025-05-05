@@ -1,4 +1,7 @@
 docs
+*nsys-rep
+spock_venv/*
+messing_around/*
 data
 requirements_dev.txt
 #launch_benchmark*.sh

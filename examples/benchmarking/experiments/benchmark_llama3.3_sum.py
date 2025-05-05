@@ -29,7 +29,7 @@ if not nvidia_api_key:
 """
 
 all_times_ollama = []
-spock_ollama = Spock(paper="data-sample.pdf", model="llama3.3")
+spock_ollama = Spock(paper="/home/m/mehrad/brikiyou/scratch/spock_2/spock/examples/data-sample.pdf", model="llama3.3")
 for i in range(TIMES_BENCHMARK):
     start_time = time()
     spock_ollama.summarize()

@@ -25,7 +25,7 @@ def process_chunk(chunk: str) -> str:
         {"role": "user", "content": prompt}
     ]
     response = litellm.completion(
-        model="ollama/llama3.3",
+        model="ollama/llama3.2:3b",
         messages=messages,
         temperature=0.2
     )
@@ -104,6 +104,6 @@ class Summarizer:
 
 if __name__ == "__main__":
     pdf_path = "/home/m/mehrad/brikiyou/scratch/spock_2/spock/examples/data-sample.pdf"
-    summarizer = Summarizer(paper=pdf_path, model_name="ollama/llama3.3", api_key="your-key")
+    summarizer = Summarizer(paper=pdf_path, model_name="ollama/llama3.3:70b-instruct-q3_K_M", api_key="your-key")
     summarizer.summarize()
     print(summarizer.paper_summary)
