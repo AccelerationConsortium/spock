@@ -52,7 +52,8 @@ class Spock(Helper_LLM):
         temperature: float = 0.2,
         embed_model=None,
         folder_path=None,
-        settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True}
+        settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True},
+        **kwargs
    
     ):
         """
@@ -213,7 +214,7 @@ class Spock(Helper_LLM):
                     parts.append("None")
                 return parts[0], parts[1]
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             results = list(executor.map(__process_question, keys_to_process))
 
         for key, (response, sentence) in zip(keys_to_process, results):
@@ -235,7 +236,8 @@ class Spock(Helper_LLM):
 
         if isinstance(self.llm, ChatOpenAI):
             #llm = ChatOpenAI(model="gpt-3.5-turbo-0125", temperature=0.2)
-            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2)
+            #os.environ["OPENAI_API_BASE"] = "https://api.openai.com/v1"
+            llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.2, max_tokens=2500)
         else:
             llm = OllamaLLM(model="llama3.2:3b", temperature=0.2)
 
@@ -243,13 +245,13 @@ class Spock(Helper_LLM):
             template="Please summarize the following text, focusing on the main themes:\n\n{text}",
             input_variables=["text"]
         )
-        chain = prompt | llm
+        chain = prompt | self.llm # to edit
 
         def process_doc(doc):
             summary = chain.invoke({"text": doc})
             return summary.content if hasattr(summary, "content") else summary
 
-        with concurrent.futures.ThreadPoolExecutor() as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
             chunk_summaries = list(executor.map(process_doc, split_docs))
 
         prompt = PromptTemplate(
@@ -262,9 +264,10 @@ class Spock(Helper_LLM):
     """,
             input_variables=["summaries"]
         )
-        chain = prompt | llm
-
+        os.environ["OPENAI_API_BASE"] = "http://localhost:8000/v1"
+        chain = prompt | self.llm
         summaries_text = "\n".join(chunk_summaries)
+        #print("---------------------- \n", summaries_text)
         final_summary = chain.invoke({"summaries": summaries_text})
 
         print(f"Time taken to summarize the document: {time() - start}")
@@ -291,6 +294,7 @@ class Spock(Helper_LLM):
         self.scan_pdf() 
         
         if not self.paper_summary: 
+            
             self.summarize()
             if not self.topics:
                 self.get_topics()        
@@ -378,4 +382,19 @@ class Spock(Helper_LLM):
         else:
             self.chunk_indexing(self.paper)
             return self.query_rag(question)
-
+        
+        
+if __name__ == "__main__":
+    from langchain.llms import OpenAI
+    start = time()
+    spock = Spock(
+        model="llama3.3",
+        paper="/home/m/mehrad/brikiyou/scratch/spock_2/spock/examples/data-sample.pdf")
+    os.environ["OPENAI_API_BASE"] = "http://localhost:8000/v1"
+    spock.llm = ChatOpenAI(
+        model="llama3.3_70b_trt_engine",
+        max_tokens=3500
+    )
+    spock()
+    print(spock.format_output())
+    print("Time taken to run Spock: ", time() - start)
