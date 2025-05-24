@@ -27,7 +27,8 @@ class Helper_LLM:
         model: str,
         temperature: float = 0.2,
         embed_model=None,   # <--- Use None so we only create it if needed
-        folder_path= None
+        folder_path= None,
+        **kwargs
     ):
         # 1. Initialize the LLM
         if model == "gpt-4o":
@@ -48,6 +49,12 @@ class Helper_LLM:
         self.folder_path = folder_path
         self.vectorstore = None
 
+
+    @staticmethod
+    def text_splitter(self, document):    
+        pass 
+    
+    
     def chunk_indexing(self, document):
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=750, chunk_overlap=95)        
