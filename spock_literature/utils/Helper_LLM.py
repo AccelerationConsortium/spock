@@ -13,7 +13,10 @@ import getpass
 import os
 from dotenv import load_dotenv
 import nvtx
-
+from spock_literature.utils.pdf_parsing import PDF_document_loader
+from pathlib import Path
+chunk_size = 300
+chunk_overlap = 50
 
 load_dotenv()
 def get_api_key(env_var, prompt):
@@ -45,9 +48,16 @@ class Helper_LLM:
             get_api_key("OPENAI_API_KEY", "Enter your OpenAI API key for embeddings: ")
             embed_model = OpenAIEmbeddings(model="text-embedding-3-large")
 
-        self.oembed = embed_model
+        self.embed_model = embed_model
         self.folder_path = folder_path
-        self.vectorstore = None
+        self.vector_store = FAISS(
+                            embedding_function=self.embed_model,
+                            index=faiss.IndexFlatL2(len(self.embed_model.embed_query("hello world"))),
+                            docstore= InMemoryDocstore(),
+                            index_to_docstore_id={}
+                        )
+        self.vector_store.save_local(folder_path=os.getcwd() + "/vectorstore", index_name=self.paper_name) # to edit 
+
 
 
     @staticmethod
@@ -76,9 +86,9 @@ class Helper_LLM:
         soup = BeautifulSoup(html, 'html.parser')
         title = soup.title.string
         text = soup.get_text()        
-        document = Document(page_content=text, metadata={"title": title})
+        document = Document(page_content=text, metadata={"title": title, "source": "html"})
         text_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=750, chunk_overlap=25)
+            chunk_size=chunk_size, chunk_overlap=chunk_overlap)
         sliced_documents = text_splitter.split_documents([document])
         return FAISS.from_documents(sliced_documents, embed_model)
         

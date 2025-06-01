@@ -45,12 +45,6 @@ def configure_vlm_server(use_gpt:bool, vlm_model: str, prompt: str, url: str):
     Returns:
         PictureDescriptionApiOptions: A configuration object for the VLM API.
     """
-    # Configure your model of choice:
-    # - API endpoint for Ollama VLM
-    # - Specify the desired model for image description
-    # - Define maximum tokens allowed for the generated description
-    # - Specify the prompt used to instruct the model
-    # - Define the timeout for the API call (in seconds)
     if not use_gpt:
         return PictureDescriptionApiOptions(
             url="http://localhost:11434/v1/chat/completions",  # To change to match Tensorrt server or chatgpt
@@ -61,12 +55,12 @@ def configure_vlm_server(use_gpt:bool, vlm_model: str, prompt: str, url: str):
             prompt=prompt,
             timeout=10,
         )
-class Pdf_document_loader():
+class PDF_document_loader():
     def __init__(self, sources:Union[List[str], List[Path], List[Union[str, Path]]], **kwargs):
         self.sources = sources
         self.num_gpus = torch.cuda.device_count()
         
-    def parse_document(self, use_vlm:Optional[bool]=False, use_ocr:Optional[bool]=True, **kwargs):
+    def parse_document(self, use_vlm:Optional[bool]=False, use_ocr:Optional[bool]=True, **kwargs) -> str:
         """
         Parses Document to markdown or other formats.
         """
@@ -132,7 +126,7 @@ class Pdf_document_loader():
                 annotation = "\n".join([ann.text for ann in element.annotations]) or "No annotations"
                 annotations_list.append(annotation)
         
-        output_md_path = '/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/doc-with-images.md'
+        output_md_path = '/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/doc-with-images1.md'
         
         doc.save_as_markdown(
             output_md_path,
@@ -148,6 +142,13 @@ class Pdf_document_loader():
         
         with open(output_md_path, 'w') as file:
             file.write(md_content)
+
+    @staticmethod
+    def to_json(self,) -> dict:
+        """
+        Gets a md file -> to json + images and stuff (check Ilya Rice's wokr)
+        """
+        pass
         
     def __ocr(self):
         """
@@ -165,8 +166,8 @@ class Pdf_document_loader():
 
 
 if __name__ == "__main__":
-    test_file = [Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/examples/data-sample.pdf")]
-    pdf_loader = Pdf_document_loader(test_file)
+    test_file = [Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/cell_penetration_of_oxadiazole_containing_macrocycles.pdf")]
+    pdf_loader = PDF_document_loader(test_file)
     pdf_loader.parse_document(use_vlm=True)
     
 
