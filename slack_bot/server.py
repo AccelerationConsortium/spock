@@ -9,11 +9,15 @@ import subprocess
 from texts import *
 from pathlib import Path
 
-
-
-
 load_dotenv()
 
+
+def is_spock_server_running() -> bool: # To check later
+    """
+    Check if the Spock server is running for trt engine
+    """
+    return os.system("squeue | grep spock") != 256
+    
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 APP_TOKEN = os.getenv("APP_TOKEN")
 

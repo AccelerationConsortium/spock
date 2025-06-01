@@ -10,9 +10,6 @@ from langchain_core.prompts import PromptTemplate
 from langchain.schema import Document
 from langchain_openai import ChatOpenAI
 
-
-
-
 load_dotenv()
 def get_api_key(env_var, prompt):
     
@@ -120,7 +117,7 @@ class URLDownloader:
         
         try: 
             data,soup = self.extract_html_text(response.text)           
-            document = Document(page_content=data['text'], metadata={"title": data['title'], "headings": data['headings']})
+            document = Document(page_content=data['text'], metadata={"title": data['title'], "headings": data['headings'], "source":""})
             response = self.llm_document_decider(document)
             logger.info(f"Document is a complete scientific paper: {response}")
             if response:
@@ -159,7 +156,7 @@ class URLDownloader:
     def llm_document_decider(document:Document):
 
 
-        prompt = PromptTemplate(
+        prompt = PromptTemplate( # Would return a pydantic publication object
             template=f"""
 Here is a text, and we need to determine whether it represents a complete scientific article or a sufficiently comprehensive scientific piece (such as a commentary, feature, or news article) that conveys scientific findings or analysis in a coherent and self-contained manner. Traditional full-length research articles often include:
 

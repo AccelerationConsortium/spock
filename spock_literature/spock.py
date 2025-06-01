@@ -1,6 +1,8 @@
 """Main module."""
-from langchain_openai import ChatOpenAI
-from spock_literature.utils.Helper_LLM import Helper_LLM
+from langchain_experimental.text_splitter import SemanticChunker
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings,OpenAI
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_core.prompts import PromptTemplate
@@ -11,84 +13,137 @@ from spock_literature.utils.Generate_podcast import generate_audio
 from pathlib import Path
 from typing import List, Optional, Union
 from spock_literature.utils.Url_downloader import URLDownloader
-from langchain.schema import Document
 from scidownl import scihub_download
 import concurrent.futures
 from langchain.docstore.document import Document
 from time import time
 import nvtx
 from langchain_nvidia_ai_endpoints import ChatNVIDIA
+from spock_literature.utils.pdf_parsing import PDF_document_loader
+import getpass
+import re
+from langchain_community.vectorstores import FAISS
+import faiss
+import socket
 
+load_dotenv()
+def get_api_key(env_var, prompt):
+    if not os.getenv(env_var):
+        os.environ[env_var] = getpass.getpass(prompt)
 
-def verificator(paper, publication_doi, publication_title, publication_url):
-    """
-    Verify if input is valid
-    """
-    if not paper and not publication_doi and not publication_title and not publication_url:
-        raise ValueError("Please provide a paper, publication DOI, publication title, or publication URL.")
-    if paper and (publication_doi or publication_title or publication_url):
-        raise ValueError("Please provide either a paper or a publication DOI, title, or URL, not both.")
-    if publication_doi and (publication_title or publication_url):
-        raise ValueError("Please provide either a publication DOI or a publication title or URL, not both.")
-    if publication_title and (publication_doi or publication_url):
-        raise ValueError("Please provide either a publication title or a publication DOI or URL, not both.")
-    if publication_url and (publication_doi or publication_title):
-        raise ValueError("Please provide either a publication URL or a publication DOI or title, not both.")
-    if os.path.exists(paper) and not paper.endswith(".pdf"):
-        raise ValueError("Please provide a PDF file.")
+CHUNK_SIZE = 300
+CHUNK_OVERLAP = 50
 
-class Spock(Helper_LLM):  
-    """Spock class."""
-    
+# TODO:
+# Make the paper variable work with everthing, not just a path but urls too (maybe have a class or pydantic object representing a document or paper)
+class Spock:  
+    """Spock class"""
     def __init__(
         self,
-        model: str = "llama3.3",
+        model:str,
+        use_tensor_rt:bool = False,
         paper: Optional[Union[Path, str]] = None,
-        custom_questions: Optional[List[str]] = None,
-        publication_doi: Optional[str] = None,
-        publication_title: Optional[str] = None,
-        publication_url: Optional[str] = None,
-        papers_download_path: str = PAPERS_PATH,
+        #publication_doi: Optional[str] = None,
+        #publication_title: Optional[str] = None,
+        #publication_url: Optional[str] = None,
+        custom_questions: Optional[List[str]] = None, # Batch processing of questions
+        papers_download_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/papers/'),
         temperature: float = 0.2,
-        embed_model=None,
-        folder_path=None,
-        settings:Optional[dict[str, bool]]={'Summary':True, 'Questions':True,'Binary Response':True},
+        embed_model = OpenAIEmbeddings(model="text-embedding-3-large"),
+        vectorestore_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/vectorstore/'),
+        use_semantic_splitting: bool = False,
+        max_tokens: int = 3500,
         **kwargs
    
     ):
-        """
-        Initialize a Spock object.
+        """_summary_
 
         Args:
-            model (str): Model name. Defaults to "llama3.1".
-            paper (Path | str | None): Path to the PDF file locally stored. Defaults to None.
-            custom_questions (list[str] | None): List of custom questions. Defaults to None.
-            publication_doi (str | None): DOI of the paper to analyze. Defaults to None.
-            publication_title (str | None): Title of the paper to analyze. Defaults to None.
-            publication_url (str | None): URL of the paper to analyze. Defaults to None.
-            papers_download_path (str): Path to download the papers. 
-            temperature (float): Temperature for the model. Defaults to 0.2.
-            embed_model (str): Embedding model. Defaults to None.
-            folder_path (str): Folder path. Defaults to None.
+            model (str): _description_
+            use_tensor_rt (bool, optional): _description_. Defaults to False.
+            paper (Optional[Union[Path, str]], optional): _description_. Defaults to None.
+            custom_questions (Optional[List[str]], optional): _description_. Defaults to None.
+            temperature (float, optional): _description_. Defaults to 0.2.
+            embed_model (Optional[str], optional): _description_. Defaults to None.
+            vectorestore_path (Optional[Union[Path, str]], optional): _description_. Defaults to Path(os.getcwd() + '/vectorstore/').
+            use_semantic_splitting (bool, optional): _description_. Defaults to False.
+            max_tokens (int, optional): _description_. Defaults to 3500.
         """
-        verificator(paper, publication_doi, publication_title, publication_url)
-        super().__init__(model=model, temperature=temperature, embed_model=embed_model, folder_path=folder_path)
-        self.paper: Optional[Path] = Path(paper) if paper else None
-        self.paper_summary: str = ""
-        self.custom_questions: List[str] = custom_questions or []
-        self.publication_doi: Optional[str] = publication_doi
-        self.publication_title: Optional[str] = publication_title
-        self.publication_url: Optional[str] = publication_url
-        self.topics: str = ""
-        self.settings = settings
-        self.questions = QUESTIONS
-        self.papers_path = papers_download_path
+        self.embed_model = embed_model
+        if use_tensor_rt:
+            timeout = 1.0
+            port = kwargs.get("trt_port", 8000)
+            is_up = False
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+                sock.settimeout(timeout)
+                try:
+                    sock.connect(("127.0.0.1", port))
+                    is_up = True
+                except (socket.timeout, ConnectionRefusedError, OSError):
+                    return False
+                
+            if is_up:
+                os.environ["OPENAI_API_BASE"] = "http://localhost:8000/v1" # Assuming the server is running already
+            else:
+                # launch trt server
+                pass 
+            
+        if use_semantic_splitting:
+            self.text_splitter = SemanticChunker(
+                self.embed_model, breakpoint_threshold_type="gradient"
+            )
+        else:
+            self.text_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
+            )
+        self.llm = OpenAI(
+            model=model,
+            temperature=temperature,
+            max_tokens=max_tokens,
+        ) 
+        self.embed_model = embed_model(model="text-embedding-3-large") if isinstance(embed_model, type) else embed_model # to edit
+        self.paper = paper
+        if re.match(r"^https?://", str(self.paper)) or isinstance(self.paper, str):
+            
+            # Download the paper
+            pass 
+            
+        self.vector_store = FAISS(
+                            embedding_function=self.embed_model,
+                            index=faiss.IndexFlatL2(len(self.embed_model.embed_query("hello world"))),
+                            docstore= InMemoryDocstore(),
+                            index_to_docstore_id={}
+                        )
+        self.vector_store.save_local(folder_path=os.getcwd() + "/vectorstore", index_name=self.paper_name) # to edit 
+
+        
+        
+        
+        
+        
+    @staticmethod
+    def download_paper(
+        paper: Union[Path, str],
+        papers_path: Union[Path, str] = PAPERS_PATH,
+        publication_doi: Optional[str] = None,
+        publication_title: Optional[str] = None,
+        publication_url: Optional[str] = None
+    ):
+        """_summary_
+
+        Args:
+            paper (Union[Path, str]): _description_
+            papers_path (Union[Path, str], optional): _description_. Defaults to PAPERS_PATH.
+            publication_doi (Optional[str], optional): _description_. Defaults to None.
+            publication_title (Optional[str], optional): _description_. Defaults to None.
+            publication_url (Optional[str], optional): _description_. Defaults to None.
+        """
+        pass
+        
   
     @nvtx.annotate("Download PDF")
-    def download_pdf(self):
+    def download_pdf(self): # Use maybe arxiv here instead of scihub
         """Download the PDF of a publication."""
-    
-        
         if self.publication_doi and not self.paper:
 
             paper = "https://doi.org/" + self.publication_doi
@@ -385,12 +440,13 @@ class Spock(Helper_LLM):
         
         
 if __name__ == "__main__":
+    load_dotenv()
     from langchain.llms import OpenAI
     start = time()
     spock = Spock(
         model="llama3.3",
         paper="/home/m/mehrad/brikiyou/scratch/spock_2/spock/examples/data-sample.pdf")
-    os.environ["OPENAI_API_BASE"] = "http://localhost:8000/v1"
+    
     spock.llm = ChatOpenAI(
         model="llama3.3_70b_trt_engine",
         max_tokens=3500
