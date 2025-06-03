@@ -11,8 +11,7 @@ from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from langchain_ollama import OllamaLLM
 from spock_literature.utils.Generate_podcast import generate_audio
 from pathlib import Path
-from typing import List, Optional, Union
-from spock_literature.utils.Url_downloader import URLDownloader
+from spock_literature.utils.Spock_Downloader import URLDownloader
 from scidownl import scihub_download
 import concurrent.futures
 from langchain.docstore.document import Document
@@ -25,7 +24,14 @@ import re
 from langchain_community.vectorstores import FAISS
 import faiss
 import socket
-
+from langchain.retrievers import ParentDocumentRetriever
+from langchain.storage import InMemoryByteStore
+from langchain_core.runnables import ConfigurableField
+from langchain.retrievers import EnsembleRetriever
+from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestions
+from langchain.retrievers.multi_vector import MultiVectorRetriever
+from langchain.retrievers.multi_vector import SearchType
+from typing import Any, Dict, Union, Optional, List
 load_dotenv()
 def get_api_key(env_var, prompt):
     if not os.getenv(env_var):
@@ -53,6 +59,7 @@ class Spock:
         vectorestore_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/vectorstore/'),
         use_semantic_splitting: bool = False,
         max_tokens: int = 3500,
+        #docs: Optional[List[Publications]]
         **kwargs
    
     ):
@@ -108,19 +115,281 @@ class Spock:
             # Download the paper
             pass 
             
-        self.vector_store = FAISS(
+        self.docstore = InMemoryDocstore() # to edit
+        self.vectorstore = FAISS(
                             embedding_function=self.embed_model,
                             index=faiss.IndexFlatL2(len(self.embed_model.embed_query("hello world"))),
-                            docstore= InMemoryDocstore(),
+                            docstore= self.docstore,
                             index_to_docstore_id={}
                         )
-        self.vector_store.save_local(folder_path=os.getcwd() + "/vectorstore", index_name=self.paper_name) # to edit 
+        self.vectorstore.save_local(folder_path=os.getcwd() + "/vectorstore", index_name={self.paper_name}) # to edit *
+        self.chunk_retriever = self.vectorstore.as_retriever(
+        ) # To add MMR as algorithm
+        
+        
+        
+        self.doc_retriever = ParentDocumentRetriever(
+                        vectorstore=vectorstore,
+                        docstore=self.store,
+                        child_splitter=child_splitter,
+                    )
+        self.abstract_retriever = MultiVectorRetriever( # Maybe to add summary to vectorstore after being computed
+            vectorstore=vectorstore,
+            byte_store=self.store,
+            id_key=id_key,
+            )
+        
+        self.hypothetical_question_retriever = MultiVectorRetriever(
+        )
+
+
+    def __get_splitter(self, use_semantic_splitting: bool):
+        """Get the text splitter based on the use_semantic_splitting flag."""
+        if use_semantic_splitting:
+            return SemanticChunker(
+                self.embed_model, breakpoint_threshold_type="gradient"
+            )
+        else:
+            return RecursiveCharacterTextSplitter(
+                chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
+            )
+            
+            
+    def add_to_vectorstore(
+        self,
+        parent_retrieval: bool = False,
+        abstract_retrieval: bool = False,
+        hypothetical_question_retrieval: bool = False,
+        use_semantic_splitting: bool = False,
+        search_type: str = "mmr",   
+    ) -> Any: # Returns List[Retrievers] to see how it's done on langchain (datatype)
+        
+        retrievers = []
+        self.store = InMemoryByteStore()
+        splitter = self.__get_splitter(use_semantic_splitting)
+        
+        if parent_retrieval:
+            parent_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=2250, chunk_overlap=150
+            )
+            self.parent_retriever = ParentDocumentRetriever(
+                                    vectorstore=self.vectorstore,
+                                    docstore=self.store,
+                                    child_splitter=spliter,
+                                    parent_splitter=parent_splitter,
+                                    #search_type=SearchType.mmr  # to see 
+                                )
+            retrievers.append(('parent', self.parent_retriever))
+            #self.parent_retriever.add_documents(self.paper) # To change 
+        if abstract_retrieval:
+            self.abstract_retriever = MultiVectorRetriever(
+                vectorstore=self.vectorstore,
+                byte_store=self.store,
+                #id_key="id",
+                #search_type=SearchType.mmr if search_type == "mmr" else SearchType.hnsw
+            )
+            abstract = self.paper.abstract # To update
+            # TODO: work on adding the original doc too
+            retrievers.append(('abstract', self.abstract_retriever))
+            
+        if hypothetical_question_retrieval:
+            
+            # Pass in the abstract
+            chain = (
+                {"doc": lambda x: x.page_content} 
+                # Only asking for 3 hypothetical questions, but this could be adjusted
+                | PromptTemplate.from_template(
+                    "Generate a list of exactly 3 hypothetical questions that the below document could be used to answer:\n\n{doc}"
+                )
+                | self.llm.with_structured_output(
+                    HypotheticalQuestions
+                )
+                | (lambda x: x.questions)
+            )
+            retrievers.append(('hypothetical_questions', chain))
+            
+            """
+            # Batch chain over documents to generate hypothetical questions
+            hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
+
+
+            # The vectorstore to use to index the child chunks
+            vectorstore = Chroma(
+                collection_name="hypo-questions", embedding_function=OpenAIEmbeddings()
+            )
+            # The storage layer for the parent documents
+            store = InMemoryByteStore()
+            id_key = "doc_id"
+            # The retriever (empty to start)
+            retriever = MultiVectorRetriever(
+                vectorstore=vectorstore,
+                byte_store=store,
+                id_key=id_key,
+            )
+            doc_ids = [str(uuid.uuid4()) for _ in docs]
+
+
+            # Generate Document objects from hypothetical questions
+            question_docs = []
+            for i, question_list in enumerate(hypothetical_questions):
+                question_docs.extend(
+                    [Document(page_content=s, metadata={id_key: doc_ids[i]}) for s in question_list]
+                )
+
+
+            retriever.vectorstore.add_documents(question_docs)
+            retriever.docstore.mset(list(zip(doc_ids, docs)))
+            sub_docs = retriever.vectorstore.similarity_search("justice breyer")
+            retrieved_docs = retriever.invoke("justice breyer")
+            len(retrieved_docs[0].page_content)
+            """
+        self.available_retrievers = dict(retrievers)
+        return retrievers
+
+            
+    def __get_available_retrievers(self, weights:Optional[Dict[str, float]]) -> Dict[str, Any]:
+        """
+        Get the available retrievers based on the current configuration.
+        """
+        retrievers = {}
+        
+        # To fix weights        
+        if hasattr(self, 'parent_retriever') and self.parent_retriever:
+            retrievers['parent'] = {
+                'retriever': self.parent_retriever,
+                'description': 'Parent-child document retrieval',
+                'weight': weights.get('parent', 0.3)
+            }
+        
+        if hasattr(self, 'abstract_retriever') and self.abstract_retriever:
+            retrievers['abstract'] = {
+                'retriever': self.abstract_retriever,
+                'description': 'Abstract-based retrieval',
+                'weight': weights.get('abstract', 0.2)
+            }
+        
+        if hasattr(self, 'hypo_retriever') and self.hypo_retriever:
+            retrievers['hypothetical'] = {
+                'retriever': self.hypo_retriever,
+                'description': 'Hypothetical question retrieval',
+                'weight': weights.get('hypothetical', 0.2)
+            }
+        
+        # Base retriever 
+        retrievers['chunk'] = {
+            'retriever': self.chunk_retriever,
+            'description': 'Standard chunk retrieval',
+            'weight': weights.get('chunk', 0.3)
+        }
+        
+        return retrievers
+
+    async def aadd_to_vectorstore(
+        self,
+        settings: dict,
+        documents: List[Document]):
+        pass 
+    
+    # To see later on how good it is
+    def __create_ensemble_retriever(self, custom_weights: Optional[Dict[str, float]] = None):
+        """Create ensemble retriever with available retrievers"""
+        available = self.__get_available_retrievers()
+        
+        if len(available) < 2:
+            print("Warning: Only one retriever available, ensemble not beneficial")
+            return list(available.values())[0]['retriever']
+        
+        retrievers = []
+        weights = []
+        
+        for name, config in available.items():
+            retrievers.append(config['retriever'])
+            weight = custom_weights.get(name, config['weight']) if custom_weights else config['weight']
+            weights.append(weight)
+        
+        # Normalize weights
+        total_weight = sum(weights)
+        weights = [w/total_weight for w in weights]
+        
+        print(f"Creating ensemble with {len(retrievers)} retrievers:")
+        for i, (name, _) in enumerate(available.items()):
+            print(f"  - {name}: {weights[i]:.2f}")
+        
+        return EnsembleRetriever(retrievers=retrievers, weights=weights)
+
+    def answer_question(
+        self,
+        question: str,
+        reranking: bool = False,
+        hybrid_search: bool = False,
+        search_algorithm: str = "mmr",
+        search_algorithm_kwargs: Optional[dict] = None,
+        custom_weights: Optional[Dict[str, float]] = None,
+        query_transformation: Optional[bool] = False,
+        run_manager=None
+    ):
+        # Default search kwargs - to change
+        default_kwargs = {"k": 10, "fetch_k": 50} if search_algorithm == "mmr" else {"k": 10}
+        search_kwargs = search_algorithm_kwargs or default_kwargs
+        
+        if hybrid_search:
+            retriever = self.__create_ensemble_retriever(custom_weights)
+            config = {"configurable": {"search_kwargs_faiss": search_kwargs}}
+            results = retriever.invoke(question, config=config)
+        else:
+            # Use the best single retriever or default chunk retriever
+            retriever = self.__select_best_retriever(question)
+            results = retriever.invoke(question)
+        
+        if reranking:
+            results = self._rerank_results(results, question)
+        
+        return results
+
+    def __select_best_retriever(self, usage_mode, question: str):
+        """Select best single retriever based on question type"""
+        if hasattr(self, 'parent_retriever'):
+            return self.parent_retriever
+        return self.chunk_retriever
+
+
+    def print_retriever_summary(self):
+        """Print summary of available retrievers"""
+        available = self.get_available_retrievers()
+        print("Available Retrievers:")
+        print("-" * 50)
+        for name, config in available.items():
+            print(f"{name.capitalize()}: {config['description']}")
+            print(f"  Default weight: {config['weight']}")
+        print("-" * 50)
+        print(f"Total retrievers: {len(available)}")
+
+    # To change later on 
+    def benchmark_retrievers(self, test_questions: List[str], top_k: int = 5):
+        """Benchmark different retriever combinations"""
+        results = {}
+        available = self.get_available_retrievers()
+        
+        for name, config in available.items():
+            retriever = config['retriever']
+            results[name] = []
+            
+            for question in test_questions:
+                docs = retriever.invoke(question)[:top_k]
+                results[name].append(len(docs))
+        
+        return results
 
         
-        
-        
-        
-        
+    async def aanswer_question(
+        self,
+        question: str,
+        run_manager=None
+    ):
+        pass
+    
+    
+    
     @staticmethod
     def download_paper(
         paper: Union[Path, str],
@@ -174,6 +443,37 @@ class Spock:
                 self.paper = temp_return
             else:
                 raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
+        
+    def intro_section(self,) -> Dict[str, str]:
+        """
+        summary + topics and normal stuff +
+        """
+        summary = self.paper_summary if self.paper_summary else "No summary available."
+        topics = self.topics if self.topics else "No topics available."
+        hypothetical_questions = ""
+        return {"summary": summary,"topics": topics, "questions":hypothetical_questions}
+        
+    def get_methods_section(self,) -> Dict[str, str]:
+        """
+        Datasets, Methods, Models used, Screening algorithms, summary of the workflow
+        """
+        #methods_summary = summarize(self.paper.methods)
+        is_method_novel = ""
+        datasets = ""
+        methods = ""     
+        models = ""
+        screening_algorithms = ""
+        #graph = generate_graph   
+        
+    def get_conclusion_section(self):
+        """
+        Matter discovered, discussion, next steps, future work, conclusion
+        """
+        conclusion_summary = ""
+        matter_discovered = ""
+        discussion = ""
+        
+    
         
     
     @nvtx.annotate("Question Answering - RAG retrieval + Generation")
@@ -441,6 +741,7 @@ class Spock:
         
 if __name__ == "__main__":
     load_dotenv()
+
     from langchain.llms import OpenAI
     start = time()
     spock = Spock(

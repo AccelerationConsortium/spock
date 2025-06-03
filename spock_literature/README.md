@@ -26,3 +26,4 @@ Priorities:
 14. Docker and devops stuff 
 15. Return pydantic object for the urldownlaodre
 16. Knowledge graph ?????
+17. Add ContextualCompressionRetriever ??? Could be useful for the 10 questions stuff 
