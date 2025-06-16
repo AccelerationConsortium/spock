@@ -7,16 +7,16 @@ import uuid
 import re
 from sentence_transformers import SentenceTransformer, util
 import torch
+from langchain_core.documents import Document
 
 
-
-class Publication(BaseModel):
+class Publication(BaseModel, Document):
     """
     Represents a scientific document with its metadata and content. 
     """
-    key:str = Field(description="Unique identifier for the document")
-    page_content:Optional[str] = Field(default=None, description="Content of the document")
-    metadata:Optional[Dict[str, Any]] = Field(default_factory={}, description="Metadata associated with the document")
+    #key:str = Field(..., description="Unique identifier for the document")
+    #page_content:Optional[str] = Field(default=None, description="Content of the document")
+    #metadata:Optional[Dict[str, Any]] = Field(default_factory={}, description="Metadata associated with the document")
     introduction:Optional[str] = Field(default=None, description="Introduction section of the document, introduces the purpose and scope of the research")
     methods:Optional[str] = Field(default=None, description="Methods section of the document")
     results:Optional[str] = Field(default=None, description="Results section of the document")
@@ -104,5 +104,9 @@ class Publication(BaseModel):
         """
         Check if all major sections are present.
         """
-        sections = self.get_sections()
-        return all(content is not None and content.strip() for content in sections.values())
+        return all(content is not None and content.strip() for content in self.get_sections.values())
+    
+    def __repr__(self):
+        # To update: Use metadata for title if available
+        if self.has_complete_sections():
+            return f"Publication(key={self.key}, title={self.metadata.get('title', 'Untitled')})"

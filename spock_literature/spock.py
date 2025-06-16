@@ -32,7 +32,15 @@ from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestio
 from langchain.retrievers.multi_vector import MultiVectorRetriever
 from langchain.retrievers.multi_vector import SearchType
 from typing import Any, Dict, Union, Optional, List
+
+
+
+
+# Data has to be in md format which is not so great
+
+
 load_dotenv()
+
 def get_api_key(env_var, prompt):
     if not os.getenv(env_var):
         os.environ[env_var] = getpass.getpass(prompt)
@@ -47,8 +55,9 @@ class Spock:
     def __init__(
         self,
         model:str,
+        splitter: Optional[Union[RecursiveCharacterTextSplitter, SemanticChunker]] = None,
         use_tensor_rt:bool = False,
-        paper: Optional[Union[Path, str]] = None,
+        paper: Optional[Union[Document,Publication]] = None, # Publication object ig 
         #publication_doi: Optional[str] = None,
         #publication_title: Optional[str] = None,
         #publication_url: Optional[str] = None,
@@ -59,6 +68,7 @@ class Spock:
         vectorestore_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/vectorstore/'),
         use_semantic_splitting: bool = False,
         max_tokens: int = 3500,
+        
         #docs: Optional[List[Publications]]
         **kwargs
    
@@ -155,6 +165,26 @@ class Spock:
             )
             
             
+            
+    @classmethod
+    def from_url(cls, url: str, **kwargs) -> "Spock":
+        pass
+    
+    
+    @classmethod
+    def from_doi(cls, doi: str, **kwargs) -> "Spock":
+        pass
+    
+    
+    @classmethod
+    def from_title(cls, title: str, **kwargs) -> "Spock":
+        pass
+    
+    @classmethod
+    def from_pdf(cls,):
+        pass
+    
+    
     def add_to_vectorstore(
         self,
         parent_retrieval: bool = False,
@@ -726,17 +756,13 @@ class Spock:
         output_text = '\n'.join(output_lines)     
         return output_text
     
+    def answer_general_question():
+        """
+        Answer a general question asked by the user -> Look at all the vectorestores and retrieve what's best
+        """
+        pass
     
-    @nvtx.annotate("Answer Question")
-    def answer_question(self, question:str):
-        """
-        Answer a question
-        """
-        if self.vectorstore:
-            return self.query_rag(question)
-        else:
-            self.chunk_indexing(self.paper)
-            return self.query_rag(question)
+
         
         
 if __name__ == "__main__":
