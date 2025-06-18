@@ -16,6 +16,43 @@ from langchain.docstore import InMemoryDocstore
 from langchain.storage import InMemoryByteStore
 from pydantic import BaseModel, Field
 
+
+            """
+            # Batch chain over documents to generate hypothetical questions
+            hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
+
+
+            # The vectorstore to use to index the child chunks
+            vectorstore = Chroma(
+                collection_name="hypo-questions", embedding_function=OpenAIEmbeddings()
+            )
+            # The storage layer for the parent documents
+            store = InMemoryByteStore()
+            id_key = "doc_id"
+            # The retriever (empty to start)
+            retriever = MultiVectorRetriever(
+                vectorstore=vectorstore,
+                byte_store=store,
+                id_key=id_key,
+            )
+            doc_ids = [str(uuid.uuid4()) for _ in docs]
+
+
+            # Generate Document objects from hypothetical questions
+            question_docs = []
+            for i, question_list in enumerate(hypothetical_questions):
+                question_docs.extend(
+                    [Document(page_content=s, metadata={id_key: doc_ids[i]}) for s in question_list]
+                )
+
+
+            retriever.vectorstore.add_documents(question_docs)
+            retriever.docstore.mset(list(zip(doc_ids, docs)))
+            sub_docs = retriever.vectorstore.similarity_search("justice breyer")
+            retrieved_docs = retriever.invoke("justice breyer")
+            len(retrieved_docs[0].page_content)
+            """
+
 class HypotheticalQuestions(BaseModel):
     """Schema for hypothetical questions generation."""
     questions: List[str] = Field(description="List of hypothetical questions")
@@ -33,39 +70,12 @@ class Spock_Retriever(BaseRetriever):
     - Ensemble retrieval combining multiple strategies
     """
 
-    def __init__(self, embed_model, child_splitter=None, parent_splitter=None, 
-                 mode="child", k=10, search_type="mmr", docstore=None, 
-                 store=None, vectorstore=None, **kwargs):
-        super().__init__(**kwargs)        
-        self.embed_model = embed_model
-        if child_splitter is None:
-            self.child_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=, chunk_overlap=50
-            )
-        else:
-            self.child_splitter = child_splitter
-            
-        if parent_splitter is None:
-            from langchain.text_splitter import RecursiveCharacterTextSplitter
-            self.parent_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=, chunk_overlap=200
-            )
-        else:
-            self.parent_splitter = parent_splitter
+    def __init__(self, 
+                 retrievers:List[BaseRetriever], 
+                 **kwargs):
+        super().__init__(**kwargs) 
+        self.retrievers = retrievers
         
-        # Mode & retrieval settings
-        self.mode = mode
-        self.k = k
-        self.search_type = search_type
-        self.search_kwargs = kwargs.get("search_kwargs", {"k": self.k})
-        
-        # Storage & retrievers
-        self.docstore = docstore
-        self.store = store
-        self.vectorstore = vectorstore
-        
-        # Initialize stores and retrievers
-        self._initialize_stores()
         
         
     @classmethod
@@ -141,6 +151,16 @@ class Spock_Retriever(BaseRetriever):
             )
             
             
+        self.abstract_retriever = MultiVectorRetriever( # Maybe to add summary to vectorstore after being computed
+            vectorstore=vectorstore,
+            byte_store=self.store,
+            id_key=id_key,
+            )
+        
+        self.hypothetical_question_retriever = MultiVectorRetriever(
+        )
+
+
     
     @classmethod
     def from_retrievers(cls, 
@@ -183,7 +203,38 @@ class Spock_Retriever(BaseRetriever):
         
 
 
+    @staticmethod
+    def create_hypothetical_questions_retriever() -> MultiVectorRetriever:
+        
+        """
+                self.abstract_retriever = MultiVectorRetriever( # Maybe to add summary to vectorstore after being computed
+            vectorstore=vectorstore,
+            byte_store=self.store,
+            id_key=id_key,
+            )
+        
+        self.hypothetical_question_retriever = MultiVectorRetriever(
+        )
+        
+    """
     
+    @staticmethod
+    def create_retriever_from_abstract():
+        
+        """
+        self.doc_retriever = ParentDocumentRetriever(
+                        vectorstore=vectorstore,
+                        docstore=self.store,
+                        child_splitter=child_splitter,
+                    )
+        self.abstract_retriever = MultiVectorRetriever( # Maybe to add summary to vectorstore after being computed
+            vectorstore=vectorstore,
+            byte_store=self.store,
+            id_key=id_key,
+            )
+        
+        """
+
     def _initialize_stores(self):
         """Initialize the vector store and document stores."""
         raise NotImplementedError("This method should be implemented in subclasses.")
@@ -314,8 +365,3 @@ retriever.add_to_vectorstore(documents)
 # Retrieve documents
 results = retriever.invoke("your query here")
 """
-
-
-def a(arg1, arg2, **kwargs):
-    b(**kwargs)
-    c(**kwargs)
