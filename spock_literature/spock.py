@@ -1,39 +1,44 @@
 """Main module."""
-from langchain_experimental.text_splitter import SemanticChunker
-from dotenv import load_dotenv
-from langchain_openai import ChatOpenAI, OpenAIEmbeddings,OpenAI
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-import os
-from langchain_community.document_loaders import PyPDFLoader
-from langchain_core.prompts import PromptTemplate
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from spock_literature.texts import QUESTIONS, PAPERS_PATH
-from langchain_ollama import OllamaLLM
-from spock_literature.utils.Generate_podcast import generate_audio
-from pathlib import Path
-from spock_literature.utils.Spock_Downloader import URLDownloader
-from scidownl import scihub_download
 import concurrent.futures
-from langchain.docstore.document import Document
-from time import time
-import nvtx
-from langchain_nvidia_ai_endpoints import ChatNVIDIA
-from spock_literature.utils.pdf_parsing import PDF_document_loader
 import getpass
+import os
 import re
-from langchain_community.vectorstores import FAISS
-import faiss
 import socket
-from langchain.retrievers import ParentDocumentRetriever
-from langchain.storage import InMemoryByteStore
+from pathlib import Path
+from typing import List, Optional, Union, Dict, Any
+from time import time
+import faiss
+import nvtx
+from dotenv import load_dotenv
+from scidownl import scihub_download
+from beartype import beartype
+
+
+from langchain.docstore.document import Document
+from langchain_experimental.text_splitter import SemanticChunker
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import ConfigurableField
-from langchain.retrievers import EnsembleRetriever
+from langchain.storage import InMemoryByteStore
+from langchain.retrievers import ParentDocumentRetriever, EnsembleRetriever
+from langchain.retrievers.multi_vector import MultiVectorRetriever, SearchType
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.vectorstores import FAISS
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from langchain_core.retrievers import BaseRetriever
+from langchain_core.language_models.llms import BaseLLM
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_community.vectorstores.faiss import DistanceStrategy
+from langchain_community.docstore.in_memory import InMemoryDocstore
+
+
+from spock_literature.texts import QUESTIONS, PAPERS_PATH
+from spock_literature.utils.Generate_podcast import generate_audio
+from spock_literature.utils.Spock_Downloader import URLDownloader
+from spock_literature.utils.pdf_parsing import PDF_document_loader
 from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestions
-from langchain.retrievers.multi_vector import MultiVectorRetriever
-from langchain.retrievers.multi_vector import SearchType
-from typing import Any, Dict, Union, Optional, List
-
-
+from spock_literature.utils.Spock_Retriever import Spock_Retriever
+from spock_literature.utils.Spock_Publication import Publication
 
 
 # Data has to be in md format which is not so great
@@ -52,40 +57,114 @@ CHUNK_OVERLAP = 50
 # Make the paper variable work with everthing, not just a path but urls too (maybe have a class or pydantic object representing a document or paper)
 class Spock:  
     """Spock class"""
+    @beartype
     def __init__(
         self,
-        model:str,
-        splitter: Optional[Union[RecursiveCharacterTextSplitter, SemanticChunker]] = None,
-        use_tensor_rt:bool = False,
-        paper: Optional[Union[Document,Publication]] = None, # Publication object ig 
-        #publication_doi: Optional[str] = None,
-        #publication_title: Optional[str] = None,
-        #publication_url: Optional[str] = None,
-        custom_questions: Optional[List[str]] = None, # Batch processing of questions
-        papers_download_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/papers/'),
-        temperature: float = 0.2,
-        embed_model = OpenAIEmbeddings(model="text-embedding-3-large"),
-        vectorestore_path: Optional[Union[Path, str]] = Path(os.getcwd() + '/vectorstore/'),
-        use_semantic_splitting: bool = False,
-        max_tokens: int = 3500,
-        
-        #docs: Optional[List[Publications]]
+        publication: Publication,
+        llm: Union[BaseLLM, BaseChatModel] = ChatOpenAI(model="gpt-4o", temperature=0.2),
+        smaller_model: Optional[Union[BaseLLM, BaseChatModel]] = None,
+        embed_model: OpenAIEmbeddings = OpenAIEmbeddings(model="text-embedding-3-large"),
+        vectorstore: Optional[FAISS] = None,
+        retrievers: Optional[List[BaseRetriever]] = None,
+        splitter: Optional[Union[RecursiveCharacterTextSplitter, SemanticChunker]] = RecursiveCharacterTextSplitter(
+            chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP),
+        #papers_download_path: Optional[Union[Path, str]] = os.getcwd() + '/papers/',
+        vectorstore_path: Optional[Union[Path, str]] = os.getcwd() + '/vectorstore/',
         **kwargs
-   
     ):
-        """_summary_
+        """
+        Initialize a Spock instance to load, chunk, embed, and query a scientific publication.
 
         Args:
-            model (str): _description_
-            use_tensor_rt (bool, optional): _description_. Defaults to False.
-            paper (Optional[Union[Path, str]], optional): _description_. Defaults to None.
-            custom_questions (Optional[List[str]], optional): _description_. Defaults to None.
-            temperature (float, optional): _description_. Defaults to 0.2.
-            embed_model (Optional[str], optional): _description_. Defaults to None.
-            vectorestore_path (Optional[Union[Path, str]], optional): _description_. Defaults to Path(os.getcwd() + '/vectorstore/').
-            use_semantic_splitting (bool, optional): _description_. Defaults to False.
-            max_tokens (int, optional): _description_. Defaults to 3500.
+            publication (Publication):
+                The publication object or metadata representing the paper to be processed.
+            llm (Union[BaseLLM, BaseChatModel], optional):
+                A high-capacity language model for performing generation and summarization tasks.
+                Defaults to a ChatOpenAI instance running “gpt-4o” at temperature 0.2.
+            smaller_model (Optional[Union[BaseLLM, BaseChatModel]], optional):
+                An optional lightweight model for faster or lower-cost inference on simpler tasks.
+                Defaults to None.
+            embed_model (OpenAIEmbeddings, optional):
+                The embedding model used to convert text chunks into vector representations.
+                Defaults to the “text-embedding-3-large” OpenAI Embeddings.
+            vectorstore (Optional[FAISS], optional):
+                An optional FAISS vector store instance to hold embeddings and support similarity search.
+                If None, a new in-memory FAISS index will be created internally.
+            retrievers (Optional[List[BaseRetriever]], optional):
+                A list of one or more retriever objects (e.g., keyword or vector retrievers) used
+                to fetch relevant chunks in response to queries. Defaults to None.
+            splitter (Optional[Union[RecursiveCharacterTextSplitter, SemanticChunker]], optional):
+                The text-splitting strategy that divides the publication into manageable chunks
+                for embedding and retrieval. Defaults to a recursive splitter with
+                CHUNK_SIZE and CHUNK_OVERLAP.
+            papers_download_path (Optional[Union[Path, str]], optional):
+                Filesystem path where downloaded publications (PDFs, etc.) will be saved.
+                Defaults to “<cwd>/papers/”.
+            vectorstore_path (Optional[Union[Path, str]], optional):
+                Directory path for persisting or loading the FAISS vectorstore on disk.
+                Defaults to “<cwd>/vectorstore/”.
+            **kwargs:
+                Additional keyword arguments to pass through to underlying components
+                (e.g., custom cache settings, logging options, or other hooks).
         """
+        
+        self.publication = publication
+        self.llm = llm
+        self.smaller_model = smaller_model if smaller_model else llm
+        self.embed_model = embed_model 
+        self.splitter = splitter 
+        if vectorstore is not None and not isinstance(vectorstore, FAISS):
+            raise TypeError("Only FAISS vectorstore is supported. Please provide a valid FAISS instance or None to use the one we provide.")
+        
+        self.vectorstore = vectorstore if vectorstore else FAISS(
+                    embedding_function=self.embed_model,       
+                    index=faiss.IndexFlatIP(self.embed_model.embed_query("hello world")),               
+                    docstore=InMemoryDocstore()                       
+                    index_to_docstore_id={},                      
+                    normalize_L2=True,                             
+                    distance_strategy=DistanceStrategy.COSINE,)
+        
+        self.vectorstore.save_local(folder_path=os.getcwd() + "/vectorstore", index_name={self.paper_name}) # to check later
+        
+        self.retriever = Spock_Retriever(
+            retrievers=retrievers if retrievers else ParentDocumentRetriever(
+                                                    vectorstore=vectorstore,
+                                                    docstore=InMemoryDocstore(), # To see if to use 2 different docstores
+                                                    child_splitter=self.splitter,
+                                                    parent_splitter=RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=150),
+                                                )
+
+        )
+
+        self._setup()
+        
+
+    def _setup(self):
+        """Handle post-initialization setup."""
+        # Create directories if they don't exist
+        self.papers_download_path.mkdir(parents=True, exist_ok=True)
+        self.vectorstore_path.mkdir(parents=True, exist_ok=True)
+        
+        # Setup vectorstore if provided
+        if self.vectorstore:
+            self.vectorstore.save_local(
+                folder_path=str(self.vectorstore_path), 
+                index_name="spock_index"
+            )
+        
+        # Setup retrievers
+        self.retrievers = SpockRetriever(self.retrievers, self.vectorstore)
+        
+        # Start TensorRT server if needed
+        if hasattr(self.llm, 'base_url') and self.llm.base_url == "http://localhost:8000/v1":
+            self.start_tensorrt_server()
+
+    def start_tensorrt_server(self):
+        """Start TensorRT server for optimized inference."""
+        if self.use_tensor_rt:
+            # TensorRT server startup logic
+            pass
+        """"
         self.embed_model = embed_model
         if use_tensor_rt:
             timeout = 1.0
@@ -126,32 +205,29 @@ class Spock:
             pass 
             
         self.docstore = InMemoryDocstore() # to edit
-        self.vectorstore = FAISS(
-                            embedding_function=self.embed_model,
-                            index=faiss.IndexFlatL2(len(self.embed_model.embed_query("hello world"))),
-                            docstore= self.docstore,
-                            index_to_docstore_id={}
-                        )
+        self.vectorstore = 
         self.vectorstore.save_local(folder_path=os.getcwd() + "/vectorstore", index_name={self.paper_name}) # to edit *
         self.chunk_retriever = self.vectorstore.as_retriever(
         ) # To add MMR as algorithm
         
         
-        
-        self.doc_retriever = ParentDocumentRetriever(
-                        vectorstore=vectorstore,
-                        docstore=self.store,
-                        child_splitter=child_splitter,
-                    )
-        self.abstract_retriever = MultiVectorRetriever( # Maybe to add summary to vectorstore after being computed
-            vectorstore=vectorstore,
-            byte_store=self.store,
-            id_key=id_key,
-            )
-        
         self.hypothetical_question_retriever = MultiVectorRetriever(
         )
 
+    """
+    
+    
+    @staticmethod
+    def create_vectorstore() -> FAISS:
+        return FAISS() # Our vectorstore creation logic here 
+    
+    @staticmethod
+    def create_retriever() -> Union[Spock_Retriever, ParentDocumentRetriever,]:
+        pass 
+    
+
+    def __setup():
+        pass
 
     def __get_splitter(self, use_semantic_splitting: bool):
         """Get the text splitter based on the use_semantic_splitting flag."""
@@ -167,23 +243,74 @@ class Spock:
             
             
     @classmethod
+    def _from_loader(
+        cls,
+        loader_fn,
+        loader_arg,
+        *,
+        llm=None,
+        smaller_model=None,
+        embed_model=None,
+        **kwargs
+    ) -> "Spock":
+        """
+        Internal helper: call loader_fn(loader_arg, **kwargs)
+        to get a paper/document, then forward into cls().
+        """
+        paper = loader_fn(loader_arg, **kwargs)
+        # allow overriding llm/embed_model via kwargs, or fall back
+        return cls(
+            llm=llm or kwargs.get("llm", ChatOpenAI()),
+            smaller_model=smaller_model,
+            embed_model=embed_model,
+            paper=paper,
+            **{k: v for k, v in kwargs.items() if k not in {"llm", "smaller_model", "embed_model"}}
+        )
+
+    @classmethod
     def from_url(cls, url: str, **kwargs) -> "Spock":
-        pass
-    
-    
+        """Load a Publication from its URL, then initialize."""
+        return cls._from_loader(Publication.from_url, url, **kwargs)
+
     @classmethod
     def from_doi(cls, doi: str, **kwargs) -> "Spock":
-        pass
-    
-    
+        """Load a Publication from its DOI, then initialize."""
+        return cls._from_loader(Publication.from_doi, doi, **kwargs)
+
     @classmethod
     def from_title(cls, title: str, **kwargs) -> "Spock":
-        pass
-    
+        """Load a Publication by title search, then initialize."""
+        return cls._from_loader(Publication.from_title, title, **kwargs)
+
     @classmethod
-    def from_pdf(cls,):
-        pass
+    def from_pdf(
+        cls,
+        pdf_path: Union[str, Path],
+        **kwargs
+    ) -> "Spock":
+        """
+        Load a PDF file (or list of Document objects) via your PDF loader,
+        pick the first Document if it returns a list, then initialize.
+        """
+        documents = PDF_document_loader(pdf_path, **kwargs)
+        paper = documents[0] if isinstance(documents, list) else documents
+        return cls(paper=paper, **kwargs)
     
+    
+    
+    def start_tensort_rt_server(self, path_to_model:Union[str, Path], port: int = 8000):
+        """Start the TensorRT server for the LLM."""
+        import subprocess
+        try:
+            subprocess.run(
+                ["trtserver", "--model-repository=/path/to/model/repo", "--port", str(port)],
+                check=True
+            )
+            print(f"TensorRT server started on port {port}")
+        except subprocess.CalledProcessError as e:
+            print(f"Failed to start TensorRT server: {e}")
+            
+            
     
     def add_to_vectorstore(
         self,
@@ -238,41 +365,6 @@ class Spock:
             )
             retrievers.append(('hypothetical_questions', chain))
             
-            """
-            # Batch chain over documents to generate hypothetical questions
-            hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
-
-
-            # The vectorstore to use to index the child chunks
-            vectorstore = Chroma(
-                collection_name="hypo-questions", embedding_function=OpenAIEmbeddings()
-            )
-            # The storage layer for the parent documents
-            store = InMemoryByteStore()
-            id_key = "doc_id"
-            # The retriever (empty to start)
-            retriever = MultiVectorRetriever(
-                vectorstore=vectorstore,
-                byte_store=store,
-                id_key=id_key,
-            )
-            doc_ids = [str(uuid.uuid4()) for _ in docs]
-
-
-            # Generate Document objects from hypothetical questions
-            question_docs = []
-            for i, question_list in enumerate(hypothetical_questions):
-                question_docs.extend(
-                    [Document(page_content=s, metadata={id_key: doc_ids[i]}) for s in question_list]
-                )
-
-
-            retriever.vectorstore.add_documents(question_docs)
-            retriever.docstore.mset(list(zip(doc_ids, docs)))
-            sub_docs = retriever.vectorstore.similarity_search("justice breyer")
-            retrieved_docs = retriever.invoke("justice breyer")
-            len(retrieved_docs[0].page_content)
-            """
         self.available_retrievers = dict(retrievers)
         return retrievers
 
@@ -781,3 +873,15 @@ if __name__ == "__main__":
     spock()
     print(spock.format_output())
     print("Time taken to run Spock: ", time() - start)
+
+
+
+        """
+        
+        
+        
+        
+        class Spock:
+            def init(retrievers, embedding_model, llm, paper=None)
+        
+        """
