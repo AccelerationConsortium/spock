@@ -113,17 +113,11 @@ class Spock:
         self.smaller_model = smaller_model if smaller_model else llm
         self.embed_model = embed_model 
         self.splitter = splitter 
+        
         if vectorstore is not None and not isinstance(vectorstore, FAISS):
             raise TypeError("Only FAISS vectorstore is supported. Please provide a valid FAISS instance or None to use the one we provide.")
         
-        self.vectorstore = vectorstore if vectorstore else FAISS(
-                    embedding_function=self.embed_model,       
-                    index=faiss.IndexFlatIP(self.embed_model.embed_query("hello world")),               
-                    docstore=InMemoryDocstore()                       
-                    index_to_docstore_id={},                      
-                    normalize_L2=True,                             
-                    distance_strategy=DistanceStrategy.COSINE,)
-        
+        self.vectorstore = vectorstore if vectorstore else self.create_vectorstore(embed_model=self.embed_model, use_flatip=True, use_hnsw=False, use_ivfflat=False)
         self.vectorstore.save_local(folder_path=os.getcwd() + "/vectorstore", index_name={self.paper_name}) # to check later
         
         self.retriever = Spock_Retriever(
@@ -134,111 +128,58 @@ class Spock:
                                                     parent_splitter=RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=150),
                                                 )
 
-        )
+        )        
+        
+        # Using TensorRT or any local llm with a compatible Open AI server 
+        if "localhost" in self.llm.base_url:
+            self.start_tensorrt_server() 
 
-        self._setup()
-        
 
-    def _setup(self):
-        """Handle post-initialization setup."""
-        # Create directories if they don't exist
-        self.papers_download_path.mkdir(parents=True, exist_ok=True)
-        self.vectorstore_path.mkdir(parents=True, exist_ok=True)
-        
-        # Setup vectorstore if provided
-        if self.vectorstore:
-            self.vectorstore.save_local(
-                folder_path=str(self.vectorstore_path), 
-                index_name="spock_index"
-            )
-        
-        # Setup retrievers
-        self.retrievers = SpockRetriever(self.retrievers, self.vectorstore)
-        
-        # Start TensorRT server if needed
-        if hasattr(self.llm, 'base_url') and self.llm.base_url == "http://localhost:8000/v1":
-            self.start_tensorrt_server()
-
-    def start_tensorrt_server(self):
+    def start_tensorrt_server(self, port: int = 8000):
         """Start TensorRT server for optimized inference."""
-        if self.use_tensor_rt:
-            # TensorRT server startup logic
-            pass
-        """"
-        self.embed_model = embed_model
-        if use_tensor_rt:
-            timeout = 1.0
-            port = kwargs.get("trt_port", 8000)
-            is_up = False
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
-                sock.settimeout(timeout)
-                try:
-                    sock.connect(("127.0.0.1", port))
-                    is_up = True
-                except (socket.timeout, ConnectionRefusedError, OSError):
-                    return False
-                
-            if is_up:
-                os.environ["OPENAI_API_BASE"] = "http://localhost:8000/v1" # Assuming the server is running already
-            else:
-                # launch trt server
-                pass 
-            
-        if use_semantic_splitting:
-            self.text_splitter = SemanticChunker(
-                self.embed_model, breakpoint_threshold_type="gradient"
-            )
-        else:
-            self.text_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
-            )
-        self.llm = OpenAI(
-            model=model,
-            temperature=temperature,
-            max_tokens=max_tokens,
-        ) 
-        self.embed_model = embed_model(model="text-embedding-3-large") if isinstance(embed_model, type) else embed_model # to edit
-        self.paper = paper
-        if re.match(r"^https?://", str(self.paper)) or isinstance(self.paper, str):
-            
-            # Download the paper
-            pass 
-            
-        self.docstore = InMemoryDocstore() # to edit
-        self.vectorstore = 
-        self.vectorstore.save_local(folder_path=os.getcwd() + "/vectorstore", index_name={self.paper_name}) # to edit *
-        self.chunk_retriever = self.vectorstore.as_retriever(
-        ) # To add MMR as algorithm
-        
-        
-        self.hypothetical_question_retriever = MultiVectorRetriever(
-        )
-
-    """
-    
-    
-    @staticmethod
-    def create_vectorstore() -> FAISS:
-        return FAISS() # Our vectorstore creation logic here 
-    
-    @staticmethod
-    def create_retriever() -> Union[Spock_Retriever, ParentDocumentRetriever,]:
-        pass 
-    
-
-    def __setup():
         pass
+    
+    @staticmethod
+    def create_tensort_rt_llm(link_to_trt_server, **kwargs) -> "ChatOpenAI":
+        """Create a TensorRT LLM instance."""
+        return ChatOpenAI(
+            model="llama3.3_70b_trt_engine",
+            base_url=link_to_trt_server,
+            **kwargs
+        )
+        
+        # TODO: Add verification of the tensort server and if available
 
-    def __get_splitter(self, use_semantic_splitting: bool):
-        """Get the text splitter based on the use_semantic_splitting flag."""
-        if use_semantic_splitting:
-            return SemanticChunker(
-                self.embed_model, breakpoint_threshold_type="gradient"
+    
+    @staticmethod
+    def create_vectorstore(embed_model, use_flatip:bool=True, use_hnsw:bool=False, use_ivfflat:bool=False) -> FAISS:
+        dim = len(embed_model.embed_query("hello world"))  
+        if use_flatip:
+            return FAISS(
+                embedding_function=embed_model,
+                index=faiss.IndexFlatIP(dim), 
+                docstore=InMemoryDocstore(),
+                index_to_docstore_id={},
+                normalize_L2=True,
+                distance_strategy=DistanceStrategy.COSINE,
+            ) 
+        elif use_hnsw:
+            raise NotImplementedError("Not implemented yet")
+            return FAISS(
+                embedding_function=embed_model,
+                index=faiss.IndexHNSWFlat(1536, 32),  # Example parameters, adjust as needed
+                docstore=InMemoryDocstore(),
+                index_to_docstore_id={},
+                normalize_L2=True,
+                distance_strategy=DistanceStrategy.COSINE,
             )
-        else:
-            return RecursiveCharacterTextSplitter(
-                chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP
-            )
+        elif use_ivfflat:
+            raise NotImplementedError("Not implemented yet")
+            quantizer = faiss.IndexFlatL2(1536)
+            index = faiss.IndexIVFFlat(quantizer, 1536, 100)  # Example parameters, adjust as needed
+            index.train(np.random.rand(1000, 1536).astype(np.float32))
+            return FAISS()               
+            
             
             
             
@@ -260,7 +201,7 @@ class Spock:
         paper = loader_fn(loader_arg, **kwargs)
         # allow overriding llm/embed_model via kwargs, or fall back
         return cls(
-            llm=llm or kwargs.get("llm", ChatOpenAI()),
+            llm=llm,
             smaller_model=smaller_model,
             embed_model=embed_model,
             paper=paper,
@@ -300,6 +241,7 @@ class Spock:
     
     def start_tensort_rt_server(self, path_to_model:Union[str, Path], port: int = 8000):
         """Start the TensorRT server for the LLM."""
+        raise NotImplementedError("TensorRT server start is not implemented yet.")
         import subprocess
         try:
             subprocess.run(
@@ -310,135 +252,6 @@ class Spock:
         except subprocess.CalledProcessError as e:
             print(f"Failed to start TensorRT server: {e}")
             
-            
-    
-    def add_to_vectorstore(
-        self,
-        parent_retrieval: bool = False,
-        abstract_retrieval: bool = False,
-        hypothetical_question_retrieval: bool = False,
-        use_semantic_splitting: bool = False,
-        search_type: str = "mmr",   
-    ) -> Any: # Returns List[Retrievers] to see how it's done on langchain (datatype)
-        
-        retrievers = []
-        self.store = InMemoryByteStore()
-        splitter = self.__get_splitter(use_semantic_splitting)
-        
-        if parent_retrieval:
-            parent_splitter = RecursiveCharacterTextSplitter(
-                chunk_size=2250, chunk_overlap=150
-            )
-            self.parent_retriever = ParentDocumentRetriever(
-                                    vectorstore=self.vectorstore,
-                                    docstore=self.store,
-                                    child_splitter=spliter,
-                                    parent_splitter=parent_splitter,
-                                    #search_type=SearchType.mmr  # to see 
-                                )
-            retrievers.append(('parent', self.parent_retriever))
-            #self.parent_retriever.add_documents(self.paper) # To change 
-        if abstract_retrieval:
-            self.abstract_retriever = MultiVectorRetriever(
-                vectorstore=self.vectorstore,
-                byte_store=self.store,
-                #id_key="id",
-                #search_type=SearchType.mmr if search_type == "mmr" else SearchType.hnsw
-            )
-            abstract = self.paper.abstract # To update
-            # TODO: work on adding the original doc too
-            retrievers.append(('abstract', self.abstract_retriever))
-            
-        if hypothetical_question_retrieval:
-            
-            # Pass in the abstract
-            chain = (
-                {"doc": lambda x: x.page_content} 
-                # Only asking for 3 hypothetical questions, but this could be adjusted
-                | PromptTemplate.from_template(
-                    "Generate a list of exactly 3 hypothetical questions that the below document could be used to answer:\n\n{doc}"
-                )
-                | self.llm.with_structured_output(
-                    HypotheticalQuestions
-                )
-                | (lambda x: x.questions)
-            )
-            retrievers.append(('hypothetical_questions', chain))
-            
-        self.available_retrievers = dict(retrievers)
-        return retrievers
-
-            
-    def __get_available_retrievers(self, weights:Optional[Dict[str, float]]) -> Dict[str, Any]:
-        """
-        Get the available retrievers based on the current configuration.
-        """
-        retrievers = {}
-        
-        # To fix weights        
-        if hasattr(self, 'parent_retriever') and self.parent_retriever:
-            retrievers['parent'] = {
-                'retriever': self.parent_retriever,
-                'description': 'Parent-child document retrieval',
-                'weight': weights.get('parent', 0.3)
-            }
-        
-        if hasattr(self, 'abstract_retriever') and self.abstract_retriever:
-            retrievers['abstract'] = {
-                'retriever': self.abstract_retriever,
-                'description': 'Abstract-based retrieval',
-                'weight': weights.get('abstract', 0.2)
-            }
-        
-        if hasattr(self, 'hypo_retriever') and self.hypo_retriever:
-            retrievers['hypothetical'] = {
-                'retriever': self.hypo_retriever,
-                'description': 'Hypothetical question retrieval',
-                'weight': weights.get('hypothetical', 0.2)
-            }
-        
-        # Base retriever 
-        retrievers['chunk'] = {
-            'retriever': self.chunk_retriever,
-            'description': 'Standard chunk retrieval',
-            'weight': weights.get('chunk', 0.3)
-        }
-        
-        return retrievers
-
-    async def aadd_to_vectorstore(
-        self,
-        settings: dict,
-        documents: List[Document]):
-        pass 
-    
-    # To see later on how good it is
-    def __create_ensemble_retriever(self, custom_weights: Optional[Dict[str, float]] = None):
-        """Create ensemble retriever with available retrievers"""
-        available = self.__get_available_retrievers()
-        
-        if len(available) < 2:
-            print("Warning: Only one retriever available, ensemble not beneficial")
-            return list(available.values())[0]['retriever']
-        
-        retrievers = []
-        weights = []
-        
-        for name, config in available.items():
-            retrievers.append(config['retriever'])
-            weight = custom_weights.get(name, config['weight']) if custom_weights else config['weight']
-            weights.append(weight)
-        
-        # Normalize weights
-        total_weight = sum(weights)
-        weights = [w/total_weight for w in weights]
-        
-        print(f"Creating ensemble with {len(retrievers)} retrievers:")
-        for i, (name, _) in enumerate(available.items()):
-            print(f"  - {name}: {weights[i]:.2f}")
-        
-        return EnsembleRetriever(retrievers=retrievers, weights=weights)
-
     def answer_question(
         self,
         question: str,
@@ -468,12 +281,12 @@ class Spock:
         
         return results
 
-    def __select_best_retriever(self, usage_mode, question: str):
-        """Select best single retriever based on question type"""
-        if hasattr(self, 'parent_retriever'):
-            return self.parent_retriever
-        return self.chunk_retriever
-
+    async def aanswer_question(
+        self,
+        question: str,
+        run_manager=None
+    ):
+        pass
 
     def print_retriever_summary(self):
         """Print summary of available retrievers"""
@@ -486,32 +299,6 @@ class Spock:
         print("-" * 50)
         print(f"Total retrievers: {len(available)}")
 
-    # To change later on 
-    def benchmark_retrievers(self, test_questions: List[str], top_k: int = 5):
-        """Benchmark different retriever combinations"""
-        results = {}
-        available = self.get_available_retrievers()
-        
-        for name, config in available.items():
-            retriever = config['retriever']
-            results[name] = []
-            
-            for question in test_questions:
-                docs = retriever.invoke(question)[:top_k]
-                results[name].append(len(docs))
-        
-        return results
-
-        
-    async def aanswer_question(
-        self,
-        question: str,
-        run_manager=None
-    ):
-        pass
-    
-    
-    
     @staticmethod
     def download_paper(
         paper: Union[Path, str],
@@ -529,11 +316,6 @@ class Spock:
             publication_title (Optional[str], optional): _description_. Defaults to None.
             publication_url (Optional[str], optional): _description_. Defaults to None.
         """
-        pass
-        
-  
-    @nvtx.annotate("Download PDF")
-    def download_pdf(self): # Use maybe arxiv here instead of scihub
         """Download the PDF of a publication."""
         if self.publication_doi and not self.paper:
 
@@ -566,6 +348,8 @@ class Spock:
             else:
                 raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
         
+  
+        
     def intro_section(self,) -> Dict[str, str]:
         """
         summary + topics and normal stuff +
@@ -594,8 +378,6 @@ class Spock:
         conclusion_summary = ""
         matter_discovered = ""
         discussion = ""
-        
-    
         
     
     @nvtx.annotate("Question Answering - RAG retrieval + Generation")

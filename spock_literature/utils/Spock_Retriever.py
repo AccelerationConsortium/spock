@@ -17,41 +17,41 @@ from langchain.storage import InMemoryByteStore
 from pydantic import BaseModel, Field
 
 
-            """
-            # Batch chain over documents to generate hypothetical questions
-            hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
+"""
+# Batch chain over documents to generate hypothetical questions
+hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
 
 
-            # The vectorstore to use to index the child chunks
-            vectorstore = Chroma(
-                collection_name="hypo-questions", embedding_function=OpenAIEmbeddings()
-            )
-            # The storage layer for the parent documents
-            store = InMemoryByteStore()
-            id_key = "doc_id"
-            # The retriever (empty to start)
-            retriever = MultiVectorRetriever(
-                vectorstore=vectorstore,
-                byte_store=store,
-                id_key=id_key,
-            )
-            doc_ids = [str(uuid.uuid4()) for _ in docs]
+# The vectorstore to use to index the child chunks
+vectorstore = Chroma(
+    collection_name="hypo-questions", embedding_function=OpenAIEmbeddings()
+)
+# The storage layer for the parent documents
+store = InMemoryByteStore()
+id_key = "doc_id"
+# The retriever (empty to start)
+retriever = MultiVectorRetriever(
+    vectorstore=vectorstore,
+    byte_store=store,
+    id_key=id_key,
+)
+doc_ids = [str(uuid.uuid4()) for _ in docs]
 
 
-            # Generate Document objects from hypothetical questions
-            question_docs = []
-            for i, question_list in enumerate(hypothetical_questions):
-                question_docs.extend(
-                    [Document(page_content=s, metadata={id_key: doc_ids[i]}) for s in question_list]
-                )
+# Generate Document objects from hypothetical questions
+question_docs = []
+for i, question_list in enumerate(hypothetical_questions):
+    question_docs.extend(
+        [Document(page_content=s, metadata={id_key: doc_ids[i]}) for s in question_list]
+    )
 
 
-            retriever.vectorstore.add_documents(question_docs)
-            retriever.docstore.mset(list(zip(doc_ids, docs)))
-            sub_docs = retriever.vectorstore.similarity_search("justice breyer")
-            retrieved_docs = retriever.invoke("justice breyer")
-            len(retrieved_docs[0].page_content)
-            """
+retriever.vectorstore.add_documents(question_docs)
+retriever.docstore.mset(list(zip(doc_ids, docs)))
+sub_docs = retriever.vectorstore.similarity_search("justice breyer")
+retrieved_docs = retriever.invoke("justice breyer")
+len(retrieved_docs[0].page_content)
+"""
 
 class HypotheticalQuestions(BaseModel):
     """Schema for hypothetical questions generation."""
@@ -365,3 +365,130 @@ retriever.add_to_vectorstore(documents)
 # Retrieve documents
 results = retriever.invoke("your query here")
 """
+
+    def add_to_vectorstore(
+        self,
+        parent_retrieval: bool = False,
+        abstract_retrieval: bool = False,
+        hypothetical_question_retrieval: bool = False,
+        use_semantic_splitting: bool = False,
+        search_type: str = "mmr",   
+    ) -> Any: # Returns List[Retrievers] to see how it's done on langchain (datatype)
+        
+        retrievers = []
+        self.store = InMemoryByteStore()
+        splitter = self.__get_splitter(use_semantic_splitting)
+        
+        if parent_retrieval:
+            parent_splitter = RecursiveCharacterTextSplitter(
+                chunk_size=2250, chunk_overlap=150
+            )
+            self.parent_retriever = ParentDocumentRetriever(
+                                    vectorstore=self.vectorstore,
+                                    docstore=self.store,
+                                    child_splitter=spliter,
+                                    parent_splitter=parent_splitter,
+                                    #search_type=SearchType.mmr  # to see 
+                                )
+            retrievers.append(('parent', self.parent_retriever))
+            #self.parent_retriever.add_documents(self.paper) # To change 
+        if abstract_retrieval:
+            self.abstract_retriever = MultiVectorRetriever(
+                vectorstore=self.vectorstore,
+                byte_store=self.store,
+                #id_key="id",
+                #search_type=SearchType.mmr if search_type == "mmr" else SearchType.hnsw
+            )
+            abstract = self.paper.abstract # To update
+            # TODO: work on adding the original doc too
+            retrievers.append(('abstract', self.abstract_retriever))
+            
+        if hypothetical_question_retrieval:
+            
+            # Pass in the abstract
+            chain = (
+                {"doc": lambda x: x.page_content} 
+                # Only asking for 3 hypothetical questions, but this could be adjusted
+                | PromptTemplate.from_template(
+                    "Generate a list of exactly 3 hypothetical questions that the below document could be used to answer:\n\n{doc}"
+                )
+                | self.llm.with_structured_output(
+                    HypotheticalQuestions
+                )
+                | (lambda x: x.questions)
+            )
+            retrievers.append(('hypothetical_questions', chain))
+            
+        self.available_retrievers = dict(retrievers)
+        return retrievers
+
+            
+    def __get_available_retrievers(self, weights:Optional[Dict[str, float]]) -> Dict[str, Any]:
+        """
+        Get the available retrievers based on the current configuration.
+        """
+        retrievers = {}
+        
+        # To fix weights        
+        if hasattr(self, 'parent_retriever') and self.parent_retriever:
+            retrievers['parent'] = {
+                'retriever': self.parent_retriever,
+                'description': 'Parent-child document retrieval',
+                'weight': weights.get('parent', 0.3)
+            }
+        
+        if hasattr(self, 'abstract_retriever') and self.abstract_retriever:
+            retrievers['abstract'] = {
+                'retriever': self.abstract_retriever,
+                'description': 'Abstract-based retrieval',
+                'weight': weights.get('abstract', 0.2)
+            }
+        
+        if hasattr(self, 'hypo_retriever') and self.hypo_retriever:
+            retrievers['hypothetical'] = {
+                'retriever': self.hypo_retriever,
+                'description': 'Hypothetical question retrieval',
+                'weight': weights.get('hypothetical', 0.2)
+            }
+        
+        # Base retriever 
+        retrievers['chunk'] = {
+            'retriever': self.chunk_retriever,
+            'description': 'Standard chunk retrieval',
+            'weight': weights.get('chunk', 0.3)
+        }
+        
+        return retrievers
+
+    async def aadd_to_vectorstore(
+        self,
+        settings: dict,
+        documents: List[Document]):
+        pass 
+    
+    # To see later on how good it is
+    def __create_ensemble_retriever(self, custom_weights: Optional[Dict[str, float]] = None):
+        """Create ensemble retriever with available retrievers"""
+        available = self.__get_available_retrievers()
+        
+        if len(available) < 2:
+            print("Warning: Only one retriever available, ensemble not beneficial")
+            return list(available.values())[0]['retriever']
+        
+        retrievers = []
+        weights = []
+        
+        for name, config in available.items():
+            retrievers.append(config['retriever'])
+            weight = custom_weights.get(name, config['weight']) if custom_weights else config['weight']
+            weights.append(weight)
+        
+        # Normalize weights
+        total_weight = sum(weights)
+        weights = [w/total_weight for w in weights]
+        
+        print(f"Creating ensemble with {len(retrievers)} retrievers:")
+        for i, (name, _) in enumerate(available.items()):
+            print(f"  - {name}: {weights[i]:.2f}")
+        
+        return EnsembleRetriever(retrievers=retrievers, weights=weights)
