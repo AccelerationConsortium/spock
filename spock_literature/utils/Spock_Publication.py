@@ -1,78 +1,92 @@
 
-from typing import Optional, Dict, Union, Any, List
-from pydantic import (
-    BaseModel,
-    Field,
-    HttpUrl,
-    PositiveInt,
-)
+from typing import Generator, Optional, Dict, Union, Any, List
+from pydantic import BaseModel, Field, HttpUrl, PositiveInt
+from pydantic.dataclasses import dataclass
 import json
-#import spacy
-#from scipy.spatial.distance import cosine
 import uuid
-import re
+import time
+import os
 import torch
-from langchain_core.documents import Document
 from pathlib import Path
+from scholarly import scholarly
+from langchain_core.documents import Document
+from langchain_community.document_loaders import BasePDFLoader
+from docling_core.types.doc import PictureItem, ImageRefMode
+from docling.datamodel.base_models import InputFormat
+from docling.datamodel.pipeline_options import (
+    PdfPipelineOptions,
+    smolvlm_picture_description,
+    AcceleratorDevice,
+    AcceleratorOptions,
+    EasyOcrOptions,
+    PictureDescriptionApiOptions,
+)
+from docling.document_converter import DocumentConverter, PdfFormatOption
+from docling.utils.model_downloader import download_models
 
+# Download necessary models
+download_models(
+    output_dir=Path("/home/m/mehrad/brikiyou/scratch/docling_artifacts"),
+    with_easyocr=True,
+    with_smolvlm=True,
+)
 
+os.environ["EASYOCR_MODULE_PATH"] = "/home/m/mehrad/brikiyou/scratch/EasyOCR"
 
-
-class ScholarlyObject(BaseModel):
-    title: str = Field(..., description="Title of the publication")
-    abstract: str = Field(..., description="Abstract of the publication")
-    author: str = Field(..., description="Author(s) of the publication")
-    year: PositiveInt = Field(..., description="Publication year (positive integer)")
-    url: Optional[HttpUrl] = Field(None, description="URL of the publication")
-    citation: str = Field(..., description="Formatted citation of the publication")
-    topic: Optional[str] = Field(None, description="Topic of the publication, if available")
-
-
-    @root_validator(pre=True)
-    def check_publication_filled(cls, values: Dict[str, Any]) -> Dict[str, Any]:
-        # If user passed a raw dict under 'publication_filled', extract fields automatically
-        raw = values.get("publication_filled")
-        if raw and isinstance(raw, dict):
-            bib = raw.get("bib", {})
-            values.setdefault("title", bib.get("title", ""))
-            values.setdefault("abstract", bib.get("abstract", ""))
-            values.setdefault("author", bib.get("author", ""))
-            year = bib.get("pub_year")
-            if year is not None:
-                values.setdefault("year", int(year))
-            values.setdefault("citation", bib.get("citation", ""))
-            values.setdefault("url", raw.get("pub_url", ""))
-        return values
-    
-    def get_topic(self) -> str:
-        """
-        Uses an LLM to retrieve the topic of the publication 
-        """
-
-    @property
-    def summary(self) -> str:
-        """A one line summary combining title and year."""
-        return f"{self.title} ({self.year})"
-
-    def to_json(self, *, indent: int = 2) -> str:
-        """Serialize this object to a JSON string."""
-        return self.model_dump_json(indent=indent)
+@dataclass(frozen=True, eq=False)
+class GScholarPublicationObject:
+    title: str
+    abstract: str
+    author: str
+    year: PositiveInt
+    url: Optional[HttpUrl] = None
+    citation: str
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], *, get_topic: bool = False) -> "ScholarlyObject":
+    def from_dict(cls, data: Dict[str, Any], *, get_topic: bool = False) -> "GScholarPublicationObject":
         """
         Construct from a raw dict that may contain 'publication_filled'.
         If get_topic=True, you could extend this to call an LLM to assign 'topic'.
         """
-        init_kwargs = {"publication_filled": data}
-        obj = cls(**init_kwargs)
-        if get_topic and obj.topic is None:
-            
-            pass
+        raw = data.get("publication_filled", {})
+        bib = raw.get("bib", {})
+        year = bib.get("pub_year")
+        obj = cls(
+            title=bib.get("title", ""),
+            abstract=bib.get("abstract", ""),
+            author=bib.get("author", ""),
+            year=int(year) if year is not None else 0,
+            url=raw.get("pub_url"),
+            citation=bib.get("citation", ""),
+        )
         return obj
 
-@dataclass
-class Author:
+    @property
+    def summary(self) -> str:
+        """A one-line summary combining title and year."""
+        return f"{self.title} ({self.year})"
+
+    def to_json(self) -> str:
+        """Serialize this object to a JSON string."""
+        return json.dumps(self.__dict__)
+
+    @staticmethod
+    def from_json(json_str: str) -> "GScholarPublicationObject":
+        """
+        Deserialize a JSON string to a GScholarPublication object.
+        """
+        data = json.loads(json_str)
+        return GScholarPublicationObject(
+            title=data.get("title", ""),
+            abstract=data.get("abstract", ""),
+            author=data.get("author", ""),
+            year=data.get("year", 0),
+            url=data.get("url"),
+            citation=data.get("citation", ""),
+        )
+
+@dataclass(frozen=True, eq=False)
+class GScholar_Author(BaseModel):
     def __init__(self, author):
         """
         Initialize an Author object.
@@ -82,16 +96,10 @@ class Author:
         """
         self.author_name = author
         
-    def __repr__(self):
-        """
-        Return a string representation of the Author object.
-
-        Returns:
-            str: The name of the author.
-        """
+    def __str__(self):
         return self.author_name
-
-    def get_last_publication(self, count) -> dict:
+    
+    def get_last_publications(self, count) -> dict:
         """
         Get the last publication of the author.
 
@@ -113,114 +121,15 @@ class Author:
         except Exception as e:
             print(f"An error occurred, couldnt get the latest publications: {e}")
 
-    def __call__(self,count:int=1):
+    def __call__(self, count: int = 1) -> Generator["Publication", None, None]:  
         """
-        Setup the author by adding their last publication to a JSON file.
-
-        Args:
-            output_file (str): The path to the JSON file.
-
-        Returns:
-            data (dict): A dict containing the author's last publication.
-        """
-        
-        data = {}
-        author_publications = self.get_last_publication(count)
+        Get the n last publications of the author.
+        """       
+        author_publications = self.get_last_publications(count)
         for publication in author_publications:
-            publication = Publication(publication)
-            publication_data = {
-                "title": publication.title,
-                "abstract": publication.abstract,
-                "author": publication.author, 
-                "year": publication.year,
-                "url": publication.url,
-            }
-            if self.author_name in data:
-                data[self.author_name].append(publication_data)
-            else:
-                data[self.author_name] = [publication_data]
-        return data
-    
+            yield Publication(publication)
+        
 
-# TODO: - clean the package
-# - 
-class Scholarly_Object(BaseModel): # Use pydantic for it   
-    publication_filled: Dict[str, Any] = Field(..., description="Filled publication data from the scholarly object")
-    title: str = Field(..., description="Title of the publication")
-    abstract: str = Field(..., description="Abstract of the publication")
-    author : str = Field(..., description="Author of the publication")
-    year: str = Field(..., description="Publication year")
-    url: str = Field(..., description="URL of the publication")
-    citation: str = Field(..., description="Citation of the publication")
-    topic: Optional[str] = Field(default=None, description="Topic of the publication, if available")
-    
-    def __init__(self,publication_filled, get_topic:bool=False) -> None:
-        """Initialize a Publication object."""
-        self.publication_filled = publication_filled
-        self.title = self.get_publication_title()
-        self.abstract = self.get_publication_abstract().lower()
-        self.author = self.get_author_name()
-        self.year = self.get_year()
-        self.url = self.get_publication_url()
-        self.citation = self.get_citation()
-        self.topic = self.get_topic() if get_topic else None
-    
-      
-    def get_publication_url(self) -> str:
-        return self.publication_filled['pub_url']
-    
-    def get_publication_title(self) -> str:
-        return self.publication_filled['bib']['title'] 
-
-    def get_publication_abstract(self) -> str:
-        return self.publication_filled['bib']['abstract']
-
-    def get_author_name(self) -> str:
-        return self.publication_filled['bib']['author']
-
-    def get_year(self) -> str:
-        return self.publication_filled['bib']['pub_year']
-    
-    def get_citation(self) -> str:
-        return self.publication_filled['bib']['citation']
-    
-    
-    
-from typing import Optional, Union, List
-import json
-import time
-from pathlib import Path
-from docling_core.types.doc import DocItemLabel, ImageRefMode
-from docling_core.types.doc.document import DEFAULT_EXPORT_LABELS
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-    smolvlm_picture_description,
-    AcceleratorDevice,
-    AcceleratorOptions,
-    EasyOcrOptions,
-    PictureDescriptionApiOptions
-)
-from docling.document_converter import DocumentConverter, PdfFormatOption
-import os
-import torch
-from docling_core.types.doc import PictureItem, ImageRefMode
-from langchain_community.document_loaders import BasePDFLoader
-
-os.environ["EASYOCR_MODULE_PATH"] = "/home/m/mehrad/brikiyou/scratch/EasyOCR"
-
-
-
-from docling.utils.model_downloader import download_models
-download_models(output_dir=Path("/home/m/mehrad/brikiyou/scratch/docling_artifacts"), with_easyocr=True, with_smolvlm=True)
-
-# Plan:
-# 1. Use docling for this 
-# 2. Use VLM/OCR for parsing
-# 3. Output -> Md or else
-# 4. Metadata extraction 
-# 5. Langchain integration - Document loaders
-# 6. Use GPU + parallel processing of everything / Maybe run OCR on CPU 
 
 def configure_vlm_server(use_gpt:bool, vlm_model: str, prompt: str, url: str): 
     """
@@ -243,7 +152,7 @@ def configure_vlm_server(use_gpt:bool, vlm_model: str, prompt: str, url: str):
             prompt=prompt,
             timeout=10,
         )
-class PDF_document_loader(BasePDFLoader):
+class SpockPDFLoader(BasePDFLoader):
     def __init__(self, sources:Union[List[str], List[Path], List[Union[str, Path]]], **kwargs):
         self.sources = sources
         self.num_gpus = torch.cuda.device_count()
@@ -368,68 +277,12 @@ class Publication(Document):
     """
     Represents a scientific document with its metadata and content. 
     """
-    key:str = Field(..., description="Unique identifier for the document")
-    introduction:Optional[str] = Field(default=None, description="Introduction section of the document, introduces the purpose and scope of the research")
-    methods:Optional[str] = Field(default=None, description="Methods section of the document")
-    results:Optional[str] = Field(default=None, description="Results section of the document")
-    discussion:Optional[str] = Field(default=None, description="Discussion section of the document, interprets the results and their implications")
-    conclusion:Optional[str] = Field(default=None, description="Conclusion and conclusion section of the document")
+    key:str = Field(..., description="Unique identifier for the document") 
     # TODO: Add support for structured data
-    # images: Optional[List[Image]] = Field(default_factory=list)
-    # tables: Optional[List[Table]] = Field(default_factory=list)
+    #images: Optional[List[Image]] = Field(default_factory=list)
+    #tables: Optional[List[Table]] = Field(default_factory=list)
     
     
-    
-    def extract_sections(self, text:Optional[str]) -> Dict[str, str]:
-        """
-        Extract sections from the publication content based on markdown-style headings.
-
-        Args:
-            text (Optional[str]): The text to extract sections from. If None, uses the page_content of the publication.
-
-        Returns:
-            Dict[str, str]: A dictionary where keys are section titles and values are the corresponding section content.
-        """
-        if not text:
-            text = self.page_content
-        pattern = re.compile(
-            r'(?m)^(##\s*(?:\d+\.\s*)?[^\n]+)\n'    
-            r'([\s\S]*?)'                      
-            r'(?=^##\s*(?:\d+\.\s*)?[^\n]+|\Z)'
-        )
-
-        sections = {}
-        for match in pattern.finditer(self.page_content):
-            title_line = match.group(1).strip()     
-            content    = match.group(2).rstrip()     
-            sections[title_line] = content
-
-        return sections
-
-        
-
-        
-    def fill_sections(self, text: Union[str, "Publication"]) -> "Publication":
-        """
-        Fill the sections of the publication with the provided content.
-        Uses text clustering to identify and extract sections.
-        
-        """
-        if isinstance(text, Publication):
-            source_text = text.page_content
-        else:
-            source_text = text
-            
-        if not source_text:
-            raise ValueError("Cannot fill sections from empty text")
-        
-        sections = self.extract_sections(source_text)
-        
-        # TODO: Implement text clustering logic
-        # This would contain your clustering/section identification logic
-        
-        # For now, return a copy with the source text
-        return self.model_copy(update={"page_content": source_text})
     
     @classmethod
     def from_document(cls, doc: Document, **kwargs) -> "Publication":
