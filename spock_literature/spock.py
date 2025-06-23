@@ -16,7 +16,7 @@ from beartype import beartype
 
 from langchain.docstore.document import Document
 from langchain_experimental.text_splitter import SemanticChunker
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter, TextSplitter
 from langchain_core.prompts import PromptTemplate
 from langchain_core.runnables import ConfigurableField
 from langchain.storage import InMemoryByteStore
@@ -30,7 +30,6 @@ from langchain_core.language_models.llms import BaseLLM
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_community.vectorstores.faiss import DistanceStrategy
 from langchain_community.docstore.in_memory import InMemoryDocstore
-
 
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from spock_literature.utils.Generate_podcast import generate_audio
@@ -66,7 +65,7 @@ class Spock:
         embed_model: OpenAIEmbeddings = OpenAIEmbeddings(model="text-embedding-3-large"),
         vectorstore: Optional[FAISS] = None,
         retrievers: Optional[List[BaseRetriever]] = None,
-        splitter: Optional[Union[RecursiveCharacterTextSplitter, SemanticChunker]] = RecursiveCharacterTextSplitter(
+        splitter: Optional[Union[TextSplitter, SemanticChunker]] = RecursiveCharacterTextSplitter(
             chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP),
         #papers_download_path: Optional[Union[Path, str]] = os.getcwd() + '/papers/',
         vectorstore_path: Optional[Union[Path, str]] = os.getcwd() + '/vectorstore/',
@@ -160,7 +159,6 @@ class Spock:
                 index=faiss.IndexFlatIP(dim), 
                 docstore=InMemoryDocstore(),
                 index_to_docstore_id={},
-                normalize_L2=True,
                 distance_strategy=DistanceStrategy.COSINE,
             ) 
         elif use_hnsw:
