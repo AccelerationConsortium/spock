@@ -35,60 +35,57 @@ import getpass
 from langchain_core.prompts import PromptTemplate
 from langchain.schema import Document
 from langchain_openai import ChatOpenAI
+import tempfile
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+load_dotenv()
 
+
+# TODOs:
+# - Add support for OCR and VLM servers
+# If OCR not supported, use VLM for both
+# If vlm not in it, use ocr 
+# - Add support for json with different stuff (check the blog for more references)
+# From pdf -> Md -> Json 
 
 # Download necessary models
-download_models(
-    output_dir=Path("/home/m/mehrad/brikiyou/scratch/docling_artifacts"),
-    with_easyocr=True,
-    with_smolvlm=True,
-)
-
-os.environ["EASYOCR_MODULE_PATH"] = "/home/m/mehrad/brikiyou/scratch/EasyOCR"
 
 
-def configure_vlm_server(use_gpt:bool, vlm_model: str, prompt: str, url: str): 
-    """
-    Configure options for the OpenAI or Tensort vision-language model API.
+def get_api_key(env_var, prompt):
+    
+    if not os.getenv(env_var):
+        os.environ[env_var] = getpass.getpass(prompt)
 
-    Args:
-        model (str): The model name to use for image description generation.
-        prompt (str): The prompt to use for image description generation.
+def configure_vlm_server(url: str, model: str,
+                         prompt: Optional[str] = "Describe the image in detail and accurately", 
+                         max_completion_tokens=200, 
+                         timeout=10) -> PictureDescriptionApiOptions: 
+    return PictureDescriptionApiOptions(
+        url=url,
+        params={
+            "model": model,      
+            "max_completion_tokens": max_completion_tokens
+        },
+        prompt=prompt,
+        timeout=timeout,
+    )
         
-    Returns:
-        PictureDescriptionApiOptions: A configuration object for the VLM API.
-    """
-    if not use_gpt:
-        return PictureDescriptionApiOptions(
-            url="http://localhost:11434/v1/chat/completions",  # To change to match Tensorrt server or chatgpt
-            params={
-                "model": vlm_model,      
-                "max_completion_tokens": 512
-            },
-            prompt=prompt,
-            timeout=10,
-        )
-        
-        
-def configure_ocr_server(use_easyocr: bool, use_gpu: bool, model_storage_directory: str):
-    pass
-
+    
 
 class SpockPDFLoader(BasePDFLoader):
     def __init__(
         self,
         file_path: Union[str, Path],
-        vlm: bool = None,
-        ocr: bool = None,
+        with_easyocr: bool = True,
+        with_smolvlm: bool = False,
+        with_remote_vlm: bool = True,
         vlm_prompt: str = "Describe the image in detail and accurately",
         **kwargs
     ):
         """
         
-
         Args:
             file_path (Union[str, Path]): _description_
             vlm (bool, optional): _description_. Defaults to None.
@@ -99,18 +96,30 @@ class SpockPDFLoader(BasePDFLoader):
             ValueError: _description_
         """
         super().__init__(file_path=file_path, **kwargs)
-        self.vlm = vlm
-        self.ocr = ocr
+        self.file_path = Path(file_path)
+        
+        if with_remote_vlm and with_smolvlm:
+            raise ValueError("Cannot use both remote VLM and smolvlm at the same time. Choose one.")
+        if with_easyocr or with_smolvlm:
+            download_models(
+                output_dir=Path(os.getcwd()+"/docling_artifacts"),
+                with_easyocr=with_easyocr,
+                with_smolvlm=with_smolvlm,
+                progress=True
+            )
+            if with_easyocr:
+                os.environ["EASYOCR_MODULE_PATH"] = str(Path(os.getcwd()) / "EasyOCR")
+                scratch = Path(os.getcwd())
+                (scratch / "EasyOCR" / "model").mkdir(parents=True, exist_ok=True)
+                (scratch / "EasyOCR" / "user_network").mkdir(parents=True, exist_ok=True)
+
         self.num_gpus = torch.cuda.device_count()
 
-        scratch = Path(os.getcwd())
-        (scratch / "EasyOCR" / "model").mkdir(parents=True, exist_ok=True)
-        (scratch / "EasyOCR" / "user_network").mkdir(parents=True, exist_ok=True)
 
         if self.num_gpus > 0:
             accelerator_options = AcceleratorOptions(
                 device=AcceleratorDevice.CUDA,
-                #num_threads=64,
+                num_threads=64,
             )
         else:
             accelerator_options = AcceleratorOptions(
@@ -121,58 +130,52 @@ class SpockPDFLoader(BasePDFLoader):
         self.pipeline_options = PdfPipelineOptions()
         self.pipeline_options.accelerator_options = accelerator_options
 
-        self.pipeline_options.do_ocr = self.ocr
-        if self.ocr is not None:
-            
-            if isinstance(self.ocr, EasyOcrOptions):
-                self.pipeline_options.ocr_options = self.ocr
-            elif isinstance(self.ocr, str) and self.ocr.lower() == "easyocr":
-                self.pipeline_options.ocr_options = EasyOcrOptions(
-                    use_gpu=(self.num_gpus > 0),
-                    model_storage_directory=str(scratch / "EasyOCR" / "model"),
-                    download_enabled=True,
-                )
-            else:
-                raise ValueError(
-                    "Invalid OCR option. Use 'easyocr' or provide an EasyOcrOptions instance."
-                )
-                
+        self.pipeline_options.do_ocr = with_easyocr
+        if with_easyocr:
+            self.pipeline_options.ocr_options = EasyOcrOptions(
+                use_gpu=(self.num_gpus > 0),
+                model_storage_directory=str(scratch / "EasyOCR" / "model"),
+                download_enabled=True,
+            )
 
         self.pipeline_options.do_formula_enrichment = True
         self.pipeline_options.do_table_structure = True
         self.pipeline_options.table_structure_options.do_cell_matching = True
         self.pipeline_options.do_code_enrichment = True
+        self.pipeline_options.enable_remote_services = True
+        
+        use_vlm = with_smolvlm or with_remote_vlm
 
-        self.pipeline_options.do_picture_description = self.vlm
-        if self.vlm:
+        self.pipeline_options.do_picture_description = with_smolvlm or with_remote_vlm
+        if use_vlm:
             pd_opts = smolvlm_picture_description
             pd_opts.prompt = vlm_prompt 
-            self.pipeline_options.picture_description_options = pd_opts
+            self.pipeline_options.picture_description_options = configure_vlm_server() if not with_smolvlm else pd_opts
             self.pipeline_options.images_scale = 2.0
-            self.pipeline_options.generate_picture_images = False
 
         self.converter = DocumentConverter(
             format_options={
                 InputFormat.PDF: PdfFormatOption(pipeline_options=self.pipeline_options)
             }
         )
-        print(f"Parsing {self.sources[0]}...")
+        
 
-    # To check this later
     def lazy_load(self) -> Iterator[Document]:
         """
         Parses Document to markdown or other formats.
         """
-        doc = self.converter.convert(self.file_path).document
+        self.doc = self.converter.convert(self.file_path).document
 
         annotations_list = []
-        for element, *_ in doc.iterate_items():
+        for element, *_ in self.doc.iterate_items():
             if isinstance(element, PictureItem):
                 annotation = "\n".join([ann.text for ann in element.annotations]) or "No annotations"
                 annotations_list.append(annotation)
 
-        output_md_path = Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/doc-with-images1.md")
-        doc.save_as_markdown(
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".md")
+        output_md_path = Path(tmp.name)
+        tmp.close()
+        self.doc.save_as_markdown(
             output_md_path,
             image_mode=ImageRefMode.PLACEHOLDER,
             image_placeholder="%%ANNOTATION%%"
@@ -181,38 +184,50 @@ class SpockPDFLoader(BasePDFLoader):
         md_content = output_md_path.read_text()
         for ann in annotations_list:
             md_content = md_content.replace("%%ANNOTATION%%", ann, 1)
+        yield Document(
+            page_content=md_content,
+            metadata={
+                "source": str(self.file_path),
+                "file_name": self.file_path.name,
+            }
+        )
+        
         output_md_path.write_text(md_content)
         
-    async def alazy_load(self) -> AsyncIterator[Document]:
-        pass
-
-    @staticmethod
-    def to_json():
+        
+    def to_markdown(self, output_dir: Union[str, Path]=Path(os.getcwd()) / "md_folders") -> str:
         """
-        Gets a md file -> to json + images and stuff (check Ilya Rice's wokr)
+        Export a Document to markdown.  
+        Returns the path to the written .md file.
         """
-        pass
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-    def create_ocr(self):
+        md_path = Path(os.getcwd) / f"{self.file_path.name}.md"
+
+        with md_path.open("w", encoding="utf-8") as fp:
+            fp.write(self.doc.export_to_markdown())
+
+        return str(md_path)
+
+    def to_json(self, output_dir: Union[str, Path]=Path(os.getcwd()) / "json_folders") -> Dict[str, Any]:
         """
-        Use EasyOCR to parse the document.
+        Export a Document to JSON.  
+        Returns the dict that was written.
         """
-        pass
+        output_dir = Path(output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
 
-    def create_vlm(self):
-        """
-        Use VLM to parse the document.
-        """
-        pass
+        md_path = Path(os.getcwd) / f"{self.file_path.name}.json"
 
-       
+        data = self.doc.export_to_dict()
+        with md_path.open("w", encoding="utf-8") as fp:
+            json.dump(data, fp)
+
+        return data
 
 
-load_dotenv()
-def get_api_key(env_var, prompt):
-    
-    if not os.getenv(env_var):
-        os.environ[env_var] = getpass.getpass(prompt)
+
 
 class URLDownloader:
     def __init__(self, url: str, download_path: Path):
@@ -393,6 +408,6 @@ Your output should contain only one number, no text or additional information.
 
 if __name__ == "__main__":
     test_file = [Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/cell_penetration_of_oxadiazole_containing_macrocycles.pdf")]
-    pdf_loader = PDF_document_loader(test_file)
-    pdf_loader.parse_document(use_vlm=True)
+    pdf_loader = SpockPDFLoader(test_file)
+    pdf_loader.lazy_load()
     

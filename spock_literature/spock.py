@@ -653,15 +653,3 @@ if __name__ == "__main__":
     spock()
     print(spock.format_output())
     print("Time taken to run Spock: ", time() - start)
-
-
-
-        """
-        
-        
-        
-        
-        class Spock:
-            def init(retrievers, embedding_model, llm, paper=None)
-        
-        """
