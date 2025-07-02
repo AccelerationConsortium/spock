@@ -33,11 +33,9 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from spock_literature.utils.Generate_podcast import generate_audio
-from spock_literature.utils.Spock_Downloader import URLDownloader
-from spock_literature.utils.pdf_parsing import PDF_document_loader
+from spock_literature.utils.Spock_Loaders import SpockPDFLoader, URLDownloader
 from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestions
 from spock_literature.utils.Spock_Retriever import Spock_Retriever
-from spock_literature.utils.Spock_Publication import Publication
 
 
 # Data has to be in md format which is not so great
@@ -59,10 +57,12 @@ class Spock:
     @beartype
     def __init__(
         self,
-        publication: Publication,
+        publication: Document,
         llm: Union[BaseLLM, BaseChatModel] = ChatOpenAI(model="gpt-4o", temperature=0.2),
         smaller_model: Optional[Union[BaseLLM, BaseChatModel]] = None,
         embed_model: OpenAIEmbeddings = OpenAIEmbeddings(model="text-embedding-3-large"),
+        summaries_vectorstore: Optional[Union[FAISS, Path ]] = None,
+        hypothetical_questions_vectorstore: Optional[Union[FAISS, Path ]]= None,
         vectorstore: Optional[FAISS] = None,
         retrievers: Optional[List[BaseRetriever]] = None,
         splitter: Optional[Union[TextSplitter, SemanticChunker]] = RecursiveCharacterTextSplitter(
@@ -127,23 +127,23 @@ class Spock:
                                                     parent_splitter=RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=150),
                                                 )
 
-        )        
+        ) 
         
-        # Using TensorRT or any local llm with a compatible Open AI server 
+        # To check:
+               
+        self.summaries_vectorstore = summaries_vectorstore if summaries_vectorstore else self.create_vectorstore(embed_model=self.embed_model, use_flatip=True, use_hnsw=False)
+        self.hypothetical_questions_vectorstore = hypothetical_questions_vectorstore if hypothetical_questions_vectorstore else self.create_vectorstore(embed_model=self.embed_model, use_flatip=True, use_hnsw=False)
+        # Using TensorRT or any local llm with a compatible Open AI server + see if trt server is running
         if "localhost" in self.llm.base_url:
             self.start_tensorrt_server() 
 
-
-    def start_tensorrt_server(self, port: int = 8000):
-        """Start TensorRT server for optimized inference."""
-        pass
     
     @staticmethod
-    def create_tensort_rt_llm(link_to_trt_server, **kwargs) -> "ChatOpenAI":
+    def create_tensort_rt_llm(model, url, **kwargs) -> "ChatOpenAI":
         """Create a TensorRT LLM instance."""
         return ChatOpenAI(
-            model="llama3.3_70b_trt_engine",
-            base_url=link_to_trt_server,
+            model=model,
+            base_url=url,
             **kwargs
         )
         
@@ -151,7 +151,7 @@ class Spock:
 
     
     @staticmethod
-    def create_vectorstore(embed_model, use_flatip:bool=True, use_hnsw:bool=False, use_ivfflat:bool=False) -> FAISS:
+    def create_vectorstore(embed_model, use_flatip:bool=True, use_hnsw:bool=False) -> FAISS:
         dim = len(embed_model.embed_query("hello world"))  
         if use_flatip:
             return FAISS(
@@ -162,21 +162,14 @@ class Spock:
                 distance_strategy=DistanceStrategy.COSINE,
             ) 
         elif use_hnsw:
-            raise NotImplementedError("Not implemented yet")
             return FAISS(
                 embedding_function=embed_model,
-                index=faiss.IndexHNSWFlat(1536, 32),  # Example parameters, adjust as needed
+                index=faiss.IndexHNSWFlat(dim),
                 docstore=InMemoryDocstore(),
                 index_to_docstore_id={},
-                normalize_L2=True,
                 distance_strategy=DistanceStrategy.COSINE,
-            )
-        elif use_ivfflat:
-            raise NotImplementedError("Not implemented yet")
-            quantizer = faiss.IndexFlatL2(1536)
-            index = faiss.IndexIVFFlat(quantizer, 1536, 100)  # Example parameters, adjust as needed
-            index.train(np.random.rand(1000, 1536).astype(np.float32))
-            return FAISS()               
+            )     
+        
             
             
             
@@ -206,6 +199,8 @@ class Spock:
             **{k: v for k, v in kwargs.items() if k not in {"llm", "smaller_model", "embed_model"}}
         )
 
+
+    # TODO: implement logic here
     @classmethod
     def from_url(cls, url: str, **kwargs) -> "Spock":
         """Load a Publication from its URL, then initialize."""
@@ -231,55 +226,54 @@ class Spock:
         Load a PDF file (or list of Document objects) via your PDF loader,
         pick the first Document if it returns a list, then initialize.
         """
-        documents = PDF_document_loader(pdf_path, **kwargs)
+        documents = SpockPDFLoader(pdf_path, **kwargs)
         paper = documents[0] if isinstance(documents, list) else documents
         return cls(paper=paper, **kwargs)
     
     
+    def embed_document(self):
+        self.vectorstore.add_documents(
+            documents=[self.publication],
+        )
+        
+        
+    async def aembed_document(self):
+        """Asynchronously embed the document."""
+        raise NotImplementedError("Asynchronous embedding is not implemented yet.")
     
-    def start_tensort_rt_server(self, path_to_model:Union[str, Path], port: int = 8000):
-        """Start the TensorRT server for the LLM."""
-        raise NotImplementedError("TensorRT server start is not implemented yet.")
-        import subprocess
-        try:
-            subprocess.run(
-                ["trtserver", "--model-repository=/path/to/model/repo", "--port", str(port)],
-                check=True
-            )
-            print(f"TensorRT server started on port {port}")
-        except subprocess.CalledProcessError as e:
-            print(f"Failed to start TensorRT server: {e}")
-            
-    def answer_question(
+    def answer_question_single_publication(
+        self,
+        question: str, ):
+        pass
+    
+    async def aanswer_question_single_publication(
+        self,
+    ):
+        """Asynchronously answer a question for a single publication."""
+        raise NotImplementedError("Asynchronous answering for a single publication is not implemented yet.")
+
+
+    def answer_question_multi_publication(
         self,
         question: str,
-        reranking: bool = False,
-        hybrid_search: bool = False,
-        search_algorithm: str = "mmr",
-        search_algorithm_kwargs: Optional[dict] = None,
-        custom_weights: Optional[Dict[str, float]] = None,
-        query_transformation: Optional[bool] = False,
-        run_manager=None
-    ):
-        # Default search kwargs - to change
-        default_kwargs = {"k": 10, "fetch_k": 50} if search_algorithm == "mmr" else {"k": 10}
-        search_kwargs = search_algorithm_kwargs or default_kwargs
-        
-        if hybrid_search:
-            retriever = self.__create_ensemble_retriever(custom_weights)
-            config = {"configurable": {"search_kwargs_faiss": search_kwargs}}
-            results = retriever.invoke(question, config=config)
-        else:
-            # Use the best single retriever or default chunk retriever
-            retriever = self.__select_best_retriever(question)
-            results = retriever.invoke(question)
-        
-        if reranking:
-            results = self._rerank_results(results, question)
-        
-        return results
+        use_summaries: bool = True,
+        use_hypothetical_questions: bool = True,
+        run_manager=None,
+        weight: Optional[Dict[str, float]] = {"summaries": 0.5, "hypothetical_questions": 0.5},
+        **kwargs):
+        """
 
-    async def aanswer_question(
+        Args:
+            question (str): _description_
+            use_summaries (bool, optional): _description_. Defaults to True.
+            use_hypothetical_questions (bool, optional): _description_. Defaults to True.
+            run_manager (_type_, optional): _description_. Defaults to None.
+            weight (_type_, optional): _description_. Defaults to {"summaries": 0.5, "hypothetical_questions": 0.5}.
+        """
+        pass
+    
+    
+    async def aanswer_question_multi_publication(
         self,
         question: str,
         run_manager=None
@@ -345,37 +339,6 @@ class Spock:
                 self.paper = temp_return
             else:
                 raise RuntimeError(f"Failed to download the PDF for the publication with URL: {self.publication_url}")
-        
-  
-        
-    def intro_section(self,) -> Dict[str, str]:
-        """
-        summary + topics and normal stuff +
-        """
-        summary = self.paper_summary if self.paper_summary else "No summary available."
-        topics = self.topics if self.topics else "No topics available."
-        hypothetical_questions = ""
-        return {"summary": summary,"topics": topics, "questions":hypothetical_questions}
-        
-    def get_methods_section(self,) -> Dict[str, str]:
-        """
-        Datasets, Methods, Models used, Screening algorithms, summary of the workflow
-        """
-        #methods_summary = summarize(self.paper.methods)
-        is_method_novel = ""
-        datasets = ""
-        methods = ""     
-        models = ""
-        screening_algorithms = ""
-        #graph = generate_graph   
-        
-    def get_conclusion_section(self):
-        """
-        Matter discovered, discussion, next steps, future work, conclusion
-        """
-        conclusion_summary = ""
-        matter_discovered = ""
-        discussion = ""
         
     
     @nvtx.annotate("Question Answering - RAG retrieval + Generation")

@@ -36,7 +36,7 @@ class GScholarPublicationObject:
     citation: str
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any], *, get_topic: bool = False) -> "GScholarPublicationObject":
+    def from_dict(cls, data: Dict[str, Any]) -> "GScholarPublicationObject":
         """
         Construct from a raw dict that may contain 'publication_filled'.
         If get_topic=True, you could extend this to call an LLM to assign 'topic'.
@@ -114,64 +114,11 @@ class GScholar_Author(BaseModel):
         except Exception as e:
             print(f"An error occurred, couldnt get the latest publications: {e}")
 
-    def __call__(self, count: int = 1) -> Generator["Publication", None, None]:  # Iterator here ? 
+    def __call__(self, count: int = 1) -> Generator[GScholarPublicationObject, None, None]:
         """
         Get the n last publications of the author.
         """       
         author_publications = self.get_last_publications(count)
         for publication in author_publications:
-            yield Publication(publication)
+            yield GScholarPublicationObject(publication)
         
-
-        
-# Useless ??
-@dataclass(frozen=True, repr=False)
-class Publication(Document):
-    """
-    Represents a scientific document with its metadata and content. 
-    """
-    key:str = Field(..., description="Unique identifier for the document") 
-    # TODO: Add support for structured data
-    #images: Optional[List[Image]] = Field(default_factory=list)
-    #tables: Optional[List[Table]] = Field(default_factory=list)
-    
-    
-    
-    @classmethod
-    def from_document(cls, doc: Document, **kwargs) -> "Publication":
-        return cls(
-            key=kwargs.pop("key", getattr(doc, "key", str(uuid.uuid4()))),
-            page_content=doc.page_content,
-            metadata=doc.metadata,
-            **kwargs
-        ).fill_sections(doc.page_content)
-    
-    @classmethod
-    def from_pdf(cls, pdf_file:Union[str, Path]):
-        """
-        """
-        
-    def get_sections(self) -> Dict[str, Optional[str]]:
-        """
-        Get all document sections as a dictionary.
-        """
-        return {
-            "introduction": self.introduction,
-            "methods": self.methods,
-            "results": self.results,
-            "discussion": self.discussion,
-            "conclusion": self.conclusion,
-        }
-    
-    def has_complete_sections(self) -> bool:
-        """
-        Check if all major sections are present.
-        """
-        return all(content is not None and content.strip() for content in self.get_sections.values())
-    
-    def __repr__(self):
-        # To update: Use metadata for title if available
-        if self.has_complete_sections():
-            return f"Publication(key={self.key}, title={self.metadata.get('title', 'Untitled')})"
-
-
