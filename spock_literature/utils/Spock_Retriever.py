@@ -16,7 +16,7 @@ from langchain.docstore import InMemoryDocstore
 from langchain.storage import InMemoryByteStore
 from pydantic import BaseModel, Field
 
-
+# Hypothetical Questions Generation Example
 """
 # Batch chain over documents to generate hypothetical questions
 hypothetical_questions = chain.batch(docs, {"max_concurrency": 5})
@@ -76,6 +76,22 @@ class Spock_Retriever(BaseRetriever):
         super().__init__(**kwargs) 
         self.retrievers = retrievers
         
+        
+    def _get_relevant_documents(
+        self,
+        query: str, 
+        run_manager: CallbackManagerForRetrieverRun
+    ) -> list[Document]:
+        """Get documents relevant to a query.
+
+        Args:
+            query: String to find relevant documents for.
+            run_manager: The callback handler to use.
+        Returns:
+            List of relevant documents.
+        """
+        ensemble_retriever = EnsembleRetriever(retrivers=self.retrievers, weights=weights)
+
         
         
     @classmethod

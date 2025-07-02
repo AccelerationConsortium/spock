@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 import nvtx
 from spock_literature.utils.pdf_parsing import PDF_document_loader
 from pathlib import Path
+
 chunk_size = 300
 chunk_overlap = 50
 
