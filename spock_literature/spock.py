@@ -33,7 +33,7 @@ from langchain_community.docstore.in_memory import InMemoryDocstore
 
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
 from spock_literature.utils.Generate_podcast import generate_audio
-from spock_literature.utils.Spock_Loaders import SpockPDFLoader, URLDownloader
+from spock_literature.utils.spock_loaders import SpockPDFLoader, URLDownloader
 from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestions
 from spock_literature.utils.Spock_Retriever import Spock_Retriever
 

@@ -1,6 +1,6 @@
 
 from typing import Generator, Optional, Dict, Union, Any, List, Iterator, AsyncIterator
-from pydantic import BaseModel, Field, HttpUrl, PositiveInt
+from pydantic import AnyUrl, BaseModel, Field, HttpUrl, PositiveInt
 from pydantic.dataclasses import dataclass
 import json
 import uuid
@@ -230,22 +230,17 @@ class SpockPDFLoader(BasePDFLoader):
 
 
 
-class SpockWebLoader(BaseLoader):
-    def __init__(self, url: str, download_path: Path):
-        if not self.validator(url):
-            raise ValueError(f"Invalid URL: {url}")
-        self.url = url
-        self.download_path = download_path
-
-
+class SpockWebLoader(BaseModel, BaseLoader):
+    url: AnyUrl = Field(description="The URL of the web page to load. Must be a valid URL.")
+    download_path: Path = Field(default=Path(os.getcwd()/"downloads"),
+        description="The path where the downloaded file will be saved. Must be a valid file path."
+    )
+    pdf_loader:BasePDFLoader = Field(default_factory=SpockPDFLoader, description="Optional PDF loader to use for PDF files.")
 
     async def alazy_load(self) -> AsyncIterator[Document]:
         raise NotImplementedError("Asynchronous loading is not implemented for SpockWebLoader.")
     
     def lazy_load(self) -> Iterator[Document]:
-        raise NotImplementedError("Synchronous loading is not implemented for SpockWebLoader.")
-
-    def __call__(self) -> None:
         preprint_regex = (
             r"^https://(www\.)?" 
             r"(arxiv\.org|chemrxiv\.org|biorxiv\.org|medrxiv\.org)"  
@@ -253,12 +248,11 @@ class SpockWebLoader(BaseLoader):
         )
         
         if not re.match(preprint_regex, self.url):
-            return self.__journals_download()
+            yield from self.__journals_download()
         else:
-            return self.__preprint_download()
+            yield from self.__preprint_download()
 
-
-    def __preprint_download(self):
+    def __preprint_download(self, **kwargs):
         response = requests.get(self.url)
         if response.status_code != 200:
             raise ConnectionError(f"Failed to download {self.url}")
@@ -276,7 +270,16 @@ class SpockWebLoader(BaseLoader):
                     if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                         logger.error(f"Couldn't download the file: {self.download_path}")                    
                     logger.info(f"PDF downloaded successfully to {self.download_path}")
-                    return self.download_path/pdf_name               
+                    
+                    # To change here:
+                    document:Document = self.pdf_loader(file_path=self.download_path/pdf_name).lazy_load()
+                    document.metadata = {
+                        "title": data['title'],
+                        "headings": data['headings'],
+                        "source": self.url,
+                        "path": self.download_path/pdf_name
+                    }
+                    yield  self.download_path/pdf_name               
                 else:
                     logger.error(f"Failed to download PDF from {pdf_url}")
             except ValueError as e:
@@ -292,6 +295,21 @@ class SpockWebLoader(BaseLoader):
                 logger.error(f"Couldn't download the file: {self.download_path}")                    
             logger.info(f"PDF downloaded successfully to {self.download_path}")
             return self.download_path/pdf_name
+    
+    
+    def __read_pdf(self, file_path: Union[str, Path]) -> Document:
+        """
+        Reads a PDF file and returns its content as a Document.
+        
+        Args:
+            file_path (Union[str, Path]): The path to the PDF file.
+        
+        Returns:
+            Document: The content of the PDF file as a Document object.
+        """
+        pdf_loader = SpockPDFLoader(file_path)
+        pdf_loader.lazy_load()
+        return pdf_loader.doc
     
     
     @staticmethod
@@ -341,7 +359,7 @@ class SpockWebLoader(BaseLoader):
             logger.info(f"Document is a complete scientific paper: {response}")
             if response:
                 # If the document is a complete scientific paper
-                return document
+                yield document
 
             pdf_url = self.find_pdf_link(soup, self.url)
             pdf_name = pdf_url.split("/")[-1] + ".pdf"  
@@ -352,7 +370,19 @@ class SpockWebLoader(BaseLoader):
                 if os.path.getsize(self.download_path) == 0 or not os.path.exists(self.download_path):
                     logger.error(f"Couldn't download the file: {self.download_path}")                    
                 logger.info(f"PDF downloaded successfully to {self.download_path}")
-                return self.download_path/pdf_name        
+                
+                # To change here:
+                
+                
+                
+                document:Document = self.pdf_loader(file_path=self.download_path/pdf_name).lazy_load()
+                document.metadata = {
+                    "title": data['title'],
+                    "headings": data['headings'],
+                    "source": self.url,
+                    "path": self.download_path/pdf_name
+                }
+                yield document  
             else:
                 logger.error(f"Failed to download PDF from {pdf_url}")
         except ValueError as e:
@@ -361,21 +391,13 @@ class SpockWebLoader(BaseLoader):
             
     
         
-    @staticmethod
-    def validator(url:str) -> bool:
-        url_regex = (
-            r"^(https?://)" 
-            r"(([a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})" 
-            r"(:\d+)?(/.*)?$"
-        )
-        return bool(re.match(url_regex, url))
+    # Use BM25 + regression
     
-    
-    @staticmethod
-    def llm_document_decider(document:Document):
+    @staticmethod # Make this into langgraph + two prompts <- decisive node
+    def llm_document_decider(use_llm:bool, use_lenght:bool, document:Document):
 
 
-        prompt = PromptTemplate( # Would return a pydantic publication object
+        prompt = PromptTemplate( # Would return a pydantic publication object or don't use llms at all
             template=f"""
 Here is a text, and we need to determine whether it represents a complete scientific article or a sufficiently comprehensive scientific piece (such as a commentary, feature, or news article) that conveys scientific findings or analysis in a coherent and self-contained manner. Traditional full-length research articles often include:
 
@@ -412,7 +434,8 @@ Your output should contain only one number, no text or additional information.
             return True
         return False
 
-    
+    def get_document_from_web(self):
+        raise NotImplementedError("This method is not implemented yet. Use lazy_load() instead to load the document from the web.")
 
 if __name__ == "__main__":
     test_file = [Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/cell_penetration_of_oxadiazole_containing_macrocycles.pdf")]
