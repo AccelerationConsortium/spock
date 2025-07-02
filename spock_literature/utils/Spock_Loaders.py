@@ -37,6 +37,7 @@ from langchain.schema import Document
 from langchain_openai import ChatOpenAI
 import tempfile
 
+from langchain_community.document_loaders.base import BaseLoader
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -229,13 +230,20 @@ class SpockPDFLoader(BasePDFLoader):
 
 
 
-class URLDownloader:
+class SpockWebLoader(BaseLoader):
     def __init__(self, url: str, download_path: Path):
         if not self.validator(url):
             raise ValueError(f"Invalid URL: {url}")
         self.url = url
         self.download_path = download_path
 
+
+
+    async def alazy_load(self) -> AsyncIterator[Document]:
+        raise NotImplementedError("Asynchronous loading is not implemented for SpockWebLoader.")
+    
+    def lazy_load(self) -> Iterator[Document]:
+        raise NotImplementedError("Synchronous loading is not implemented for SpockWebLoader.")
 
     def __call__(self) -> None:
         preprint_regex = (
