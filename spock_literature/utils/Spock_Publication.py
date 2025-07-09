@@ -28,13 +28,16 @@ from docling.utils.model_downloader import download_models
 
 @dataclass(frozen=True, eq=False)
 class GScholarPublicationObject:
-    title: str
-    abstract: str
-    author: str
-    year: PositiveInt
-    url: Optional[HttpUrl] = None
-    citation: str
-
+    title: str = Field(..., description="The title of the publication.")
+    abstract: str = Field(..., description="The abstract of the publication.")
+    author: str = Field(..., description="The author(s) of the publication.")
+    year: PositiveInt = Field(
+        ...,
+        description="The year of publication. Must be a positive integer.")
+    url: Optional[HttpUrl] = Field(default=None, description="The URL of the publication.")
+    citation: str = Field(
+        ...,
+    )
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "GScholarPublicationObject":
         """
@@ -80,17 +83,10 @@ class GScholarPublicationObject:
 
 @dataclass(frozen=True, eq=False)
 class GScholar_Author(BaseModel):
-    def __init__(self, author):
-        """
-        Initialize an Author object.
-
-        Args:
-            author (str): The name of the author.
-        """
-        self.author_name = author
-        
-    def __str__(self):
-        return self.author_name
+    author_name: str = Field(
+        ...,
+        description="The name of the author to search for in Google Scholar.",
+    )
     
     def get_last_publications(self, count) -> dict:
         """

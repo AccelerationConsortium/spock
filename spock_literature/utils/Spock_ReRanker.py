@@ -19,7 +19,7 @@ class Spock_ReRanker:
         self.kwargs = kwargs
         
         
-    def rerank_llm(self, query, model:Union[str, ChatOpenAI], retriever, embedding=OpenAIEmbeddings, n:int=3) -> ContextualCompressionRetriever: # Only supports OpenAI
+    def __rerank_llm(self, query, model:Union[str, ChatOpenAI], retriever, embedding=OpenAIEmbeddings, n:int=3) -> ContextualCompressionRetriever: # Only supports OpenAI
         """
         Rerank two sentences using a language model.
         """
@@ -35,7 +35,7 @@ class Spock_ReRanker:
             base_compressor=compressor, base_retriever=retriever
         )
         
-    def rerank_cross_encoder(self, question, retriever, model="BAAI/bge-reranker-base"):
+    def __rerank_cross_encoder(self, question, retriever, model="BAAI/bge-reranker-base"):
         """
         Rerank two sentences using a cross-encoder model.
         
@@ -55,3 +55,6 @@ class Spock_ReRanker:
         raise NotImplementedError("Cross-encoder reranking is not implemented yet.")
         compressed_docs = compression_retriever.invoke(question)
         pretty_print_docs(compressed_docs)
+        
+    def rerank(self):
+        if 
