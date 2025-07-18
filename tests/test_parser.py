@@ -1,0 +1,1 @@
+from spock_literature.core.PublicationParser import PublicationOutputParser

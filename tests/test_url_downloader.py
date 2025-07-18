@@ -1,4 +1,4 @@
-from spock_literature.utils.Url_downloader import URLDownloader
+from spock_literature.core.Spock_Downloader import URLDownloader
 import pytest
 import os
 import re

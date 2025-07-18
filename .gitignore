@@ -1,5 +1,10 @@
 docs
+*nsys-rep
+spock_venv/*
+messing_around/*
 data
+ocr*/
+code.snippet.py
 requirements_dev.txt
 #launch_benchmark*.sh
 #benchmark*

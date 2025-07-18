@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from pathlib import Path
 from .fake_llm import FakeChatModel
 from spock_literature.spock import Spock
-from spock_literature.utils.Url_downloader import URLDownloader
+from spock_literature.core.Spock_Downloader import URLDownloader
 from langchain_ollama import OllamaLLM
 from langchain.schema import Document
 

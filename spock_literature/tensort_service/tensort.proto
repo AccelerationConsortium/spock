@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+service TensortLLMService {
+  rpc RunLLM(LLMRequest) returns (LLMResponse);
+}
+
+message LLMRequest {
+  string text = 1;
+}
+
+message LLMResponse {
+  string json_result = 1;
+}
