@@ -2,7 +2,7 @@ import argparse
 import os
 from slack_sdk import WebClient
 from spock_literature import Spock
-from spock_literature.utils.Author import Author
+from spock_literature.core.Author import Author
 
 def main():
     parser = argparse.ArgumentParser()

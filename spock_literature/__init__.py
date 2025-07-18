@@ -6,5 +6,5 @@ __version__ = "0.0.8"
 
 
 from .spock import Spock
-from .utils import *
+from .core import *
 from .texts import *
