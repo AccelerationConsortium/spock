@@ -13,7 +13,7 @@ import getpass
 import os
 from dotenv import load_dotenv
 import nvtx
-from spock_literature.utils.pdf_parsing import PDF_document_loader
+from spock_literature.core.pdf_parsing import PDF_document_loader
 from pathlib import Path
 
 chunk_size = 300

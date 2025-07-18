@@ -1,29 +1,9 @@
 
-from typing import Generator, Optional, Dict, Union, Any, List
+from typing import Generator, Optional, Dict, Any
 from pydantic import BaseModel, Field, HttpUrl, PositiveInt
 from pydantic.dataclasses import dataclass
 import json
-import uuid
-import time
-import os
-import torch
-from pathlib import Path
 from scholarly import scholarly
-from langchain_core.documents import Document
-from langchain_community.document_loaders import BasePDFLoader
-from docling_core.types.doc import PictureItem, ImageRefMode
-from docling.datamodel.base_models import InputFormat
-from docling.datamodel.pipeline_options import (
-    PdfPipelineOptions,
-    smolvlm_picture_description,
-    AcceleratorDevice,
-    AcceleratorOptions,
-    EasyOcrOptions,
-    PictureDescriptionApiOptions,
-)
-from docling.document_converter import DocumentConverter, PdfFormatOption
-from docling.utils.model_downloader import download_models
-
 
 
 @dataclass(frozen=True, eq=False)

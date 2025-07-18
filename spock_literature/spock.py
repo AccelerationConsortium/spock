@@ -32,10 +32,10 @@ from langchain_community.vectorstores.faiss import DistanceStrategy
 from langchain_community.docstore.in_memory import InMemoryDocstore
 
 from spock_literature.texts import QUESTIONS, PAPERS_PATH
-from spock_literature.utils.Generate_podcast import generate_audio
-from spock_literature.utils.spock_loaders import SpockPDFLoader, URLDownloader
-from spock_literature.utils.Spock_MultiQueryRetriever import HypotheticalQuestions
-from spock_literature.utils.Spock_Retriever import Spock_Retriever
+from spock_literature.core.Generate_podcast import generate_audio
+from spock_literature.core.spock_loaders import SpockPDFLoader, URLDownloader
+from spock_literature.core.Spock_MultiQueryRetriever import HypotheticalQuestions
+from spock_literature.core.Spock_Retriever import Spock_Retriever
 
 
 # Data has to be in md format which is not so great
