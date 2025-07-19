@@ -1,0 +1,29 @@
+# To edit
+
+version: "3.9"
+services:
+  trt:
+    image: nvcr.io/nvidia/tensorrt_llm:0.20.2
+    command: >
+      trtllm-serve /models/llama --model-type llama
+      --port 6060 --enable-inflight-batching
+    ports: ["6060:6060"]
+    volumes: ["./engines/llama2-7b:/models/llama"]
+    deploy: { resources: { reservations: { devices: [{ driver: "nvidia", count: all, capabilities: ["gpu"] }] } } }
+
+  proxy:
+    build: .
+    command: python proxy.py
+    ports: ["50051:50051"]
+    depends_on: [trt]
+
+services:
+  trt:
+    build: .
+    runtime: nvidia
+    environment: { NVIDIA_VISIBLE_DEVICES: all }
+    ports: ["6060:6060"]
+  proxy:
+    image: proxy:latest             # the gRPC proxy we built earlier
+    ports: ["50051:50051"]
+    depends_on: [trt]

@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: nvcr.io/nvidia/pytorch:24.05-py3
+
+%post
+    pip install --no-cache-dir tensorrt-llm[serve]
+    mkdir -p /models/llama
+    # copy or insvcap engine at build time:
+    # cp /host/engines/llama2-7b/model.plan /models/llama/
+
+%runscript
+    trtllm-serve /models/llama \
+        --model-type llama \
+        --enable-inflight-batching \
+        --port 6060 "$@"

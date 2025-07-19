@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package chat;
+
+service Chat {
+  // Bidirectional stream, one delta per token
+  rpc StreamChat (ChatRequest) returns (stream ChatDelta);
+}
+
+message ChatRequest {
+  string user_id = 1;  
+  string prompt  = 2;
+  bool   use_trt = 3; 
+}
+
+message ChatDelta {
+  string text = 1;    
+}
