@@ -1,6 +1,6 @@
 
 from typing import Generator, Optional, Dict, Union, Any, List, Iterator, AsyncIterator
-from pydantic import AnyUrl, BaseModel, Field, HttpUrl, PositiveInt
+from pydantic import AnyUrl, BaseModel, Field, HttpUrl, PositiveInt, ConfigDict
 from pydantic.dataclasses import dataclass
 import json
 import uuid
@@ -10,7 +10,7 @@ import torch
 from pathlib import Path
 from scholarly import scholarly
 from langchain_core.documents import Document
-from langchain_community.document_loaders import BasePDFLoader
+from langchain_community.document_loaders.pdf import BasePDFLoader
 from docling_core.types.doc import PictureItem, ImageRefMode
 from docling.datamodel.base_models import InputFormat
 from docling.datamodel.pipeline_options import (
@@ -21,6 +21,9 @@ from docling.datamodel.pipeline_options import (
     EasyOcrOptions,
     PictureDescriptionApiOptions,
 )
+from docling.chunking import ParagraphChunker, SentenceChunker
+from docling.document import DoclingDocument
+
 from docling.document_converter import DocumentConverter, PdfFormatOption
 from docling.utils.model_downloader import download_models
 import logging
@@ -127,7 +130,6 @@ class SpockPDFLoader(BasePDFLoader):
                 device=AcceleratorDevice.CPU,
                 num_threads=64,
             )
-
         self.pipeline_options = PdfPipelineOptions()
         self.pipeline_options.accelerator_options = accelerator_options
 
@@ -147,7 +149,7 @@ class SpockPDFLoader(BasePDFLoader):
         
         use_vlm = with_smolvlm or with_remote_vlm
 
-        self.pipeline_options.do_picture_description = with_smolvlm or with_remote_vlm
+        self.pipeline_options.do_picture_description = use_vlm
         if use_vlm:
             pd_opts = smolvlm_picture_description
             pd_opts.prompt = vlm_prompt 
@@ -201,14 +203,14 @@ class SpockPDFLoader(BasePDFLoader):
         Export a Document to markdown.  
         Returns the path to the written .md file.
         """
-        output_dir = Path(output_dir)
-        output_dir.mkdir(parents=True, exist_ok=True)
+        #output_dir = Path(output_dir)
+        #output_dir.mkdir(parents=True, exist_ok=True)
+        print(f"Exporting {self.file_path.name} to markdown...")
+        md_path = str(output_dir) + f"/{self.file_path.name}.md"
 
-        md_path = Path(os.getcwd) / f"{self.file_path.name}.md"
-
-        with md_path.open("w", encoding="utf-8") as fp:
+        with open(md_path, "w", encoding="utf-8") as fp:
             fp.write(self.doc.export_to_markdown())
-
+        print(f"Markdown file saved to {md_path}")
         return str(md_path)
 
     def to_json(self, output_dir: Union[str, Path]=Path(os.getcwd()) / "json_folders") -> Dict[str, Any]:
@@ -219,20 +221,21 @@ class SpockPDFLoader(BasePDFLoader):
         output_dir = Path(output_dir)
         output_dir.mkdir(parents=True, exist_ok=True)
 
-        md_path = Path(os.getcwd) / f"{self.file_path.name}.json"
+        md_path = str(output_dir) + f"/{self.file_path.name}.json"
 
         data = self.doc.export_to_dict()
-        with md_path.open("w", encoding="utf-8") as fp:
+        with open(md_path, "w", encoding="utf-8") as fp:
             json.dump(data, fp)
 
         return data
 
 
 
-
 class SpockWebLoader(BaseModel, BaseLoader):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     url: AnyUrl = Field(description="The URL of the web page to load. Must be a valid URL.")
-    download_path: Path = Field(default=Path(os.getcwd()/"downloads"),
+    download_path: Path = Field(default=Path(os.getcwd()+"/downloads"),
         description="The path where the downloaded file will be saved. Must be a valid file path."
     )
     pdf_loader:BasePDFLoader = Field(default_factory=SpockPDFLoader, description="Optional PDF loader to use for PDF files.")
@@ -438,7 +441,8 @@ Your output should contain only one number, no text or additional information.
         raise NotImplementedError("This method is not implemented yet. Use lazy_load() instead to load the document from the web.")
 
 if __name__ == "__main__":
-    test_file = [Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/utils/cell_penetration_of_oxadiazole_containing_macrocycles.pdf")]
-    pdf_loader = SpockPDFLoader(test_file)
-    pdf_loader.lazy_load()
-    
+    test_file = Path("/home/m/mehrad/brikiyou/scratch/spock_2/spock/spock_literature/core/pdfs/cytomat.pdf")
+    pdf_loader = SpockPDFLoader(test_file, with_smolvlm=True, with_remote_vlm=False)
+    docs = pdf_loader.load()
+    #print(docs)
+    pdf_loader.to_markdown(output_dir=Path(os.getcwd()) / "out")

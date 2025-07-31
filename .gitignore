@@ -6,6 +6,8 @@ data
 ocr*/
 code.snippet.py
 requirements_dev.txt
+docling*
+EasyOCR
 #launch_benchmark*.sh
 #benchmark*
 #benchmark_nvidia.py 
