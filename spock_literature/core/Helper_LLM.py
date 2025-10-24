@@ -21,7 +21,6 @@ chunk_overlap = 50
 
 load_dotenv()
 def get_api_key(env_var, prompt):
-    
     if not os.getenv(env_var):
         os.environ[env_var] = getpass.getpass(prompt)
 

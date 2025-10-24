@@ -66,7 +66,7 @@ class Spock:
         vectorstore: Optional[FAISS] = None,
         retrievers: Optional[List[BaseRetriever]] = None,
         splitter: Optional[Union[TextSplitter, SemanticChunker]] = RecursiveCharacterTextSplitter(
-            chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP),
+        chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP),
         #papers_download_path: Optional[Union[Path, str]] = os.getcwd() + '/papers/',
         vectorstore_path: Optional[Union[Path, str]] = os.getcwd() + '/vectorstore/',
         **kwargs
